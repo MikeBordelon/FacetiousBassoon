@@ -4,9 +4,9 @@
 
 ## Team
 
-  - __Product Owner__: teamMember
-  - __Scrum Master__: teamMember
-  - __Development Team Members__: teamMember, teamMember
+  - __Product Owner__: Dustin Kimmel
+  - __Scrum Master__: Alexander Pantelides
+  - __Development Team Members__: Alexander Pantelides, David Platt, Dustin Kimmel, Mike Bordelon
 
 ## Table of Contents
 

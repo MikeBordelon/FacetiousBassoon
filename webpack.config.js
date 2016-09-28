@@ -1,18 +1,28 @@
 var path = require('path');
+var webpack = require('webpack');
+var APP_DIR = path.resolve(__dirname, 'app');
+var SERVER_DIR = path.resolve(__dirname, 'server');
 
 module.exports = {
-  entry: "./app/app.js",
+  devtool: 'eval',
+  entry: [
+    'webpack-hot-middleware/client', 'webpack/hot/dev-server',
+    APP_DIR + '/app.js'
+  ],
   output: {
-    filename: "public/js/bundle.js",
-    sourceMapFilename: "public/js/bundle.map"
+    path: path.join(__dirname, 'app/public'),
+    filename: 'bundle.js',
+    publicPath: '/public/'
   },
-  devtool: '#source-map',
+  plugins: [
+    new webpack.HotModuleReplacementPlugin()
+  ],
   module: {
     loaders: [
       {
-        loader: 'babel',
-        exclude: /node_modules/
-      }
-    ]
+        test: /\.jsx?$/,
+        loaders: ['react-hot', 'babel'],
+        include: APP_DIR
+      }]
   }
-}
+};

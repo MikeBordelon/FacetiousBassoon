@@ -8,7 +8,8 @@ import userReducer from './user-reducer';
 
 // Combine Reducers
 var reducers = combineReducers({
-  userState: userReducer
+  userState: userReducer,
+
     // widgetState: widgetReducer,
     // searchLayoutState: searchLayoutReducer,
     // staticState: staticReducer

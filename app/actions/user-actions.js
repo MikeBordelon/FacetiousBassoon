@@ -1,15 +1,28 @@
-import * as types from '../actions/action-types';
-
 export function getUsersSuccess(users) {
   return {
-    type: types.GET_USERS_SUCCESS,
+    type: 'GET_USERS_SUCCESS',
     users
+  };
+}
+
+export function authSuccess() {
+  return {
+    type: 'AUTH_SUCCESS',
+    isLoggedIn: true
+  };
+}
+
+export function authFailure() {
+  return {
+    type: 'AUTH_FAILURE',
+    isLoggedIn: false
   };
 }
 
 export function userProfileSuccess(userProfile) {
   return {
-    type: types.USER_PROFILE_SUCCESS,
+    type: 'USER_PROFILE_SUCCESS',
     userProfile
   };
 }
+

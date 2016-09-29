@@ -28,6 +28,7 @@ const style = {
 };
 
 export default function (props) {
+  console.log(props);
   return (
 
     <div>
@@ -39,8 +40,8 @@ export default function (props) {
       {props.users.map(user => {
         return (
           <div>
-            <div style={style.text}>{user.name}</div>
-            <span style={style.text}> Total Steps: {user.steps}</span>
+            <div style={style.text}>Page Count: {user.volumeInfo.pageCount}</div>
+            <div style={style.text}> Book Title: {user.volumeInfo.title}</div>
           </div>
         );
       })}

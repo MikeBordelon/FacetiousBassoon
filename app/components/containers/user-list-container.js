@@ -3,11 +3,21 @@ import { connect } from 'react-redux';
 import UserList from '../views/user-list';
 import * as userApi from '../../api/user-api';
 import store from '../../store';
+import axios from 'axios';
+import { getUsersSuccess } from '../../actions/user-actions';
 
 const UserListContainer = React.createClass({
 
   componentDidMount: function() {
-    userApi.getUsers();
+    axios.get('https://www.googleapis.com/books/v1/volumes?', {
+      params: {
+        q: 'Potter'
+      }
+    })
+    .then(response => {
+      store.dispatch(getUsersSuccess(response.data.items));
+      return response;
+    });
   },
 
   render: function() {

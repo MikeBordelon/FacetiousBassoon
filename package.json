@@ -4,7 +4,7 @@
   "description": "Thesis App",
   "main": "server.js",
   "scripts": {
-    "start": "./wait-for-it.sh db:5432 && npm run dev-be",
+    "start": "./wait-for-it.sh db:5432 && npm run dev-fe",
     "dev-fe": "node server/server.js",
     "dev-be": "nodemon server/server.js"
   },
@@ -22,10 +22,12 @@
     "axios": "^0.14.0",
     "body-parser": "^1.15.2",
     "fitbit-client-oauth2": "^2.0.3",
+    "bootstrap": "^3.3.7",
     "material-ui": "^0.15.4",
     "pg": "^4.4.1",
     "pg-hstore": "^2.3.2",
     "react": "^15.3.2",
+    "react-bootstrap": "^0.30.3",
     "react-dom": "^15.3.2",
     "react-redux": "^4.4.5",
     "react-router": "^2.8.1",

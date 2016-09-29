@@ -13,38 +13,49 @@ const style = {
 };
 
 const MainNavBar = function(props) {
-  console.log(props);
-  var loggedIn;
-  var loginButton;
+  var loggedIn, loggerButton, openCV;
 
   if (props.isLoggedIn === true) {
+    loggerButton = <li><a href="#"><span className="glyphicon glyphicon-log-in"></span> Logout</a></li>;
     loggedIn = <li><Link to='/profile'>Profile</Link></li>;
-    loginButton = <li><a href='#' >SIGNOUT</a></li>;
+    openCV = <li><Link to='/openCV'>OpenCV</Link></li>;
   } else {
-    loginButton = <li><a href='#' >LOGIN</a></li>;
+    loggerButton = <li><a href="#"><span className="glyphicon glyphicon-log-in"></span> Login</a></li>;
+    loggedIn = null;
   }
   return (
     // this is the nav bar essentially
   <div>
-    <nav className="navbar navbar-inverse">
-      <div className="container-fluid">
-        <div className="navbar-header">
+  <nav className="navbar navbar-inverse">
+    <div className="container-fluid">
+      <div className="navbar-header">
           <Link to='/'><a className="navbar-brand" href="#">FitCoin</a></Link>
         </div>
-        <ul className="nav navbar-nav">
-
-          <li><Link to='/'>Home</Link></li>
-          {loggedIn}
-          {loginButton}
-        </ul>
-      </div>
-    </nav>
+      <ul className="nav navbar-nav">
+        <li><Link to='/'>Home</Link></li>
+        <li><Link to='/about'>About us</Link></li>
+      </ul>
+      <ul className="nav navbar-nav navbar-right">
+      {loggerButton}
+      {loggedIn}
+      {openCV}
+      </ul>
+    </div>
+  </nav>
       <main>
         {props.children}
       </main>
     </div>
     );
 };
+
+
+
+
+
+
+
+
 
 const mapStateToProps = function(store) {
   return {

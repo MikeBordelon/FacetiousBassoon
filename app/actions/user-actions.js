@@ -5,10 +5,11 @@ export function getUsersSuccess(users) {
   };
 }
 
-export function authSuccess() {
+export function authSuccess(userID) {
   return {
     type: 'AUTH_SUCCESS',
-    isLoggedIn: true
+    isLoggedIn: true,
+    userID
   };
 }
 

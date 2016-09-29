@@ -5,7 +5,7 @@ var webpackconfig = require('../webpack.config.js');
 var webpackcompiler = webpack(webpackconfig);
 
 
- 
+
 //enable webpack middleware for hot-reloads in development
 var useWebpackMiddleware = function (app) {
   app.use(webpackDevMiddleware(webpackcompiler, {
@@ -41,6 +41,13 @@ var redirect_uri = callback_url;
 
 useWebpackMiddleware(app);
 app.use(bodyParser());
+
+// this is for React Router, it's supposed to help with browserHistory and
+// allow the user to refresh on say the /about page and it'll work...but it's broke
+app.get('*', function (request, response) {
+  response.sendFile(path.resolve(__dirname, '../app/public', 'index.html'));
+});
+
 app.use(express.static(path.join(__dirname, '../app/public')));
 
 sequelize.sync({force: true});
@@ -63,7 +70,7 @@ var User = sequelize.define('users', {
   },
   fb_user_id: {
     type: Sequelize.STRING
-  }, 
+  },
   expires_at: {
     type: Sequelize.DATE
   }
@@ -101,7 +108,7 @@ app.get('/auth/fitbit/callback', function(req, res, next) {
       token = token.token;
       User
          .find( {where: {fb_user_id: token.user_id}} )
-         .then(function(user) { 
+         .then(function(user) {
           if(user === null) {
            console.log('user not found, creating user...');
            // console.log('TOKEN.access_token', token.access_token);
@@ -115,15 +122,15 @@ app.get('/auth/fitbit/callback', function(req, res, next) {
              expires_at: token.expires_at
            })
            .then(function() {
-               User.findAll({}).then(function(found) {
-                 console.log('HEY!kuhdasdhasdkashdsakjhdsadasdasd', found);
-               });
+              User.findAll({}).then(function(found) {
+                console.log('HEY!kuhdasdhasdkashdsakjhdsadasdasd', found);
+              });
              });
           } else {
             console.log('User found', user);
           }
          });
-         
+
       // then redirect
       //res.redirect(302, '/user');
       res.send(token);
@@ -136,5 +143,5 @@ app.get('/auth/fitbit/callback', function(req, res, next) {
 
 
 app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
+  console.log('Our app is listening on port 3000!');
 });

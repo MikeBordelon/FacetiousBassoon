@@ -1,20 +1,13 @@
 import React from 'react';
 import Paper from 'material-ui/Paper';
-import RaisedButton from 'material-ui/RaisedButton';
 import {connect} from 'react-redux';
-import Link from 'react-router';
 
 const style = {
-
   height: '200px',
   width: '600px',
   margin: '100px 20px 20px 340px',
   textAlign: 'center',
-  display: 'center',
-
-  button: {
-    margin: '0px 0px 0px 0px',
-  }
+  display: 'center'
 };
 
 const Home = React.createClass({

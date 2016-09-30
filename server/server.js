@@ -38,11 +38,9 @@ var fitbitStrategy = new FitbitStrategy({
 });
 
 passport.use(fitbitStrategy);
-
 passport.serializeUser(function(user, done) {
   done(null, user);
 });
-
 passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
@@ -57,6 +55,7 @@ var Sequelize = require('sequelize');
 var sequelize = new Sequelize(process.env.DATABASE_URL || 'postgres://docker:docker@db:5432/fitcoin');
 var path = require('path');
 sequelize.sync({force: true});
+
 var User = sequelize.define('users', {
   firstName: {
     type: Sequelize.STRING,
@@ -65,19 +64,19 @@ var User = sequelize.define('users', {
   lastName: {
     type: Sequelize.STRING
   },
-  access_token: {
+  accessToken: {
     type: Sequelize.STRING
   },
-  refresh_token: {
+  refreshToken: {
     type: Sequelize.STRING
   },
-  expires_in: {
+  expiresIn: {
     type: Sequelize.INTEGER
   },
-  fb_user_id: {
+  fbUserId: {
     type: Sequelize.STRING
   },
-  expires_at: {
+  expiresAt: {
     type: Sequelize.DATE
   }
 });

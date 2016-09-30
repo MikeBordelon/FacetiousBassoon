@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var FitbitStrategy = require('passport-fitbit-oauth2').FitbitOAuth2Strategy;
 var passport = require('passport');
-var router = require('./resources/router');
+var router = require('./resources/router.js');
 var app = express();
 
 var helperFunctions = require('./resources/helperFunctions.js');

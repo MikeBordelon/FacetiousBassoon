@@ -1,6 +1,7 @@
 var router = require('express').Router();
 var controller = require('./controller');
 
+
 // Routes
 
 // Auth routes

@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var FitbitStrategy = require('passport-fitbit-oauth2').FitbitOAuth2Strategy;
 var passport = require('passport');
-// var router = require('./resources/router.js');
+var router; //  = require('./resources/router.js');
 var app = express();
 
 var helperFunctions = require('./resources/helperFunctions.js');
@@ -24,8 +24,8 @@ app.use(passport.session({
 app.use(passport.initialize());
 
 var fitbitStrategy = new FitbitStrategy({
-  clientID: authConfig.lex.clientId,
-  clientSecret: authConfig.lex.clientSecret,
+  clientID: authConfig.dustin.clientId,
+  clientSecret: authConfig.dustin.clientSecret,
   scope: ['activity', 'heartrate', 'location', 'profile'],
   callbackURL: authConfig.lex.callbackURL
 }, function(accessToken, refreshToken, params, profile, done) {
@@ -70,7 +70,7 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
-
+// 
 var fitbitAuthenticate = passport.authenticate('fitbit', {
   successRedirect: '/auth/fitbit/success',
   failureRedirect: '/auth/fitbit/failure'
@@ -257,14 +257,97 @@ app.get('/auth/logout', function(req, res) {
   res.redirect('/');
 });
 
-// this is for React Router, it's supposed to help with browserHistory and
-// allow the user to refresh on say the /about page and it'll work...but it's broke
-
-app.get('*', function (request, response) {
-  response.sendFile(path.resolve(__dirname, '../app/public', 'index.html'));
-});
 
 
+
+
+// Controller object
+var fitCoinController = {
+  retrieve: function (req, res) {
+    User.findAll({})
+      .then(function(found) {
+        console.log('retrieve findAll', found);
+        res.statusCode === 200;
+        res.end(JSON.stringify(found)); 
+      })
+      .catch(function(err) {
+        console.error(err);
+        res.statusCode === 404;
+        res.end(); 
+      });
+  },
+  retrieveOne: function (req, res) {
+    console.log('retrieveOne findOne controller reached!');
+    User.findOne({
+      where: {fbUserId: req.params.fbUserId}, // fbUserId
+      // attributes: ['id', ['name', 'title']] // can specifiy needed fields
+    })
+      .then(function(found) {
+        console.log('retrieveOne findOne', found);
+        res.statusCode === 200;
+        res.end(JSON.stringify(found)); 
+      })
+      .catch(function(err) {
+        console.error(err);
+        res.statusCode === 404;
+        res.end(); 
+      });
+  },
+  createOne: function (req, res) {
+    User.findAll({})
+      .then(function(found) {
+        console.log('retrieve findAll', found);
+        res.statusCode === 200;
+        res.end(JSON.stringify(found)); 
+      })
+      .catch(function(err) {
+        console.error(err);
+        res.statusCode === 404;
+        res.end(); 
+      });
+  },
+  updateOne: function (req, res) {
+    User.findAll({})
+      .then(function(found) {
+        console.log('retrieve findAll', found);
+        res.statusCode === 200;
+        res.end(JSON.stringify(found)); 
+      })
+      .catch(function(err) {
+        console.error(err);
+        res.statusCode === 404;
+        res.end(); 
+      });
+  },
+  deleteOne: function (req, res) {
+    User.findAll({})
+      .then(function(found) {
+        console.log('retrieve findAll', found);
+        res.statusCode === 200;
+        res.end(JSON.stringify(found)); 
+      })
+      .catch(function(err) {
+        console.error(err);
+        res.statusCode === 404;
+        res.end(); 
+      });
+  },
+  delete: function (req, res) {
+    User.destroy({
+      where: {}  // {status: 'inactive'} // specifics
+    })
+      .then(function(deleted) {
+        console.log('delete returned: ', deleted);
+        res.statusCode === 200;
+        res.end(JSON.stringify(deleted)); 
+      })
+      .catch(function(err) {
+        console.error(err);
+        res.statusCode === 404;
+        res.end(); 
+      });
+  }
+};
 
 
 
@@ -299,76 +382,94 @@ app.get('/get_stats', function(req, res) {
 });
 
 // Routes - basic format
-app.get('/users', function(req, res) {});
-app.get('/users/:userId', function(req, res) {
-  // req.params: { "userId": USER };
+app.get('/users', function(req, res) {
+  fitCoinController.retrieve(req, res);
 });
-app.get('/users:userId/friends', function(req, res) {
-  // req.params: { "userId": USER };
+
+app.get('/users/:fbUserId', function(req, res) {
+  fitCoinController.retrieveOne(req, res);
 });
-app.get('/challenges', function(req, res) {});
-app.get('/challenges/:status', function(req, res) {
-  // req.params: { "status": STATUS };
+
+app.delete('/users', function(req, res) {
+  fitCoinController.delete(req, res);
 });
-app.get('/challenges/:id', function(req, res) {
-  // req.params: { "id": USER };
-});
-app.get('/challenges/:id/participants', function(req, res) {
-  // req.params: { "id": ID };
-});
-app.get('/challenges/:id/participants/:id', function(req, res) {
-  // req.params: { "id": ID };
-});
+
+// app.get('/users:userId/friends', function(req, res) {
+//   // req.params: { "userId": USER };
+// });
+// app.get('/challenges', function(req, res) {});
+// app.get('/challenges/:status', function(req, res) {
+//   // req.params: { "status": STATUS };
+// });
+// app.get('/challenges/:id', function(req, res) {
+//   // req.params: { "id": USER };
+// });
+// app.get('/challenges/:id/participants', function(req, res) {
+//   // req.params: { "id": ID };
+// });
+// app.get('/challenges/:id/participants/:id', function(req, res) {
+//   // req.params: { "id": ID };
+// });
 // app.get('/auth/:status', function(req, res) {});
 
 // Routes - basic format
-// router.route('/users/:userId')
+// app.route('/users')
+//   .get(fitCoinController.retrieve(req, res))
+//   .post(fitCoinController.createOne(req, res))
+//   .update(fitCoinController.updateOne(req, res))
+//   .delete(fitCoinController.delete(req, res));
+
+// app.route('/users/:userId')
 //   .get(fitCoinController.retrieveOne(req, res))
 //   .post(fitCoinController.createOne(req, res))
 //   .update(fitCoinController.updateOne(req, res))
 //   .delete(fitCoinController.delete(req, res));
 
-// router.route('/users/:userId')
+// app.route('/users:userId/friends')
 //   .get(fitCoinController.retrieveOne(req, res))
 //   .post(fitCoinController.createOne(req, res))
 //   .update(fitCoinController.updateOne(req, res))
 //   .delete(fitCoinController.delete(req, res));
 
-// router.route('/users:userId/friends')
+// app.route('/challenges')
 //   .get(fitCoinController.retrieveOne(req, res))
 //   .post(fitCoinController.createOne(req, res))
 //   .update(fitCoinController.updateOne(req, res))
 //   .delete(fitCoinController.delete(req, res));
 
-// router.route('/challenges')
+// app.route('/challenges/:status')
 //   .get(fitCoinController.retrieveOne(req, res))
 //   .post(fitCoinController.createOne(req, res))
 //   .update(fitCoinController.updateOne(req, res))
 //   .delete(fitCoinController.delete(req, res));
 
-// router.route('/challenges/:status')
+// app.route('/challenges/:id')
 //   .get(fitCoinController.retrieveOne(req, res))
 //   .post(fitCoinController.createOne(req, res))
 //   .update(fitCoinController.updateOne(req, res))
 //   .delete(fitCoinController.delete(req, res));
 
-// router.route('/challenges/:id')
+// app.route('/challenges/:id/participants')
 //   .get(fitCoinController.retrieveOne(req, res))
 //   .post(fitCoinController.createOne(req, res))
 //   .update(fitCoinController.updateOne(req, res))
 //   .delete(fitCoinController.delete(req, res));
 
-// router.route('/challenges/:id/participants')
+// app.route('/challenges/:id/participants')
 //   .get(fitCoinController.retrieveOne(req, res))
 //   .post(fitCoinController.createOne(req, res))
 //   .update(fitCoinController.updateOne(req, res))
 //   .delete(fitCoinController.delete(req, res));
 
-// router.route('/challenges/:id/participants')
-//   .get(fitCoinController.retrieveOne(req, res))
-//   .post(fitCoinController.createOne(req, res))
-//   .update(fitCoinController.updateOne(req, res))
-//   .delete(fitCoinController.delete(req, res));
+
+
+
+// this is for React Router, it's supposed to help with browserHistory and
+// allow the user to refresh on say the /about page and it'll work...but it's broke
+
+app.get('*', function (request, response) {
+  response.sendFile(path.resolve(__dirname, '../app/public', 'index.html'));
+});
 
 app.listen(3000, function () {
   console.log('Our app is listening on port 3000!');

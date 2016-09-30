@@ -241,7 +241,7 @@ app.get('/auth/fitbit/callback', fitbitAuthenticate);
 
 app.get('/auth/fitbit/success', function(req, res, next) {
 
-  res.redirect('/profile');
+  res.redirect('/challenges');
 });
 
 app.get('/auth/checkLogin', function(req, res) {

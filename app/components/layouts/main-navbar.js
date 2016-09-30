@@ -43,7 +43,7 @@ class MainNavBar extends Component {
     var loggedIn, loggerButton, openCV;
     if (this.props.isLoggedIn === true) {
       loggerButton = <li><a href="/auth/logout"><span className="glyphicon glyphicon-log-in"></span> Logout</a></li>;
-      loggedIn = <li><Link to='/profile'>Profile</Link></li>;
+      loggedIn = <li><Link to='/challenges'>Challenges</Link></li>;
       openCV = <li><Link to='/openCV'>OpenCV</Link></li>;
     } else {
       loggerButton = <li><a href="/auth/fitbit"><span className="glyphicon glyphicon-log-in"></span> Login</a></li>;
@@ -85,8 +85,3 @@ const mapStateToProps = function(store) {
 };
 // users are now props on UserListContainer
 export default connect(mapStateToProps)(MainNavBar);
-
-
-
-// <MenuItem containerElement={<Link to="/" />} primaryText="Home" />
-// <MenuItem containerElement={<Link to="/profile" />} primaryText="Profile" />

@@ -220,6 +220,19 @@ app.get('/auth/fitbit/success', function(req, res, next) {
   res.send(req.user);
 });
 
+app.get('/checkLogin', function(req, res) {
+  if (req.user) {
+    res.send('authenticated');
+  } else {
+    res.send('unauthenticated');
+  }
+});
+
+app.get('/logout', function(req, res) {
+  req.logout();
+  res.redirect('/');
+});
+
 // this is for React Router, it's supposed to help with browserHistory and
 // allow the user to refresh on say the /about page and it'll work...but it's broke
 app.get('*', function (request, response) {

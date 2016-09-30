@@ -1,3 +1,4 @@
+
 import React, {Component} from 'react';
 import { Link } from 'react-router';
 import Paper from 'material-ui/Paper';
@@ -8,6 +9,7 @@ import axios from 'axios';
 import {authSuccess, authFailure} from '../../actions/user-actions.js';
 import store from '../../store.js';
 
+
 const style = {
   display: 'inline-block',
   margin: '0px 0px 0px 1160px',
@@ -15,7 +17,10 @@ const style = {
   width: '100px'
 };
 
+
 class MainNavBar extends Component {
+
+
   constructor (props) {
     super(props);
   }
@@ -38,7 +43,7 @@ class MainNavBar extends Component {
     var loggedIn, loggerButton, openCV;
     if (this.props.isLoggedIn === true) {
       loggerButton = <li><a href="/auth/logout"><span className="glyphicon glyphicon-log-in"></span> Logout</a></li>;
-      loggedIn = <li><Link to='/profile'>Profile</Link></li>;
+      loggedIn = <li><Link to='/challenges'>Challenges</Link></li>;
       openCV = <li><Link to='/openCV'>OpenCV</Link></li>;
     } else {
       loggerButton = <li><a href="/auth/fitbit"><span className="glyphicon glyphicon-log-in"></span> Login</a></li>;
@@ -72,13 +77,6 @@ class MainNavBar extends Component {
 }
 
 
-
-
-
-
-
-
-
 const mapStateToProps = function(store) {
   return {
     store,
@@ -87,8 +85,3 @@ const mapStateToProps = function(store) {
 };
 // users are now props on UserListContainer
 export default connect(mapStateToProps)(MainNavBar);
-
-
-
-// <MenuItem containerElement={<Link to="/" />} primaryText="Home" />
-// <MenuItem containerElement={<Link to="/profile" />} primaryText="Profile" />

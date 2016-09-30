@@ -32,6 +32,12 @@ const style = {
     width: 80,
     margin: '10px 0px 0px 80px'
   },
+  tableCNT: {
+    textAlign: 'center'
+  },
+  tableRGT: {
+    margin: '0px 500px 0px 0px'
+  }
 };
 
 export default function (props) {
@@ -46,11 +52,27 @@ export default function (props) {
         <span style={style.button}href="#" className="btn btn-primary btn-warning"><span className="glyphicon glyphicon-flash"></span> GO!</span>
       </Paper>
 
+      <table className="table">
+        <thead className="thead-inverse">
+            <th >Author</th>
+            <th style={style.tableCNT}>Title</th>
+            <th style={style.tableRGT}>Pages</th>
+        </thead>
+      </table>
+
       {props.users.map((user, index) => {
         return (
           <div key={index}>
-            <div style={style.text}>Page Count: {user.volumeInfo.pageCount}</div>
-            <div style={style.text}> Book Title: {user.volumeInfo.title}</div>
+            <table className="table">
+              <tbody>
+                <tr >
+                  <td >{user.volumeInfo.authors[0]}</td>
+                  <td style={style.tableCNT}>{user.volumeInfo.title}</td>
+                  <td>{user.volumeInfo.pageCount}</td>
+                  <a href="#" className="btn btn-xs btn-danger"><span className="glyphicon glyphicon-remove-sign" ></span> Delete</a>
+                </tr>
+              </tbody>
+            </table>
           </div>
         );
       })}

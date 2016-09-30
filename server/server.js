@@ -35,7 +35,7 @@ var fitbitStrategy = new FitbitStrategy({
   console.log('profile', profile);
   console.log('params', params);
   User.find( {where: {fbUserId: params.user_id}} )
-   .then(function(user) { 
+   .then(function(user) {
      if (user === null) {
        console.log('user not found, creating user...');
      // console.log('TOKEN.access_token', token.access_token);
@@ -105,7 +105,7 @@ var User = sequelize.define('users', {
   },
   fbUserId: {
     type: Sequelize.STRING
-  }, 
+  },
   expiresAt: {
     type: Sequelize.DATE
   }
@@ -192,7 +192,7 @@ var FbActivityStats = sequelize.define('fb_lifetime_stats', {
   },
   trackerSteps: {
     type: Sequelize.INTEGER
-  }  
+  }
 });
 
 
@@ -211,7 +211,7 @@ var UserChallengesJT = sequelize.define('user_challenges_jt', {
   },
   metricCurrent: {
     type: Sequelize.STRING
-  }, 
+  },
   metricGoal: {
     type: Sequelize.STRING
   }
@@ -241,7 +241,7 @@ app.get('/auth/fitbit/callback', fitbitAuthenticate);
 
 app.get('/auth/fitbit/success', function(req, res, next) {
 
-  res.redirect('/profile');
+  res.redirect('/challenges');
 });
 
 app.get('/auth/checkLogin', function(req, res) {
@@ -259,9 +259,11 @@ app.get('/auth/logout', function(req, res) {
 
 // this is for React Router, it's supposed to help with browserHistory and
 // allow the user to refresh on say the /about page and it'll work...but it's broke
+
 app.get('*', function (request, response) {
   response.sendFile(path.resolve(__dirname, '../app/public', 'index.html'));
 });
+
 
 
 
@@ -275,11 +277,11 @@ app.get('/get_stats', function(req, res) {
   //   .then(function(found) {});
 
 
-  // get data from fitbit API      
+  // get data from fitbit API
   var options = { method: 'GET',
     // url: 'https://api.fitbit.com/1/user/4Y8S2G/activities.json',
     url: 'https://api.fitbit.com/1/user/4Y8S2G/profile.json',
-    headers: 
+    headers:
      { 'postman-token': 'c17d8f37-ed07-6f46-b56e-2fe51919302f',
        'cache-control': 'no-cache',
        'x-fitbit-subscriber-id': '4Y8S2G',
@@ -367,7 +369,6 @@ app.get('/challenges/:id/participants/:id', function(req, res) {
 //   .post(fitCoinController.createOne(req, res))
 //   .update(fitCoinController.updateOne(req, res))
 //   .delete(fitCoinController.delete(req, res));
-
 
 app.listen(3000, function () {
   console.log('Our app is listening on port 3000!');

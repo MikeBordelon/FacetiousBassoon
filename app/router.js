@@ -19,7 +19,7 @@ export default (
     <Route component={MainNavBar}>
       <Route path='/' component={Home}/>
       <Route path='/about' component={About}/>
-      <Route path='/profile' component={UserListContainer}/>
+      <Route path='/challenges' component={UserListContainer}/>
       <Route path='/openCV' component={OpenCVContainer}/>
     </Route>
   </Router>

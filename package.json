@@ -4,7 +4,7 @@
   "description": "Thesis App",
   "main": "server.js",
   "scripts": {
-    "start": "./wait-for-it.sh db:5432 && npm run dev-fe",
+    "start": "./wait-for-it.sh db:5432 && npm run dev-be",
     "dev-fe": "node server/server.js",
     "dev-be": "nodemon server/server.js"
   },
@@ -22,6 +22,8 @@
     "axios": "^0.14.0",
     "body-parser": "^1.15.2",
     "bootstrap": "^3.3.7",
+    "cookie-parser": "^1.4.3",
+    "express-session": "^1.14.1",
     "fitbit-client-oauth2": "^2.0.3",
     "material-ui": "^0.15.4",
     "passport": "^0.3.2",

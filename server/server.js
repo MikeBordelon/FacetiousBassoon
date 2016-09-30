@@ -1,71 +1,61 @@
-var webpack = require('webpack');
-var webpackDevMiddleware = require('webpack-dev-middleware');
-var webpackHotMiddleware = require('webpack-hot-middleware');
-var webpackconfig = require('../webpack.config.js');
-var webpackcompiler = webpack(webpackconfig);
-
-
-
-//enable webpack middleware for hot-reloads in development
-var useWebpackMiddleware = function (app) {
-  app.use(webpackDevMiddleware(webpackcompiler, {
-    publicPath: webpackconfig.output.publicPath,
-    stats: {
-      colors: true,
-      chunks: false, // this reduces the amount of stuff I see in my terminal; configure to your needs
-      'errors-only': true
-    }
-  }));
-  app.use(webpackHotMiddleware(webpackcompiler, {
-    log: console.log
-  }));
-
-  return app;
-};
-
-const clientId = '228246';
-const clientSecret = '7491889262e92cce0bd1244fbacc14ab';
-const callbackUrl = 'http://127.0.0.1:3000/auth/fitbit/callback';
+var express = require('express');
+var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session');
+var FitbitStrategy = require('passport-fitbit-oauth2').FitbitOAuth2Strategy;
 var passport = require('passport');
-// var FitbitClient = require('fitbit-client-oauth2');
+var app = express();
 
-var FitbitStrategy = require( 'passport-fitbit-oauth2' ).FitbitOAuth2Strategy;
+var helperFunctions = require('./resources/helperFunctions.js');
+var authConfig = require('./resources/authConfig.js');
 
-passport.use(new FitbitStrategy({
-  clientID: clientId,
-  clientSecret: clientSecret,
-  callbackURL: callbackUrl
-},
-  function(accessToken, refreshToken, profile, done) {
-    User.findOrCreate({ fitbitId: profile.id }, function (err, user) {
-      return done(err, user);
-    });
-  }
-));
+helperFunctions.useWebpackMiddleware(app);
+app.use(cookieParser());
+app.use(bodyParser());
+app.use(session({ secret: 'keyboard cat' }));
+app.use(passport.initialize());
+app.use(passport.session({
+  resave: false,
+  saveUninitialized: true
+}));
+
+app.use(passport.initialize());
+
+var fitbitStrategy = new FitbitStrategy({
+  clientID: authConfig.lex.clientId,
+  clientSecret: authConfig.lex.clientSecret,
+  scope: ['activity', 'heartrate', 'location', 'profile'],
+  callbackURL: authConfig.lex.callbackURL
+}, function(accessToken, refreshToken, profile, done) {
+  // TODO: save accessToken here for later use
+
+  done(null, {
+    accessToken: accessToken,
+    refreshToken: refreshToken,
+    profile: profile
+  });
+
+});
+
+passport.use(fitbitStrategy);
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(obj, done) {
+  done(null, obj);
+});
+
+var fitbitAuthenticate = passport.authenticate('fitbit', {
+  successRedirect: '/auth/fitbit/success',
+  failureRedirect: '/auth/fitbit/failure'
+});
 
 
 var Sequelize = require('sequelize');
 var sequelize = new Sequelize(process.env.DATABASE_URL || 'postgres://docker:docker@db:5432/fitcoin');
 var path = require('path');
-var express = require('express');
-
-var app = express();
-// var client = new FitbitClient(clientId, clientSecret);
-// var redirectUri = callbackUrl;
-
-
-useWebpackMiddleware(app);
-app.use(bodyParser());
-
-// this is for React Router, it's supposed to help with browserHistory and
-// allow the user to refresh on say the /about page and it'll work...but it's broke
-app.get('*', function (request, response) {
-  response.sendFile(path.resolve(__dirname, '../app/public', 'index.html'));
-});
-
-app.use(express.static(path.join(__dirname, '../app/public')));
-
 sequelize.sync({force: true});
 var User = sequelize.define('users', {
   firstName: {
@@ -90,83 +80,23 @@ var User = sequelize.define('users', {
   expires_at: {
     type: Sequelize.DATE
   }
-
-
 });
-app.get('/auth/fitbit',
-  passport.authenticate('fitbit', { scope: ['activity', 'heartrate', 'location', 'profile'] }
-));
 
-app.get( '/auth/fitbit/callback', passport.authenticate( 'fitbit', { 
-  successRedirect: '/auth/fitbit/success',
-  failureRedirect: '/auth/fitbit/failure'
-}));
+app.use(express.static(path.join(__dirname, '../app/public')));
 
-// sequelize.sync().then(function () {
-//   // Table created
-//   User.create({
-//     firstName: 'John',
-//     lastName: 'Hancock'
-//   }).then(function() {
+app.get('/auth/fitbit', fitbitAuthenticate);
+app.get('/auth/fitbit/callback', fitbitAuthenticate);
 
-//     User.findAll({}).then(function(found) {
-//       console.log('HEY!kuhdasdhasdkashdsakjhdsadasdasd', found);
-//     });
+app.get('/auth/fitbit/success', function(req, res, next) {
 
-//   });
+  res.send(req.user);
+});
 
-// });
-
-
-// app.get('/auth/fitbit', function(req, res) {
-//   var authUrl = client.getAuthorizationUrl(callbackUrl);
-//   res.redirect(authUrl);
-// });
-
-
-// app.get('/auth/fitbit/callback', function(req, res, next) {
-
-//   client.getToken(req.query.code, redirectUri)
-//     .then(function(token) {
-
-//       // ... save your token on session or db ...
-//       token = token.token;
-//       User
-//         .find( {where: {fb_user_id: token.user_id}} )
-//         .then(function(user) { 
-//           if (user === null) {
-//             console.log('user not found, creating user...');
-//            // console.log('TOKEN.access_token', token.access_token);
-//             User.create({
-//               firstName: 'Test',
-//               lastName: 'Testerson',
-//               access_token: token.access_token,
-//               refresh_token: token.refresh_token,
-//               expires_in: token.expires_in,
-//               fb_user_id: token.user_id,
-//               expires_at: token.expires_at
-//             })
-//           .then(function() {
-//             User.findAll({}).then(function(found) {
-//               console.log('HEY!kuhdasdhasdkashdsakjhdsadasdasd', found);
-//             });
-//           });
-//           } else {
-//             console.log('User found', user);
-//           }
-//         });
-         
-//       // then redirect
-//       //res.redirect(302, '/user');
-//       res.send(token);
-//     })
-//     .catch(function(err) {
-//       // something went wrong.
-//       res.send(500, err);
-//     });
-// });
-
-
+// this is for React Router, it's supposed to help with browserHistory and
+// allow the user to refresh on say the /about page and it'll work...but it's broke
+app.get('*', function (request, response) {
+  response.sendFile(path.resolve(__dirname, '../app/public', 'index.html'));
+});
 
 app.listen(3000, function () {
   console.log('Our app is listening on port 3000!');

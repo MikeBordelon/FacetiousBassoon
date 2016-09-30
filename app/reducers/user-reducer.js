@@ -1,7 +1,7 @@
 
 const initialState = {
   users: [],
-  isLoggedIn: true,
+  isLoggedIn: false,
   openCV: 'someCoolImages'
 
 };

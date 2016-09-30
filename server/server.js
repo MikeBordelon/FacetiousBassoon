@@ -13,7 +13,7 @@ var authConfig = require('./resources/authConfig.js');
 helperFunctions.useWebpackMiddleware(app);
 app.use(cookieParser());
 app.use(bodyParser());
-app.use('/api', router); // added /api prefix to distinguish back end routes
+// app.use('/api', router); // added /api prefix to distinguish back end routes
 app.use(session({ secret: 'keyboard cat' }));
 app.use(passport.initialize());
 app.use(passport.session({
@@ -28,15 +28,39 @@ var fitbitStrategy = new FitbitStrategy({
   clientSecret: authConfig.lex.clientSecret,
   scope: ['activity', 'heartrate', 'location', 'profile'],
   callbackURL: authConfig.lex.callbackURL
-}, function(accessToken, refreshToken, profile, done) {
+}, function(accessToken, refreshToken, params, profile, done) {
   // TODO: save accessToken here for later use
-
+  console.log('accessToken', accessToken);
+  console.log('refreshToken', refreshToken);
+  console.log('profile', profile);
+  console.log('params', params);
+  User.find( {where: {fbUserId: params.user_id}} )
+   .then(function(user) { 
+     if (user === null) {
+       console.log('user not found, creating user...');
+     // console.log('TOKEN.access_token', token.access_token);
+       User.create({
+         firstName: profile._json.user.fullName.split(' ')[0],
+         lastName: profile._json.user.fullName.split(' ')[profile._json.user.fullName.split(' ').length - 1],
+         accessToken: params.access_token,
+         refreshToken: params.refresh_token,
+         expiresIn: params.expires_in,
+         fbUserId: params.user_id
+       })
+     .then(function() {
+       User.findAll({}).then(function(found) {
+         console.log('HEY!kuhdasdhasdkashdsakjhdsadasdasd', found);
+       });
+     });
+     } else {
+       console.log('User found', user);
+     }
+   });
   done(null, {
     accessToken: accessToken,
     refreshToken: refreshToken,
     profile: profile
   });
-
 });
 
 passport.use(fitbitStrategy);
@@ -217,10 +241,10 @@ app.get('/auth/fitbit/callback', fitbitAuthenticate);
 
 app.get('/auth/fitbit/success', function(req, res, next) {
 
-  res.send(req.user);
+  res.redirect('/profile');
 });
 
-app.get('/checkLogin', function(req, res) {
+app.get('/auth/checkLogin', function(req, res) {
   if (req.user) {
     res.send('authenticated');
   } else {
@@ -228,7 +252,7 @@ app.get('/checkLogin', function(req, res) {
   }
 });
 
-app.get('/logout', function(req, res) {
+app.get('/auth/logout', function(req, res) {
   req.logout();
   res.redirect('/');
 });
@@ -243,56 +267,6 @@ app.get('*', function (request, response) {
 
 
 // Routes
-
-// Auth routes
-// Initiate FitBit auth flow
-app.get('/auth/fitbit', function(req, res) {
-  var auth_url = client.getAuthorizationUrl(callback_url);
-  res.redirect(auth_url);
-});
-
-// Success callback for FitBit auth
-app.get('/auth/fitbit/callback', function(req, res, next) {
-
-  client.getToken(req.query.code, redirect_uri)
-    .then(function(token) {
-
-      // ... save your token on session or db ...
-      token = token.token;
-      User
-         .find( {where: {fbUserId: token.user_id}} )
-         .then(function(user) { 
-           if (user === null) {
-             console.log('user not found, creating user...');
-           // console.log('TOKEN.access_token', token.access_token);
-             User.create({
-               firstName: "Test",
-               lastName: "Testerson",
-               accessToken: token.access_token,
-               refreshToken: token.refresh_token,
-               expiresIn: token.expires_in,
-               fbUserId: token.user_id,
-               expiresAt: token.expires_at
-             })
-           .then(function() {
-             User.findAll({}).then(function(found) {
-               console.log('HEY!kuhdasdhasdkashdsakjhdsadasdasd', found);
-             });
-           });
-           } else {
-             console.log('User found', user);
-           }
-         });
-         
-      // then redirect
-      //res.redirect(302, '/user');
-      res.send(token);
-    })
-    .catch(function(err) {
-      // something went wrong.
-      res.send(500, err);
-    });
-});
 
 // Get info from FitBit API
 app.get('/get_stats', function(req, res) {

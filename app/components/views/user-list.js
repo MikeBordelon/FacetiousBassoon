@@ -35,7 +35,7 @@ const style = {
 };
 
 export default function (props) {
-  console.log(props);
+  // console.log(props);
   return (
 
     <div>
@@ -46,9 +46,9 @@ export default function (props) {
         <span style={style.button}href="#" className="btn btn-primary btn-warning"><span className="glyphicon glyphicon-flash"></span> GO!</span>
       </Paper>
 
-      {props.users.map(user => {
+      {props.users.map((user, index) => {
         return (
-          <div>
+          <div key={index}>
             <div style={style.text}>Page Count: {user.volumeInfo.pageCount}</div>
             <div style={style.text}> Book Title: {user.volumeInfo.title}</div>
           </div>

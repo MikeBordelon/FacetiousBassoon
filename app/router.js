@@ -15,7 +15,7 @@ import OpenCVContainer from './components/containers/OpenCV-container';
 // import StaticContainer from './components/containers/static-container';
 
 export default (
-  <Router history={hashHistory}>
+  <Router history={browserHistory}>
     <Route component={MainNavBar}>
       <Route path='/' component={Home}/>
       <Route path='/about' component={About}/>

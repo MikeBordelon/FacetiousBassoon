@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var FitbitStrategy = require('passport-fitbit-oauth2').FitbitOAuth2Strategy;
 var passport = require('passport');
-// var router = require('./resources/router.js');
+var router; //  = require('./resources/router.js');
 var app = express();
 
 var helperFunctions = require('./resources/helperFunctions.js');
@@ -70,7 +70,7 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
-
+// 
 var fitbitAuthenticate = passport.authenticate('fitbit', {
   successRedirect: '/auth/fitbit/success',
   failureRedirect: '/auth/fitbit/failure'

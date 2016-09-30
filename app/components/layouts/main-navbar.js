@@ -1,3 +1,4 @@
+
 import React, {Component} from 'react';
 import { Link } from 'react-router';
 import Paper from 'material-ui/Paper';
@@ -8,6 +9,7 @@ import axios from 'axios';
 import {authSuccess, authFailure} from '../../actions/user-actions.js';
 import store from '../../store.js';
 
+
 const style = {
   display: 'inline-block',
   margin: '0px 0px 0px 1160px',
@@ -15,7 +17,10 @@ const style = {
   width: '100px'
 };
 
+
 class MainNavBar extends Component {
+
+
   constructor (props) {
     super(props);
   }
@@ -70,13 +75,6 @@ class MainNavBar extends Component {
       );
   }
 }
-
-
-
-
-
-
-
 
 
 const mapStateToProps = function(store) {

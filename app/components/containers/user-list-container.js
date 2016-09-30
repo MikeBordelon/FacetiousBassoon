@@ -11,7 +11,7 @@ const UserListContainer = React.createClass({
   componentDidMount: function() {
     axios.get('https://www.googleapis.com/books/v1/volumes?', {
       params: {
-        q: 'Potter'
+        q: 'Pot'
       }
     })
     .then(response => {

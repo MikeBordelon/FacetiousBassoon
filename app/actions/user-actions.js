@@ -9,6 +9,8 @@ export function authSuccess() {
   return {
     type: 'AUTH_SUCCESS',
     isLoggedIn: true
+
+
     // userID
   };
 }

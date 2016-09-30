@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var FitbitStrategy = require('passport-fitbit-oauth2').FitbitOAuth2Strategy;
 var passport = require('passport');
+var router = require('./resources/router');
 var app = express();
 
 var helperFunctions = require('./resources/helperFunctions.js');
@@ -12,6 +13,7 @@ var authConfig = require('./resources/authConfig.js');
 helperFunctions.useWebpackMiddleware(app);
 app.use(cookieParser());
 app.use(bodyParser());
+app.use('/api', router); // added /api prefix to distinguish back end routes
 app.use(session({ secret: 'keyboard cat' }));
 app.use(passport.initialize());
 app.use(passport.session({
@@ -51,11 +53,15 @@ var fitbitAuthenticate = passport.authenticate('fitbit', {
 });
 
 
+// Database connection
 var Sequelize = require('sequelize');
 var sequelize = new Sequelize(process.env.DATABASE_URL || 'postgres://docker:docker@db:5432/fitcoin');
 var path = require('path');
 sequelize.sync({force: true});
 
+
+// Database schemas
+// Users Table
 var User = sequelize.define('users', {
   firstName: {
     type: Sequelize.STRING,
@@ -75,11 +81,134 @@ var User = sequelize.define('users', {
   },
   fbUserId: {
     type: Sequelize.STRING
-  },
+  }, 
   expiresAt: {
     type: Sequelize.DATE
   }
 });
+
+
+var FbAttributes = sequelize.define('fb_attributes', {
+  avatar: {
+    type: Sequelize.STRING
+  },
+  avatar150: {
+    type: Sequelize.STRING
+  },
+  dateOfBirth: {
+    type: Sequelize.DATE
+  },
+  displayName: {
+    type: Sequelize.STRING
+  },
+  distanceUnit: {
+    type: Sequelize.STRING
+  },
+  encodedId: {
+    type: Sequelize.STRING
+  },
+  height: {
+    type: Sequelize.STRING // num with floating point? 193.10000000000002
+  },
+  heightUnit: {
+    type: Sequelize.STRING
+  },
+  locale: {
+    type: Sequelize.STRING
+  },
+  offsetFromUTCMillis: {
+    type: Sequelize.INTEGER // signed int? -25200000,
+  },
+  strideLengthRunning: {
+    type: Sequelize.STRING // num with floating point?
+  },
+  strideLengthRunningType: {
+    type: Sequelize.STRING // decimal place?114.7
+  },
+  strideLengthWalking: {
+    type: Sequelize.INTEGER // num with large floating point 80.10000000000001,
+  },
+  strideLengthWalkingType: {
+    type: Sequelize.STRING
+  },
+  timezone: {
+    type: Sequelize.STRING
+  },
+  weight: {
+    type: Sequelize.INTEGER  // decimal usints
+  },
+  weightUnit: {
+    type: Sequelize.STRING
+  }
+});
+
+
+
+var FbActivityStats = sequelize.define('fb_lifetime_stats', {
+  totalCaloriesOut: {
+    type: Sequelize.INTEGER
+  },
+  totalDistance: {
+    type: Sequelize.INTEGER
+  },
+  totalFloors: {
+    type: Sequelize.INTEGER
+  },
+  totalSteps: {
+    type: Sequelize.INTEGER
+  },
+  trackerCaloriesOut: {
+    type: Sequelize.INTEGER
+  },
+  trackerDistance: {
+    type: Sequelize.INTEGER
+  },
+  trackerFloors: {
+    type: Sequelize.INTEGER
+  },
+  trackerSteps: {
+    type: Sequelize.INTEGER
+  }  
+});
+
+
+var UserChallengesJT = sequelize.define('user_challenges_jt', {
+  userId: {
+    type: Sequelize.STRING // num?
+  },
+  challengeId: {
+    type: Sequelize.STRING // num?
+  },
+  metricType: {
+    type: Sequelize.STRING
+  },
+  metricStart: {
+    type: Sequelize.STRING
+  },
+  metricCurrent: {
+    type: Sequelize.STRING
+  }, 
+  metricGoal: {
+    type: Sequelize.STRING
+  }
+});
+
+var Challenges = sequelize.define('challenges', {
+  ethereumAddress: {
+    type: Sequelize.STRING // just a string?
+  },
+  creationDate: {
+    type: Sequelize.DATE // special date?
+  },
+  expirationDate: {
+    type: Sequelize.DATE // special date?
+  },
+  status: {
+    type: Sequelize.STRING
+  }
+});
+
+
 
 app.use(express.static(path.join(__dirname, '../app/public')));
 

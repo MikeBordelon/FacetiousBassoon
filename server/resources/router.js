@@ -103,49 +103,49 @@ app.get('/challenges/:id/participants/:id', function(req, res) {
 // app.get('/auth/:status', function(req, res) {});
 
 // Routes - basic format
-fitCoin.route('/users/:userId')
+router.route('/users/:userId')
   .get(fitCoinController.retrieveOne(req, res))
   .post(fitCoinController.createOne(req, res))
   .update(fitCoinController.updateOne(req, res))
   .delete(fitCoinController.delete(req, res));
 
-fitCoin.route('/users/:userId')
+router.route('/users/:userId')
   .get(fitCoinController.retrieveOne(req, res))
   .post(fitCoinController.createOne(req, res))
   .update(fitCoinController.updateOne(req, res))
   .delete(fitCoinController.delete(req, res));
 
-fitCoin.route('/users:userId/friends')
+router.route('/users:userId/friends')
   .get(fitCoinController.retrieveOne(req, res))
   .post(fitCoinController.createOne(req, res))
   .update(fitCoinController.updateOne(req, res))
   .delete(fitCoinController.delete(req, res));
 
-fitCoin.route('/challenges')
+router.route('/challenges')
   .get(fitCoinController.retrieveOne(req, res))
   .post(fitCoinController.createOne(req, res))
   .update(fitCoinController.updateOne(req, res))
   .delete(fitCoinController.delete(req, res));
 
-fitCoin.route('/challenges/:status')
+router.route('/challenges/:status')
   .get(fitCoinController.retrieveOne(req, res))
   .post(fitCoinController.createOne(req, res))
   .update(fitCoinController.updateOne(req, res))
   .delete(fitCoinController.delete(req, res));
 
-fitCoin.route('/challenges/:id')
+router.route('/challenges/:id')
   .get(fitCoinController.retrieveOne(req, res))
   .post(fitCoinController.createOne(req, res))
   .update(fitCoinController.updateOne(req, res))
   .delete(fitCoinController.delete(req, res));
 
-fitCoin.route('/challenges/:id/participants')
+router.route('/challenges/:id/participants')
   .get(fitCoinController.retrieveOne(req, res))
   .post(fitCoinController.createOne(req, res))
   .update(fitCoinController.updateOne(req, res))
   .delete(fitCoinController.delete(req, res));
 
-fitCoin.route('/challenges/:id/participants')
+router.route('/challenges/:id/participants')
   .get(fitCoinController.retrieveOne(req, res))
   .post(fitCoinController.createOne(req, res))
   .update(fitCoinController.updateOne(req, res))

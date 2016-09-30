@@ -229,3 +229,5 @@ app.get('*', function (request, response) {
 app.listen(3000, function () {
   console.log('Our app is listening on port 3000!');
 });
+
+module.exports = app;

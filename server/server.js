@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var FitbitStrategy = require('passport-fitbit-oauth2').FitbitOAuth2Strategy;
 var passport = require('passport');
+// var router = require('./resources/router.js');
 var app = express();
 
 var helperFunctions = require('./resources/helperFunctions.js');
@@ -12,6 +13,7 @@ var authConfig = require('./resources/authConfig.js');
 helperFunctions.useWebpackMiddleware(app);
 app.use(cookieParser());
 app.use(bodyParser());
+app.use('/api', router); // added /api prefix to distinguish back end routes
 app.use(session({ secret: 'keyboard cat' }));
 app.use(passport.initialize());
 app.use(passport.session({
@@ -38,11 +40,9 @@ var fitbitStrategy = new FitbitStrategy({
 });
 
 passport.use(fitbitStrategy);
-
 passport.serializeUser(function(user, done) {
   done(null, user);
 });
-
 passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
@@ -53,10 +53,15 @@ var fitbitAuthenticate = passport.authenticate('fitbit', {
 });
 
 
+// Database connection
 var Sequelize = require('sequelize');
 var sequelize = new Sequelize(process.env.DATABASE_URL || 'postgres://docker:docker@db:5432/fitcoin');
 var path = require('path');
 sequelize.sync({force: true});
+
+
+// Database schemas
+// Users Table
 var User = sequelize.define('users', {
   firstName: {
     type: Sequelize.STRING,
@@ -65,22 +70,145 @@ var User = sequelize.define('users', {
   lastName: {
     type: Sequelize.STRING
   },
-  access_token: {
+  accessToken: {
     type: Sequelize.STRING
   },
-  refresh_token: {
+  refreshToken: {
     type: Sequelize.STRING
   },
-  expires_in: {
+  expiresIn: {
     type: Sequelize.INTEGER
   },
-  fb_user_id: {
+  fbUserId: {
     type: Sequelize.STRING
-  },
-  expires_at: {
+  }, 
+  expiresAt: {
     type: Sequelize.DATE
   }
 });
+
+
+var FbAttributes = sequelize.define('fb_attributes', {
+  avatar: {
+    type: Sequelize.STRING
+  },
+  avatar150: {
+    type: Sequelize.STRING
+  },
+  dateOfBirth: {
+    type: Sequelize.DATE
+  },
+  displayName: {
+    type: Sequelize.STRING
+  },
+  distanceUnit: {
+    type: Sequelize.STRING
+  },
+  encodedId: {
+    type: Sequelize.STRING
+  },
+  height: {
+    type: Sequelize.STRING // num with floating point? 193.10000000000002
+  },
+  heightUnit: {
+    type: Sequelize.STRING
+  },
+  locale: {
+    type: Sequelize.STRING
+  },
+  offsetFromUTCMillis: {
+    type: Sequelize.INTEGER // signed int? -25200000,
+  },
+  strideLengthRunning: {
+    type: Sequelize.STRING // num with floating point?
+  },
+  strideLengthRunningType: {
+    type: Sequelize.STRING // decimal place?114.7
+  },
+  strideLengthWalking: {
+    type: Sequelize.INTEGER // num with large floating point 80.10000000000001,
+  },
+  strideLengthWalkingType: {
+    type: Sequelize.STRING
+  },
+  timezone: {
+    type: Sequelize.STRING
+  },
+  weight: {
+    type: Sequelize.INTEGER  // decimal usints
+  },
+  weightUnit: {
+    type: Sequelize.STRING
+  }
+});
+
+
+
+var FbActivityStats = sequelize.define('fb_lifetime_stats', {
+  totalCaloriesOut: {
+    type: Sequelize.INTEGER
+  },
+  totalDistance: {
+    type: Sequelize.INTEGER
+  },
+  totalFloors: {
+    type: Sequelize.INTEGER
+  },
+  totalSteps: {
+    type: Sequelize.INTEGER
+  },
+  trackerCaloriesOut: {
+    type: Sequelize.INTEGER
+  },
+  trackerDistance: {
+    type: Sequelize.INTEGER
+  },
+  trackerFloors: {
+    type: Sequelize.INTEGER
+  },
+  trackerSteps: {
+    type: Sequelize.INTEGER
+  }  
+});
+
+
+var UserChallengesJT = sequelize.define('user_challenges_jt', {
+  userId: {
+    type: Sequelize.STRING // num?
+  },
+  challengeId: {
+    type: Sequelize.STRING // num?
+  },
+  metricType: {
+    type: Sequelize.STRING
+  },
+  metricStart: {
+    type: Sequelize.STRING
+  },
+  metricCurrent: {
+    type: Sequelize.STRING
+  }, 
+  metricGoal: {
+    type: Sequelize.STRING
+  }
+});
+
+var Challenges = sequelize.define('challenges', {
+  ethereumAddress: {
+    type: Sequelize.STRING // just a string?
+  },
+  creationDate: {
+    type: Sequelize.DATE // special date?
+  },
+  expirationDate: {
+    type: Sequelize.DATE // special date?
+  },
+  status: {
+    type: Sequelize.STRING
+  }
+});
+
+
 
 app.use(express.static(path.join(__dirname, '../app/public')));
 
@@ -97,6 +225,162 @@ app.get('/auth/fitbit/success', function(req, res, next) {
 app.get('*', function (request, response) {
   response.sendFile(path.resolve(__dirname, '../app/public', 'index.html'));
 });
+
+
+
+
+// Routes
+
+// Auth routes
+// Initiate FitBit auth flow
+app.get('/auth/fitbit', function(req, res) {
+  var auth_url = client.getAuthorizationUrl(callback_url);
+  res.redirect(auth_url);
+});
+
+// Success callback for FitBit auth
+app.get('/auth/fitbit/callback', function(req, res, next) {
+
+  client.getToken(req.query.code, redirect_uri)
+    .then(function(token) {
+
+      // ... save your token on session or db ...
+      token = token.token;
+      User
+         .find( {where: {fbUserId: token.user_id}} )
+         .then(function(user) { 
+           if (user === null) {
+             console.log('user not found, creating user...');
+           // console.log('TOKEN.access_token', token.access_token);
+             User.create({
+               firstName: "Test",
+               lastName: "Testerson",
+               accessToken: token.access_token,
+               refreshToken: token.refresh_token,
+               expiresIn: token.expires_in,
+               fbUserId: token.user_id,
+               expiresAt: token.expires_at
+             })
+           .then(function() {
+             User.findAll({}).then(function(found) {
+               console.log('HEY!kuhdasdhasdkashdsakjhdsadasdasd', found);
+             });
+           });
+           } else {
+             console.log('User found', user);
+           }
+         });
+         
+      // then redirect
+      //res.redirect(302, '/user');
+      res.send(token);
+    })
+    .catch(function(err) {
+      // something went wrong.
+      res.send(500, err);
+    });
+});
+
+// Get info from FitBit API
+app.get('/get_stats', function(req, res) {
+  // get user ID
+  // sequelize.query('SELECT * FROM "users"', { type: sequelize.QueryTypes.SELECT})
+  //   .then(function(found) {});
+
+
+  // get data from fitbit API      
+  var options = { method: 'GET',
+    // url: 'https://api.fitbit.com/1/user/4Y8S2G/activities.json',
+    url: 'https://api.fitbit.com/1/user/4Y8S2G/profile.json',
+    headers: 
+     { 'postman-token': 'c17d8f37-ed07-6f46-b56e-2fe51919302f',
+       'cache-control': 'no-cache',
+       'x-fitbit-subscriber-id': '4Y8S2G',
+       authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0WThTMkciLCJhdWQiOiIyMjgyNDYiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJzY29wZXMiOiJyc29jIHJzZXQgcmFjdCByd2VpIHJociBybnV0IHJwcm8gcnNsZSIsImV4cCI6MTQ3NTIwNDg2OCwiaWF0IjoxNDc1MTc2MDY4fQ.WaacKNsO6GjJozbw5Cp-aKtXCIK63dGEo4jMijVo1iI' } };
+
+  request(options, function (error, response, body) {
+    if (error) {
+      throw new Error(error);
+    }
+    console.log('\n');
+    console.log('FITBIT API returned: ' + body);
+    res.statusCode === 200;
+    res.end(body);
+  });
+});
+
+// Routes - basic format
+app.get('/users', function(req, res) {});
+app.get('/users/:userId', function(req, res) {
+  // req.params: { "userId": USER };
+});
+app.get('/users:userId/friends', function(req, res) {
+  // req.params: { "userId": USER };
+});
+app.get('/challenges', function(req, res) {});
+app.get('/challenges/:status', function(req, res) {
+  // req.params: { "status": STATUS };
+});
+app.get('/challenges/:id', function(req, res) {
+  // req.params: { "id": USER };
+});
+app.get('/challenges/:id/participants', function(req, res) {
+  // req.params: { "id": ID };
+});
+app.get('/challenges/:id/participants/:id', function(req, res) {
+  // req.params: { "id": ID };
+});
+// app.get('/auth/:status', function(req, res) {});
+
+// Routes - basic format
+// router.route('/users/:userId')
+//   .get(fitCoinController.retrieveOne(req, res))
+//   .post(fitCoinController.createOne(req, res))
+//   .update(fitCoinController.updateOne(req, res))
+//   .delete(fitCoinController.delete(req, res));
+
+// router.route('/users/:userId')
+//   .get(fitCoinController.retrieveOne(req, res))
+//   .post(fitCoinController.createOne(req, res))
+//   .update(fitCoinController.updateOne(req, res))
+//   .delete(fitCoinController.delete(req, res));
+
+// router.route('/users:userId/friends')
+//   .get(fitCoinController.retrieveOne(req, res))
+//   .post(fitCoinController.createOne(req, res))
+//   .update(fitCoinController.updateOne(req, res))
+//   .delete(fitCoinController.delete(req, res));
+
+// router.route('/challenges')
+//   .get(fitCoinController.retrieveOne(req, res))
+//   .post(fitCoinController.createOne(req, res))
+//   .update(fitCoinController.updateOne(req, res))
+//   .delete(fitCoinController.delete(req, res));
+
+// router.route('/challenges/:status')
+//   .get(fitCoinController.retrieveOne(req, res))
+//   .post(fitCoinController.createOne(req, res))
+//   .update(fitCoinController.updateOne(req, res))
+//   .delete(fitCoinController.delete(req, res));
+
+// router.route('/challenges/:id')
+//   .get(fitCoinController.retrieveOne(req, res))
+//   .post(fitCoinController.createOne(req, res))
+//   .update(fitCoinController.updateOne(req, res))
+//   .delete(fitCoinController.delete(req, res));
+
+// router.route('/challenges/:id/participants')
+//   .get(fitCoinController.retrieveOne(req, res))
+//   .post(fitCoinController.createOne(req, res))
+//   .update(fitCoinController.updateOne(req, res))
+//   .delete(fitCoinController.delete(req, res));
+
+// router.route('/challenges/:id/participants')
+//   .get(fitCoinController.retrieveOne(req, res))
+//   .post(fitCoinController.createOne(req, res))
+//   .update(fitCoinController.updateOne(req, res))
+//   .delete(fitCoinController.delete(req, res));
+
 
 app.listen(3000, function () {
   console.log('Our app is listening on port 3000!');

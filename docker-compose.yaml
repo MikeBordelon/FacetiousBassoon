@@ -6,6 +6,7 @@ services:
       - "3000:3000"
     links:
       - db
+      - redis
     environment:
       SEQ_DB: fitcoin
       SEQ_USER: docker
@@ -23,3 +24,5 @@ services:
       POSTGRES_USER: docker
       POSTGRES_PASSWORD: docker
       POSTGRES_DB: fitcoin
+  redis:
+    image: redis

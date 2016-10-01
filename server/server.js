@@ -29,11 +29,6 @@ var fitbitStrategy = new FitbitStrategy({
   scope: ['activity', 'heartrate', 'location', 'profile'],
   callbackURL: authConfig.lex.callbackURL
 }, function(accessToken, refreshToken, params, profile, done) {
-  // TODO: save accessToken here for later use
-  console.log('accessToken', accessToken);
-  console.log('refreshToken', refreshToken);
-  console.log('profile', profile);
-  console.log('params', params);
   User.find( {where: {fbUserId: params.user_id}} )
    .then(function(user) {
      if (user === null) {
@@ -47,20 +42,21 @@ var fitbitStrategy = new FitbitStrategy({
          expiresIn: params.expires_in,
          fbUserId: params.user_id
        })
-     .then(function() {
-       User.findAll({}).then(function(found) {
-         console.log('HEY!kuhdasdhasdkashdsakjhdsadasdasd', found);
-       });
-     });
+    .then(function() { 
+      User.find({where: {fbUserId: params.user_id}}).then(function(found) {
+        done(null, {
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+          profile: profile,
+          userID: found.dataValues.id
+        });
+      });
+    });
      } else {
-       console.log('User found', user);
+       // console.log('User found', user);
      }
    });
-  done(null, {
-    accessToken: accessToken,
-    refreshToken: refreshToken,
-    profile: profile
-  });
+  
 });
 
 passport.use(fitbitStrategy);
@@ -246,7 +242,7 @@ app.get('/auth/fitbit/success', function(req, res, next) {
 
 app.get('/auth/checkLogin', function(req, res) {
   if (req.user) {
-    console.log(req);
+    // console.log(req.session);
     res.send('authenticated');
   } else {
     res.send('unauthenticated');

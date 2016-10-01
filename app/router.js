@@ -1,6 +1,5 @@
 import React from 'react';
 import { Router, Route, browserHistory, IndexRoute, hashHistory } from 'react-router';
-
 // Layouts
 import MainNavBar from './containers/main-navbar';
 // import SearchLayoutContainer from './components/containers/search-layout-container';

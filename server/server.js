@@ -25,6 +25,7 @@ app.use(passport.session({
 
 app.use(passport.initialize());
 
+// Passport strategy for FitBit API
 var fitbitStrategy = new FitbitStrategy({
   clientID: authConfig.lex.clientId,
   clientSecret: authConfig.lex.clientSecret,
@@ -234,7 +235,7 @@ var Challenge = sequelize.define('challenges', {
   }
 });
 
-// 
+// Create join table relationship
 User.belongsToMany(Challenge, {through: 'UserChallengeJT'});
 Challenge.belongsToMany(User, {through: 'UserChallengeJT'});
 
@@ -367,29 +368,47 @@ var fitCoinController = {
       });
   },
   createChallenge: function (req, res) {
-    // console.log('req: ', req);
-    console.log('req.body: ', req.body);
-    Challenge.create({
-      ethereumAddress: req.body.ethereumAddress,
-      creationDate: req.body.creationDate,
-      expirationDate: req.body.expirationDate,
-      status: req.body.status
+    // get user
+    User.find({ 
+      where: {fbUserId: req.params.fbUserId}
     })
-      .then(function(created) {
-        console.log('createChallenge create', created);
+    .then(function(specificUser) {
+      specificUser.addChallenge({
+        // Add challenge data here
+        ethereumAddress: req.body.ethereumAddress,
+        creationDate: req.body.creationDate,
+        expirationDate: req.body.expirationDate,
+        status: req.body.status
+      })
+      .then(function(challenge) {
+        console.log('added challenge', challenge);
         res.statusCode === 200;
-        res.end(JSON.stringify(created)); 
+        res.end(JSON.stringify(challenge)); 
       })
       .catch(function(err) {
         console.error(err);
         res.statusCode === 404;
-        res.end(JSON.stringify(err)); 
+        res.end(); 
       });
+    })
+    .catch(function(err) {
+      console.error(err);
+      res.statusCode === 404;
+      res.end(); 
+    });
   },
   retrieveChallenges: function (req, res) {
-    User.findAll({})
+    User.findAll({
+      include: [{
+        model: Challenges,
+        through: {
+          attributes: ['ethereumAddress', 'creationDate', 'expirationDate', 'status'],
+          // where: {completed: true}
+        }
+      }]
+    })
       .then(function(found) {
-        console.log('retrieve findAll', found);
+        console.log('retrieveChallenges findAll through Challenges', found);
         res.statusCode === 200;
         res.end(JSON.stringify(found)); 
       })
@@ -398,7 +417,7 @@ var fitCoinController = {
         res.statusCode === 404;
         res.end(); 
       });
-  },
+  }
 };
 
 

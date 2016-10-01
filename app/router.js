@@ -8,6 +8,7 @@ import MainNavBar from './containers/main-navbar';
 import Home from './containers/home';
 import About from './components/about';
 import ChallengesContainer from './containers/challenges-container';
+import NewChallengeContainer from './containers/new-challenge-container';
 import OpenCVContainer from './containers/OpenCV-container';
 // import WidgetListContainer from './components/containers/widget-list-container';
 // import TodoListContainer from './components/containers/todo-list-container';
@@ -18,8 +19,9 @@ export default (
     <Route component={MainNavBar}>
       <Route path='/' component={Home}/>
       <Route path='/about' component={About}/>
-      <Route path='/challenges' component={ChallengesContainer}/>
+      <Route path='/allChallenges' component={ChallengesContainer}/>
       <Route path='/openCV' component={OpenCVContainer}/>
+      <Route path='/newChallenge' component={NewChallengeContainer}/>
     </Route>
   </Router>
 );

@@ -13,7 +13,7 @@ const style = {
 };
 
 const OpenCV = function (props) {
-  console.log(props);
+  // console.log(props);
   return (
 
     <div>

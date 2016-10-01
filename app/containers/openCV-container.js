@@ -1,27 +1,27 @@
-import React from 'react';
+import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import OpenCV from '../components/openCV';
 import store from '../store';
 import axios from 'axios';
 import { getUsersSuccess } from '../actions/user-actions';
 
-const OpenCVContainer = React.createClass({
 
-  componentDidMount: function() {
+class OpenCVContainer extends Component {
+  constructor(props) {
+    super(props);
+  }
 
-  },
-
-  render: function() {
-    console.log();
+  render () {
     return (
       <OpenCV openCVStuff={this.props.openCV}/>
     );
   }
 
-});
+}
 
 const mapStateToProps = function(store) {
   return {
+    store,
     openCV: store.userState.openCV
   };
 };

@@ -42,20 +42,21 @@ var fitbitStrategy = new FitbitStrategy({
          expiresIn: params.expires_in,
          fbUserId: params.user_id
        })
-     .then(function() {
-       User.findAll({}).then(function(found) {
-         // console.log('HEY!kuhdasdhasdkashdsakjhdsadasdasd', found);
-       });
-     });
+    .then(function() { 
+      User.find({where: {fbUserId: params.user_id}}).then(function(found) {
+        done(null, {
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+          profile: profile,
+          userID: found.dataValues.id
+        });
+      });
+    });
      } else {
        // console.log('User found', user);
      }
    });
-  done(null, {
-    accessToken: accessToken,
-    refreshToken: refreshToken,
-    profile: profile
-  });
+  
 });
 
 passport.use(fitbitStrategy);
@@ -241,7 +242,7 @@ app.get('/auth/fitbit/success', function(req, res, next) {
 
 app.get('/auth/checkLogin', function(req, res) {
   if (req.user) {
-    console.log(req);
+    console.log(req.session);
     res.send('authenticated');
   } else {
     res.send('unauthenticated');

@@ -1,13 +1,16 @@
-import React from 'react';
+import React, {Component} from 'react';
 import store from '../store';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import { getChallengesSuccess } from '../actions/user-actions';
-import Challenges from './components/challenges';
+import Challenges from '../components/challenges';
 
-const ChallengesContainer = React.createClass({
+class ChallengesContainer extends Component {
+  constructor(props) {
+    super(props);
+  }
 
-  componentDidMount: function() {
+  componentDidMount () {
     axios.get('https://www.googleapis.com/books/v1/volumes?', {
       params: {
         q: 'Pot'
@@ -17,15 +20,15 @@ const ChallengesContainer = React.createClass({
       store.dispatch(getChallengesSuccess(response.data.items));
       return response.data.items;
     });
-  },
+  }
 
-  render: function() {
+  render () {
     return (
       <Challenges challenges={this.props.challenges}/>
     );
   }
 
-});
+}
 
 const mapStateToProps = function(store) {
   return {

@@ -66,7 +66,7 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
-// 
+//
 var fitbitAuthenticate = passport.authenticate('fitbit', {
   successRedirect: '/auth/fitbit/success',
   failureRedirect: '/auth/fitbit/failure'
@@ -229,7 +229,6 @@ var Challenges = sequelize.define('challenges', {
 });
 
 
-
 app.use(express.static(path.join(__dirname, '../app/public')));
 
 app.get('/auth/fitbit', fitbitAuthenticate);
@@ -237,7 +236,7 @@ app.get('/auth/fitbit/callback', fitbitAuthenticate);
 
 app.get('/auth/fitbit/success', function(req, res, next) {
 
-  res.redirect('/challenges');
+  res.redirect('/allChallenges');
 });
 
 app.get('/auth/checkLogin', function(req, res) {
@@ -265,12 +264,12 @@ var fitCoinController = {
       .then(function(found) {
         console.log('retrieve findAll', found);
         res.statusCode === 200;
-        res.end(JSON.stringify(found)); 
+        res.end(JSON.stringify(found));
       })
       .catch(function(err) {
         console.error(err);
         res.statusCode === 404;
-        res.end(); 
+        res.end();
       });
   },
   retrieveOne: function (req, res) {
@@ -282,12 +281,12 @@ var fitCoinController = {
       .then(function(found) {
         console.log('retrieveOne findOne', found);
         res.statusCode === 200;
-        res.end(JSON.stringify(found)); 
+        res.end(JSON.stringify(found));
       })
       .catch(function(err) {
         console.error(err);
         res.statusCode === 404;
-        res.end(); 
+        res.end();
       });
   },
   createOne: function (req, res) {
@@ -295,12 +294,12 @@ var fitCoinController = {
       .then(function(found) {
         console.log('retrieve findAll', found);
         res.statusCode === 200;
-        res.end(JSON.stringify(found)); 
+        res.end(JSON.stringify(found));
       })
       .catch(function(err) {
         console.error(err);
         res.statusCode === 404;
-        res.end(); 
+        res.end();
       });
   },
   updateOne: function (req, res) {
@@ -308,12 +307,12 @@ var fitCoinController = {
       .then(function(found) {
         console.log('retrieve findAll', found);
         res.statusCode === 200;
-        res.end(JSON.stringify(found)); 
+        res.end(JSON.stringify(found));
       })
       .catch(function(err) {
         console.error(err);
         res.statusCode === 404;
-        res.end(); 
+        res.end();
       });
   },
   deleteOne: function (req, res) {
@@ -321,12 +320,12 @@ var fitCoinController = {
       .then(function(found) {
         console.log('retrieve findAll', found);
         res.statusCode === 200;
-        res.end(JSON.stringify(found)); 
+        res.end(JSON.stringify(found));
       })
       .catch(function(err) {
         console.error(err);
         res.statusCode === 404;
-        res.end(); 
+        res.end();
       });
   },
   delete: function (req, res) {
@@ -336,12 +335,12 @@ var fitCoinController = {
       .then(function(deleted) {
         console.log('delete returned: ', deleted);
         res.statusCode === 200;
-        res.end(JSON.stringify(deleted)); 
+        res.end(JSON.stringify(deleted));
       })
       .catch(function(err) {
         console.error(err);
         res.statusCode === 404;
-        res.end(); 
+        res.end();
       });
   }
 };

@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
 
+
 const style = {
   paper: {
     height: 60,
@@ -16,7 +17,11 @@ const style = {
   },
 
   h3: {
-    margin: '0 0 20px 460px'
+    display: 'flex'
+    // textAlign: 'center',
+    // verticalAlign: 'middle',
+    // margin: '0px 0px 0px 0px'
+
   },
 
   h4: {
@@ -37,20 +42,33 @@ const style = {
   },
   tableRGT: {
     margin: '0px 500px 0px 0px'
+  },
+
+  paper: {
+    height: '50px',
+    width: '500px',
+    margin: '90px 0px 50px 340px',
+
   }
 };
+
+
+// const style = {
+  // height: '200px',
+  // width: '600px',
+  // margin: '100px 20px 20px 340px',
+  // textAlign: 'center',
+  // display: 'center'
+// };
 
 export default function (props) {
   // console.log(props);
   return (
 
     <div>
-      <h3 style={style.h3}>Sign up for a new challenge!</h3>
-
-      <Paper style={style.paper} zDepth={1}>
-        <span><h4 style={style.h4}>Walk 10,000 steps in one day</h4></span>
-        <span style={style.button}href="#" className="btn btn-primary btn-warning"><span className="glyphicon glyphicon-flash"></span> GO!</span>
-      </Paper>
+    <Paper style={style.paper} zDepth={1}>
+      <h3 style={style.h3}>Your current challenges</h3>
+    </Paper>
 
       <table className="table">
         <thead className="thead-inverse">
@@ -80,3 +98,9 @@ export default function (props) {
     </div>
   );
 }
+
+
+      // <Paper style={style.paper} zDepth={1}>
+      //   <span><h4 style={style.h4}>Walk 10,000 steps in one day</h4></span>
+      //   <span style={style.button}href="#" className="btn btn-primary btn-warning"><span className="glyphicon glyphicon-flash"></span> GO!</span>
+      // </Paper>

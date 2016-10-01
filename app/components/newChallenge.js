@@ -1,0 +1,94 @@
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import store from '../store.js';
+
+
+
+const style = {
+  text: {
+    textAlign: 'center',
+    margin: '40px 0px 50px 0px'
+  }
+};
+
+class NewChallenge extends Component {
+  constructor (props) {
+    super(props);
+  }
+  // console.log(props);
+//   ethereumAdd string
+// date
+// metricGoal number textbox
+// metrictype = steps Picker
+  render () {
+
+
+    console.log(this.refs.ethereum);
+    return (
+    <div>
+      <h1 style={style.text}>Create A Challenge!</h1>
+
+      <form ref='form'className="form-horizontal">
+        <fieldset>
+
+          <div className="form-group">
+            <label className="col-md-4 control-label" >Ethereum Address</label>
+            <div className="col-md-4">
+              <input ref='ethereum' id="ethereum" name="ethereum" type="text" placeholder="enter you address" className="form-control input-md"/>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label className="col-md-4 control-label" >Goal</label>
+            <div className="col-md-4">
+              <input ref='goal' id="goal" name="goal" type="text" placeholder="how many?" className="form-control input-md"/>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label className="col-md-4 control-label" >Date</label>
+            <div className="col-md-4">
+              <input ref='date' id="date" name="date" type="text" placeholder="mm/dd/yyyy" className="form-control input-md"/>
+            </div>
+          </div>
+
+
+          <div className="form-group">
+            <label className="col-md-4 control-label" >Goal Type</label>
+            <div className="col-md-4">
+              <select ref='goalType' id="goalType" name="goalType" className="form-control">
+                <option value="1">Steps</option>
+                <option value="2">Floors</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label className="col-md-4 control-label" ></label>
+            <div className="col-md-4">
+              <button onClick={this.props.postChallenge} id="submitButton" name="submitButton" className="btn btn-primary">Submit</button>
+            </div>
+          </div>
+
+        </fieldset>
+      </form>
+
+    </div>
+  );
+  }
+}
+
+
+
+const mapStateToProps = function(store) {
+  return {
+    store
+  };
+};
+// users are now props on UserListContainer
+export default connect(mapStateToProps)(NewChallenge);
+
+
+
+
+

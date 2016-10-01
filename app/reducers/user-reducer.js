@@ -2,8 +2,8 @@
 const initialState = {
   challenges: [],
   isLoggedIn: false,
-  openCV: 'someCoolImages'
-
+  openCV: 'someCoolImages',
+  newChallenge: false
 };
 
 const userReducer = function(state = initialState, action) {
@@ -15,6 +15,12 @@ const userReducer = function(state = initialState, action) {
     return {
       ...state,
       challenges: action.challenges
+    };
+
+    case 'POST_CHALLENGE_SUCCESS':
+    return {
+      ...state,
+      newChallenge: action.newChallenge
     };
 
   case 'AUTH_SUCCESS':

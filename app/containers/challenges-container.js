@@ -23,6 +23,7 @@ class ChallengesContainer extends Component {
   }
 
   render () {
+    // console.log(this.props)
     return (
       <Challenges challenges={this.props.challenges}/>
     );

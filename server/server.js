@@ -246,6 +246,7 @@ app.get('/auth/fitbit/success', function(req, res, next) {
 
 app.get('/auth/checkLogin', function(req, res) {
   if (req.user) {
+    console.log(req);
     res.send('authenticated');
   } else {
     res.send('unauthenticated');

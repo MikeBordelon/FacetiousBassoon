@@ -58,28 +58,28 @@ export function getProfile(userId) {
       profile.steps = user.steps;
 
       store.dispatch(userProfileSuccess(profile));
-      // profile.twitter = user.twitter;
-      // profile.worksOn = user.worksOn;
+      profile.twitter = user.twitter;
+      profile.worksOn = user.worksOn;
 
       // Then use the github attribute from the previous request to
       // sent two XHR requests to GitHub's API. The first for their
       // general user info, and the second for their repos.
-      // return Promise.all([
-      //   axios.get('https://api.github.com/users/' + user.github),
-      //   axios.get('https://api.github.com/users/' + user.github + '/repos')
-      // ]).then(results => {
+      return Promise.all([
+        axios.get('https://api.github.com/users/' + user.github),
+        axios.get('https://api.github.com/users/' + user.github + '/repos')
+      ]).then(results => {
 
-      //   let githubProfile = results[0].data;
-      //   let githubRepos = results[1].data;
+        let githubProfile = results[0].data;
+        let githubRepos = results[1].data;
 
-      //   profile.imageUrl = githubProfile.avatar_url;
-      //   profile.repos = githubRepos;
+        profile.imageUrl = githubProfile.avatar_url;
+        profile.repos = githubRepos;
 
-      //   store.dispatch(userProfileSuccess(profile));
+        store.dispatch(userProfileSuccess(profile));
 
-      //   return;
+        return;
 
-      // });
+      });
 
     });
 

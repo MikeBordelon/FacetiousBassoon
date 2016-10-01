@@ -1,10 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import OpenCV from '../views/openCV';
-import * as userApi from '../../api/user-api';
-import store from '../../store';
+import OpenCV from '../components/openCV';
+import store from '../store';
 import axios from 'axios';
-import { getUsersSuccess } from '../../actions/user-actions';
+import { getUsersSuccess } from '../actions/user-actions';
 
 const OpenCVContainer = React.createClass({
 

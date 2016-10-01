@@ -1,6 +1,6 @@
 
 const initialState = {
-  users: [],
+  challenges: [],
   isLoggedIn: false,
   openCV: 'someCoolImages'
 
@@ -11,10 +11,10 @@ const userReducer = function(state = initialState, action) {
   switch (action.type) {
 
 
-  case 'GET_USERS_SUCCESS':
+  case 'GET_CHALLENGES_SUCCESS':
     return {
       ...state,
-      users: action.users
+      challenges: action.challenges
     };
 
   case 'AUTH_SUCCESS':

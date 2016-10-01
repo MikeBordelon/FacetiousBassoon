@@ -6,8 +6,8 @@ import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import {connect} from 'react-redux';
 import axios from 'axios';
-import {authSuccess, authFailure} from '../../actions/user-actions.js';
-import store from '../../store.js';
+import {authSuccess, authFailure} from '../actions/user-actions.js';
+import store from '../store.js';
 
 
 const style = {
@@ -27,12 +27,8 @@ class MainNavBar extends Component {
 
   componentDidMount() {
     axios.get('/auth/checkLogin').then(response => {
-      // console.log('thisistheresponse', response);
-      console.log('this is the stroe!', this.props.store.userState.isLoggedIn);
       if (response.data === 'authenticated') {
-        console.log('We should be authenticated');
         store.dispatch(authSuccess());
-        console.log('response.data');
       } else {
         store.dispatch(authFailure());
       }
@@ -41,6 +37,7 @@ class MainNavBar extends Component {
 
   render() {
     var loggedIn, loggerButton, openCV;
+
     if (this.props.isLoggedIn === true) {
       loggerButton = <li><a href="/auth/logout"><span className="glyphicon glyphicon-log-in"></span> Logout</a></li>;
       loggedIn = <li><Link to='/challenges'>Challenges</Link></li>;
@@ -51,31 +48,30 @@ class MainNavBar extends Component {
     }
     return (
       // this is the nav bar essentially
-    <div>
-    <nav className="navbar navbar-inverse">
-      <div className="container-fluid">
-        <div className="navbar-header">
-            <Link className="navbar-brand" to='/'>FitCoin</Link>
+      <div>
+        <nav className="navbar navbar-inverse">
+          <div className="container-fluid">
+            <div className="navbar-header">
+              <Link className="navbar-brand" to='/'>FitCoin</Link>
+            </div>
+            <ul className="nav navbar-nav">
+              <li><Link to='/'>Home</Link></li>
+              <li><Link to='/about'>About us</Link></li>
+            </ul>
+            <ul className="nav navbar-nav navbar-right">
+              {loggerButton}
+              {loggedIn}
+              {openCV}
+            </ul>
           </div>
-        <ul className="nav navbar-nav">
-          <li><Link to='/'>Home</Link></li>
-          <li><Link to='/about'>About us</Link></li>
-        </ul>
-        <ul className="nav navbar-nav navbar-right">
-        {loggerButton}
-        {loggedIn}
-        {openCV}
-        </ul>
-      </div>
-    </nav>
+        </nav>
         <main>
           {this.props.children}
         </main>
       </div>
-      );
+    );
   }
 }
-
 
 const mapStateToProps = function(store) {
   return {

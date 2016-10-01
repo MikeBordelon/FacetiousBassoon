@@ -16,6 +16,8 @@ const Home = React.createClass({
     return (
 
       <div>
+
+
         <Paper style={style} zDepth={1}>
 
           <h1>Welcome To FitCoin</h1>

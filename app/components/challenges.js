@@ -60,16 +60,17 @@ export default function (props) {
         </thead>
       </table>
 
-      {props.users.map((user, index) => {
+      {props.challenges.map((challenge, index) => {
+
         return (
           <div key={index}>
             <table className="table">
               <tbody>
                 <tr >
-                  <td >{user.volumeInfo.authors[0]}</td>
-                  <td style={style.tableCNT}>{user.volumeInfo.title}</td>
-                  <td>{user.volumeInfo.pageCount}</td>
-                  <a href="#" className="btn btn-xs btn-danger"><span className="glyphicon glyphicon-remove-sign" ></span> Delete</a>
+                  <td >{challenge.volumeInfo.authors[0]}</td>
+                  <td style={style.tableCNT}>{challenge.volumeInfo.title}</td>
+                  <td>{challenge.volumeInfo.pageCount}</td>
+                  <td href="#" className="btn btn-xs btn-danger"><span className="glyphicon glyphicon-remove-sign" ></span> Delete</td>
                 </tr>
               </tbody>
             </table>

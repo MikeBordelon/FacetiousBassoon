@@ -3,7 +3,8 @@ const initialState = {
   challenges: [],
   isLoggedIn: false,
   openCV: 'someCoolImages',
-  newChallenge: false
+  newChallenge: false,
+  userId: null
 };
 
 const userReducer = function(state = initialState, action) {
@@ -26,7 +27,8 @@ const userReducer = function(state = initialState, action) {
   case 'AUTH_SUCCESS':
     return {
       ...state,
-      isLoggedIn: true
+      isLoggedIn: true,
+      userId: action.userId
     };
 
 
@@ -36,6 +38,7 @@ const userReducer = function(state = initialState, action) {
       isLoggedIn: false
     };
   }
+
 
   return state;
 

@@ -26,11 +26,12 @@ class MainNavBar extends Component {
 
   componentDidMount() {
     axios.get('/auth/checkLogin').then(response => {
-      if (response.data === 'authenticated') {
-        store.dispatch(authSuccess());
+      if (response.data.logInStatus === 'authenticated') {
+        store.dispatch(authSuccess(response.data.user.userId));
       } else {
         store.dispatch(authFailure());
       }
+      console.log(store.getState());
     });
   }
 

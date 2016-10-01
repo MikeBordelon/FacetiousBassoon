@@ -48,7 +48,7 @@ var fitbitStrategy = new FitbitStrategy({
           accessToken: accessToken,
           refreshToken: refreshToken,
           profile: profile,
-          userID: found.dataValues.id
+          userId: found.dataValues.id
         });
       });
     });
@@ -242,9 +242,11 @@ app.get('/auth/fitbit/success', function(req, res, next) {
 app.get('/auth/checkLogin', function(req, res) {
   if (req.user) {
     // console.log(req.session);
-    res.send('authenticated');
+    res.send(
+      {logInStatus: 'authenticated',
+      user: req.user});
   } else {
-    res.send('unauthenticated');
+    res.send({logInStaus: 'unauthenticated', user: null});
   }
 });
 

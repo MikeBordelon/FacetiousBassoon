@@ -12,11 +12,11 @@ export function postChallengeSuccess(newChallenge) {
   };
 }
 
-
-export function authSuccess() {
+export function authSuccess(userId) {
   return {
     type: 'AUTH_SUCCESS',
-    isLoggedIn: true
+    isLoggedIn: true,
+    userId: userId
   };
 }
 

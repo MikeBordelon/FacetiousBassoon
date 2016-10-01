@@ -20,7 +20,6 @@ const style = {
 
 class MainNavBar extends Component {
 
-
   constructor (props) {
     super(props);
   }

@@ -1,7 +1,7 @@
-export function getUsersSuccess(users) {
+export function getChallengesSuccess(challenges) {
   return {
-    type: 'GET_USERS_SUCCESS',
-    users
+    type: 'GET_CHALLENGES_SUCCESS',
+    challenges
   };
 }
 
@@ -9,9 +9,6 @@ export function authSuccess() {
   return {
     type: 'AUTH_SUCCESS',
     isLoggedIn: true
-
-
-    // userID
   };
 }
 

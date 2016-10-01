@@ -8,7 +8,7 @@ import MainNavBar from './components/layouts/main-navbar';
 // Pages
 import Home from './components/home';
 import About from './components/views/about';
-import UserListContainer from './components/containers/user-list-container';
+import ChallengesContainer from './components/containers/challenges-container';
 import OpenCVContainer from './components/containers/OpenCV-container';
 // import WidgetListContainer from './components/containers/widget-list-container';
 // import TodoListContainer from './components/containers/todo-list-container';
@@ -19,7 +19,7 @@ export default (
     <Route component={MainNavBar}>
       <Route path='/' component={Home}/>
       <Route path='/about' component={About}/>
-      <Route path='/challenges' component={UserListContainer}/>
+      <Route path='/challenges' component={ChallengesContainer}/>
       <Route path='/openCV' component={OpenCVContainer}/>
     </Route>
   </Router>

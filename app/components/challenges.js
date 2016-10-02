@@ -6,50 +6,42 @@ import Paper from 'material-ui/Paper';
 
 const style = {
   paper: {
-    height: 60,
-    width: 238,
-    margin: '0 0 20px 500px'
-  },
-
-
-  text: {
-    margin: '0 0 20px 500px'
-  },
-
-  h3: {
-    display: 'flex'
-    // textAlign: 'center',
-    // verticalAlign: 'middle',
-    // margin: '0px 0px 0px 0px'
-
-  },
-
-  h4: {
-    // display: 'inline-block',
-    width: 400,
-    margin: '0 0 0 0'
-
-  },
-
-  button: {
-    display: 'inline-block',
-    height: 30,
-    width: 80,
-    margin: '10px 0px 0px 80px'
-  },
-  tableCNT: {
-    textAlign: 'center'
-  },
-  tableRGT: {
-    margin: '0px 500px 0px 0px'
-  },
-
-  paper: {
     height: '50px',
     width: '500px',
     margin: '90px 0px 50px 340px',
 
-  }
+  },
+
+  // text: {
+  //   margin: '0 0 20px 500px'
+  // },
+
+  // h3: {
+  //   display: 'flex',
+  //   // textAlign: 'center',
+  //   // verticalAlign: 'middle',
+  //   margin: '0px 0px 0px 100px'
+
+  // },
+
+  // h4: {
+  //   // display: 'inline-block',
+  //   width: 400,
+  //   margin: '0 0 0 0'
+
+  // },
+
+  // button: {
+  //   float: 'right',
+  //   height: 30,
+  //   width: 80
+  // },
+  // tableCNT: {
+  //   // textAlign: 'center'
+  // },
+  // tableRGT: {
+  //   margin: '0px 90px 0px 0px'
+  // }
 };
 
 
@@ -62,7 +54,7 @@ const style = {
 // };
 
 export default function (props) {
-  // console.log(props);
+  console.log(props);
   return (
 
     <div>
@@ -79,16 +71,16 @@ export default function (props) {
       </table>
 
       {props.challenges.map((challenge, index) => {
-
+        // console.log(index);
         return (
           <div key={index}>
             <table className="table">
               <tbody>
                 <tr >
-                  <td >{challenge.volumeInfo.authors[0]}</td>
+                  <td>{challenge.volumeInfo.authors[0]}</td>
                   <td style={style.tableCNT}>{challenge.volumeInfo.title}</td>
-                  <td>{challenge.volumeInfo.pageCount}</td>
-                  <td href="#" className="btn btn-xs btn-danger"><span className="glyphicon glyphicon-remove-sign" ></span> Delete</td>
+                  <td className=''>{challenge.volumeInfo.pageCount}</td>
+                  <td onClick={()=> props.deleteChallenge(index)} key={index} style={style.button} href="#" className="btn btn-xs btn-danger"><span className="glyphicon glyphicon-remove-sign" ></span> Delete</td>
                 </tr>
               </tbody>
             </table>

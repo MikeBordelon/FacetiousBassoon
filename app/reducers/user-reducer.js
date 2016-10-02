@@ -18,11 +18,20 @@ const userReducer = function(state = initialState, action) {
       challenges: action.challenges
     };
 
+    case 'DELETE_CHALLENGE_SUCCESS':
+
+    return {
+      ...state,
+      // need the correct dbID
+      challenges: state.challenges.filter(challenge => challenge.id !== action.challengeID)
+    };
+
     case 'POST_CHALLENGE_SUCCESS':
     return {
       ...state,
       newChallenge: action.newChallenge
     };
+
 
   case 'AUTH_SUCCESS':
     return {

@@ -4,7 +4,7 @@
   "description": "Thesis App",
   "main": "server.js",
   "scripts": {
-    "start": "./wait-for-it.sh db:5432 && npm run dev-be",
+    "start": "./wait-for-it.sh db:5432 && npm run dev-fe",
     "dev-fe": "node server/server.js",
     "dev-be": "nodemon server/server.js"
   },

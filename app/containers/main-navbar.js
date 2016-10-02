@@ -31,7 +31,7 @@ class MainNavBar extends Component {
       } else {
         store.dispatch(authFailure());
       }
-      console.log(store.getState());
+      // console.log(store.getState());
     });
   }
 

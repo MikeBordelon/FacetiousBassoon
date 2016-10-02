@@ -11,9 +11,11 @@ class NewChallengeContainer extends Component {
   constructor(props) {
     super(props);
 
+    this.postChallenge = this.postChallenge.bind(this);
   }
 
   componentDidMount () {
+    // console.log(this.props.userId);
     // axios.get()
     // .then(response => {
     //   store.dispatch(getChallengesSuccess(response.data.items));
@@ -24,28 +26,35 @@ class NewChallengeContainer extends Component {
   postChallenge (e) {
     e.preventDefault();
 
+
     var ethereum = $('#ethereum').val();
     var goal = $('#goal').val();
     var date = $('#date').val();
     var goalType = $('#goalType').val();
 
-    console.log(ethereum, goal, date, goalType);
+    console.log('etherAddress', ethereum, 'goal:', goal, 'date:', date, 'goal type:', goalType);
+    console.log('userId is: ', this.props.userId);
 
-    axios.post('/challenges/UserID', {
-      data: {
-        ethereum: ethereum,
-        goal: goal,
-        date: date,
-        goalType: goalType
 
-      }
-    })
-    .then(function(res) {
-      console.log('posted a challenge', res);
-    })
-    .catch(function(err) {
-      console.log('challenge error', err);
-    });
+
+    // axios.post('/challenges', {
+    //   params: {
+    //     userId: this.props.userId
+    //   },
+    //   data: {
+    //     ethereum: ethereum,
+    //     goal: goal,
+    //     date: date,
+    //     goalType: goalType
+    //   }
+    // })
+    // .then(function(res) {
+    // this.forceUpdate();
+    //   console.log('posted a challenge', res);
+    // })
+    // .catch(function(err) {
+    //   console.log('challenge error', err);
+    // });
 
   }
 
@@ -60,7 +69,8 @@ class NewChallengeContainer extends Component {
 const mapStateToProps = function(store) {
   return {
     store,
-    newChallenge: store.userState.newChallenge
+    newChallenge: store.userState.newChallenge,
+    userId: store.userState.userId
   };
 };
 // users are now props on UserListContainer

@@ -7,7 +7,7 @@ var moment = require('moment');
 
 const style = {
   paper: {
-    height: '50px',
+    height: '70px',
     width: '500px',
     margin: '90px 0px 50px 400px',
 
@@ -21,9 +21,15 @@ const style = {
     display: 'flex',
     // textAlign: 'center',
     // verticalAlign: 'middle',
-    margin: '0px 0px 0px 100px'
+    margin: '0px 0px 0px 120px'
 
+  },
+
+  create: {
+    display: 'flex',
+    margin: '0px 0px 0px 160px'
   }
+
 
   // h4: {
   //   // display: 'inline-block',
@@ -55,7 +61,7 @@ const style = {
 // };
 
 export default function (props) {
-  
+
   if (props.challenges.length > 0) {
 
     return (
@@ -90,7 +96,7 @@ export default function (props) {
                       <td onClick={()=> props.deleteChallenge(index)} key={index} style={style.button} href="#" className="btn btn-xs btn-danger"><span className="glyphicon glyphicon-remove-sign" ></span> Delete</td>
                     </tr>
             );
-          })} 
+          })}
           </tbody>
         </table>
       </div>
@@ -98,9 +104,9 @@ export default function (props) {
   } else {
     return (
       <div>
-        <Paper zDepth={1}>
-          <h3>Create a challenge!</h3>
-          <button className="btn btn-success" onClick={()=> browserHistory.push('/newChallenge')}>Create Challenge</button>
+        <Paper style={style.paper}zDepth={1}>
+          <h3 style={style.h3}>Create a challenge!</h3>
+          <button style={style.create} className="btn btn-success" onClick={()=> browserHistory.push('/newChallenge')}>Create Challenge</button>
         </Paper>
       </div>
       );

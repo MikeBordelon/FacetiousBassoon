@@ -25,8 +25,7 @@ const Home = React.createClass({
             <p>
               Bet on your fitness with FitCoin! It's easy! Just setup a new challenge for yourself
               and we will track all of your details in order to make sure you completed the challenge. If you successfully complete
-              a challenge you can keep your Ether, but if you fail the challenge we will donate the ether
-              to The Dust in Panty Ladies Charity.
+              a challenge you can keep your Ether, but if you fail the challenge we will donate the ether on your behalf.
             </p>
           </div>
          </Paper>

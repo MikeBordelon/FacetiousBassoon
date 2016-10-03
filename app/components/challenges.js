@@ -1,14 +1,15 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link, browserHistory} from 'react-router';
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
+var moment = require('moment');
 
 
 const style = {
   paper: {
     height: '50px',
     width: '500px',
-    margin: '90px 0px 50px 340px',
+    margin: '90px 0px 50px 400px',
 
   },
 
@@ -16,13 +17,13 @@ const style = {
   //   margin: '0 0 20px 500px'
   // },
 
-  // h3: {
-  //   display: 'flex',
-  //   // textAlign: 'center',
-  //   // verticalAlign: 'middle',
-  //   margin: '0px 0px 0px 100px'
+  h3: {
+    display: 'flex',
+    // textAlign: 'center',
+    // verticalAlign: 'middle',
+    margin: '0px 0px 0px 100px'
 
-  // },
+  }
 
   // h4: {
   //   // display: 'inline-block',
@@ -54,41 +55,57 @@ const style = {
 // };
 
 export default function (props) {
-  console.log(props);
-  return (
+  
+  if (props.challenges.length > 0) {
 
-    <div>
-    <Paper style={style.paper} zDepth={1}>
-      <h3 style={style.h3}>Your current challenges</h3>
-    </Paper>
+    return (
 
-      <table className="table">
-        <thead className="thead-inverse">
-            <th >Author</th>
-            <th style={style.tableCNT}>Title</th>
-            <th style={style.tableRGT}>Pages</th>
-        </thead>
-      </table>
+      <div>
+      <Paper style={style.paper} zDepth={1}>
+        <h3 style={style.h3}>Your current challenges</h3>
+      </Paper>
 
-      {props.challenges.map((challenge, index) => {
-        // console.log(index);
-        return (
-          <div key={index}>
-            <table className="table">
-              <tbody>
-                <tr >
-                  <td>{challenge.volumeInfo.authors[0]}</td>
-                  <td style={style.tableCNT}>{challenge.volumeInfo.title}</td>
-                  <td className=''>{challenge.volumeInfo.pageCount}</td>
-                  <td onClick={()=> props.deleteChallenge(index)} key={index} style={style.button} href="#" className="btn btn-xs btn-danger"><span className="glyphicon glyphicon-remove-sign" ></span> Delete</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        );
-      })}
-    </div>
-  );
+        <table className="table">
+          <tbody>
+            <tr className="thead-inverse">
+                <th>Challenge ID</th>
+                <th>Challenge Goal</th>
+                <th>Current Stats</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Challenge Status</th>
+                <th></th>
+            </tr>
+
+          {props.challenges.map((challenge, index) => {
+            // console.log(index);
+            return (
+                    <tr key={index}>
+                      <td style={style.tableCNT}>{challenge.id}</td>
+                      <td className=''>{challenge.challengeGoal + ' ' + challenge.challengeType}</td>
+                      <td className=''>{challenge.challengeCurrent + ' ' + challenge.challengeType}</td>
+                      <td className=''>{moment(challenge.creationDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</td>
+                      <td className=''>{moment(challenge.expirationDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</td>
+                      <td className=''>{challenge.status}</td>
+                      <td onClick={()=> props.deleteChallenge(index)} key={index} style={style.button} href="#" className="btn btn-xs btn-danger"><span className="glyphicon glyphicon-remove-sign" ></span> Delete</td>
+                    </tr>
+            );
+          })} 
+          </tbody>
+        </table>
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <Paper zDepth={1}>
+          <h3>Create a challenge!</h3>
+          <button className="btn btn-success" onClick={()=> browserHistory.push('/newChallenge')}>Create Challenge</button>
+        </Paper>
+      </div>
+      );
+  }
+
 }
 
 

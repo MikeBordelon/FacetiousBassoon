@@ -34,21 +34,21 @@ class NewChallenge extends Component {
           <div className="form-group">
             <label className="col-md-4 control-label" >Ethereum Address</label>
             <div className="col-md-4">
-              <input ref='ethereum' id="ethereum" name="ethereum" type="text" placeholder="enter you address" className="form-control input-md"/>
+              <input ref='ethereum' id="ethereum" name="ethereum" type="text" placeholder="enter your ethereum address" className="form-control input-md"/>
             </div>
           </div>
 
           <div className="form-group">
             <label className="col-md-4 control-label" >Goal</label>
             <div className="col-md-4">
-              <input ref='goal' id="goal" name="goal" type="text" placeholder="how many?" className="form-control input-md"/>
+              <input ref='goal' id="goal" name="goal" type="text" placeholder="# of steps/floors" className="form-control input-md"/>
             </div>
           </div>
 
           <div className="form-group">
-            <label className="col-md-4 control-label" >Date</label>
+            <label className="col-md-4 control-label" >Ending Date</label>
             <div className="col-md-4">
-              <input ref='date' id="date" name="date" type="text" placeholder="mm/dd/yyyy" className="form-control input-md"/>
+              <input ref='date' id="date" name="date" type="date" className="form-control input-md"/>
             </div>
           </div>
 
@@ -65,8 +65,11 @@ class NewChallenge extends Component {
 
           <div className="form-group">
             <label className="col-md-4 control-label" ></label>
-            <div className="col-md-4">
+            <div className="col-md-1">
               <button onClick={this.props.postChallenge} id="submitButton" name="submitButton" className="btn btn-primary">Submit</button>
+            </div>
+            <div className="col-md-1">
+              <button onClick={this.props.cancel} id="cancelButton" name="cancelButton" className="btn btn-danger">Cancel</button>
             </div>
           </div>
 

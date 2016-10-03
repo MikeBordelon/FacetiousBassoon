@@ -5,13 +5,13 @@ import axios from 'axios';
 import { postChallengeSuccess } from '../actions/user-actions';
 import NewChallenge from '../components/newChallenge';
 import ReactDOM, { findDOMNode } from 'react-dom';
-import $ from 'jquery';
 
 class NewChallengeContainer extends Component {
   constructor(props) {
     super(props);
 
     this.postChallenge = this.postChallenge.bind(this);
+    this.cancel = this.cancel.bind(this);
   }
 
   componentDidMount () {
@@ -58,9 +58,16 @@ class NewChallengeContainer extends Component {
 
   }
 
+  cancel () {
+    $('#ethereum').val('');
+    $('#goal').val('');
+    $('#date').val('');
+    $('#goalType').val('');
+  }
+
   render () {
     return (
-      <NewChallenge postChallenge={this.postChallenge}/>
+      <NewChallenge postChallenge={this.postChallenge} cancel={this.cancel}/>
     );
   }
 

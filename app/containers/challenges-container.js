@@ -13,15 +13,35 @@ class ChallengesContainer extends Component {
   }
 
   componentDidMount () {
-    axios.get('https://www.googleapis.com/books/v1/volumes?', {
-      params: {
-        q: 'Pot'
+    // axios.get('https://www.googleapis.com/books/v1/volumes?', {
+    //   params: {
+    //     q: 'Pot'
+    //   }
+    // })
+    // .then(response => {
+    var dummyData = [
+      {
+        id: 1523523424,
+        challengeType: 'steps',
+        challengeGoal: 100000,
+        challengeCurrent: 43242,
+        creationDate: Date.now() - 100000000,
+        expirationDate: Date.now() + 1000000000,
+        status: 'active'
+      },
+      {
+        id: 1523523423,
+        challengeType: 'floors',
+        challengeGoal: 720,
+        challengeCurrent: 719,
+        creationDate: Date.now() - 1000000000,
+        expirationDate: Date.now() - 10000000,
+        status: 'failed'
       }
-    })
-    .then(response => {
-      store.dispatch(getChallengesSuccess(response.data.items));
-      return response.data.items;
-    });
+    ];
+    store.dispatch(getChallengesSuccess(dummyData));
+    //   return response.data.items;
+    // });
   }
 
 

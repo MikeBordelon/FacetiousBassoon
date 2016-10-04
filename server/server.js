@@ -79,7 +79,6 @@ var fitbitAuthenticate = passport.authenticate('fitbit', {
   failureRedirect: '/auth/fitbit/failure'
 });
 
-
 // Database connection
 var Sequelize = require('sequelize');
 var sequelize = new Sequelize(process.env.DATABASE_URL || 'postgres://docker:docker@db:5432/fitcoin');
@@ -370,13 +369,13 @@ var fitCoinController = {
   createChallenge: function (req, res) {
     // get user
     User.find({ 
-      where: {fbUserId: req.params.fbUserId}
+      where: {id: req.params.id}
     })
     .then(function(specificUser) {
       specificUser.addChallenge({
         // Add challenge data here
         ethereumAddress: req.body.ethereumAddress,
-        creationDate: req.body.creationDate,
+        creationDate: Date.now(),
         expirationDate: req.body.expirationDate,
         status: req.body.status
       })
@@ -403,7 +402,7 @@ var fitCoinController = {
         model: Challenges,
         through: {
           attributes: ['ethereumAddress', 'creationDate', 'expirationDate', 'status'],
-          // where: {completed: true}
+          where: {id: req.params.id}
         }
       }]
     })
@@ -474,7 +473,7 @@ app.post('/users/:fbUserId', function(req, res) {
 // app.get('/challenges', function(req, res) {
 
 // });
-app.post('/challenges', function(req, res) {
+app.post('/challenges/:id', function(req, res) {
   fitCoinController.createChallenge(req, res);
 });
 app.get('/challenges/:id', function(req, res) {

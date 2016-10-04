@@ -1,6 +1,7 @@
 
 const initialState = {
   challenges: [],
+  friendsChallenges: [],
   isLoggedIn: false,
   openCV: 'someCoolImages',
   newChallenge: false,
@@ -23,8 +24,13 @@ const userReducer = function(state = initialState, action) {
       challenges: action.challenges
     };
 
-    case 'DELETE_CHALLENGE_SUCCESS':
+    case 'GET_FRIENDS_CHALLENGES_SUCCESS':
+    return {
+      ...state,
+      friendsChallenges: action.friendsChallenges
+    };
 
+    case 'DELETE_CHALLENGE_SUCCESS':
     return {
       ...state,
       // need the correct dbID

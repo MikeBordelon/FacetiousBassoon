@@ -30,7 +30,8 @@ class NewChallengeContainer extends Component {
     var ethereum = $('#ethereum').val();
     var goal = $('#goal').val();
     var buyIn = $('#buyIn').val();
-    var date = $('#date').val();
+    var startDate = $('#startDate').val();
+    var endDate = $('#endDate').val('');
     var goalType = $('#goalType').val();
 
     // console.log( 'userId:', userId, 'etherAddress', ethereum, 'goal:', goal, 'buyIn:', buyIn, 'date:', date, 'goal type:', goalType);
@@ -50,7 +51,7 @@ class NewChallengeContainer extends Component {
     //   }
     // })
     // .then(function(res) {
-    // this.forceUpdate();
+    //
     //   console.log('posted a challenge', res);
     // })
     // .catch(function(err) {
@@ -65,7 +66,8 @@ class NewChallengeContainer extends Component {
     $('#ethereum').val('');
     $('#buyIn').val();
     $('#goal').val('');
-    $('#date').val('');
+    $('#startDate').val('');
+    $('#endDate').val('');
     $('#goalType').val('');
   }
 

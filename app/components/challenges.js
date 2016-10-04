@@ -13,10 +13,6 @@ const style = {
 
   },
 
-  // text: {
-  //   margin: '0 0 20px 500px'
-  // },
-
   h3: {
     display: 'flex',
     // textAlign: 'center',
@@ -29,26 +25,6 @@ const style = {
     display: 'flex',
     margin: '0px 0px 0px 160px'
   }
-
-
-  // h4: {
-  //   // display: 'inline-block',
-  //   width: 400,
-  //   margin: '0 0 0 0'
-
-  // },
-
-  // button: {
-  //   float: 'right',
-  //   height: 30,
-  //   width: 80
-  // },
-  // tableCNT: {
-  //   // textAlign: 'center'
-  // },
-  // tableRGT: {
-  //   margin: '0px 90px 0px 0px'
-  // }
 };
 
 

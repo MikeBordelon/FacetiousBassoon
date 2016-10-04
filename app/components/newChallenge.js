@@ -22,7 +22,7 @@ class NewChallenge extends Component {
 // metrictype = steps Picker
   render () {
 
-    // console.log('store is: ', this.props.store);
+    // console.log('store is: ', this.props);
     return (
     <div>
       <h1 style={style.text}>Create A Challenge!</h1>
@@ -54,14 +54,21 @@ class NewChallenge extends Component {
           <div className="form-group">
             <label className="col-md-4 control-label" >Buy In Amount</label>
             <div className="col-md-4">
-              <input ref='buyIn' id="buyIn" name="buyIn" type="text" placeholder="$0.00" className="form-control input-md"/>
+              <input ref='buyIn' id="buyIn" name="buyIn" type="number" placeholder="$0.00" className="form-control input-md"/>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label className="col-md-4 control-label" >Starting Date</label>
+            <div className="col-md-4">
+              <input ref='startDate' id="startDate" name="startDate" type="date" className="form-control input-md"/>
             </div>
           </div>
 
           <div className="form-group">
             <label className="col-md-4 control-label" >Ending Date</label>
             <div className="col-md-4">
-              <input ref='date' id="date" name="date" type="date" className="form-control input-md"/>
+              <input ref='endDate' id="endDate" name="endDate" type="date" className="form-control input-md"/>
             </div>
           </div>
 

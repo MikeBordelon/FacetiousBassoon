@@ -1,10 +1,9 @@
 module.exports = (db, Sequelize) => {
   const User = db.define('users', {
-    firstName: {
+    name: {
       type: Sequelize.STRING,
-      field: 'first_name' // Will result in an attribute that is firstName when user facing but first_name in the database
     },
-    lastName: {
+    email: {
       type: Sequelize.STRING
     },
     accessToken: {
@@ -13,14 +12,11 @@ module.exports = (db, Sequelize) => {
     refreshToken: {
       type: Sequelize.STRING
     },
-    expiresIn: {
+    tokenExpiresIn: {
       type: Sequelize.INTEGER
     },
     fbUserId: {
       type: Sequelize.STRING
-    },
-    expiresAt: {
-      type: Sequelize.DATE
     }
   });
   return {

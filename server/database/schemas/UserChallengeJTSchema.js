@@ -4,21 +4,21 @@ module.exports = (db, Sequelize) => {
       type: Sequelize.INTEGER, autoIncrement: true, unique: true, primaryKey: true
     },
     userid: {
-      type: Sequelize.STRING // num?
+      type: Sequelize.INTEGER
     },
     challengeid: {
-      type: Sequelize.STRING // num?
+      type: Sequelize.INTEGER
     },
-    metricType: {
+    goalType: {
       type: Sequelize.STRING
     },
-    metricStart: {
+    goalStart: {
       type: Sequelize.STRING
     },
-    metricCurrent: {
+    goalCurrent: {
       type: Sequelize.STRING
     },
-    metricGoal: {
+    userEtherWallet: {
       type: Sequelize.STRING
     }
   });

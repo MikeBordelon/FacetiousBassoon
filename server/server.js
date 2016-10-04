@@ -24,24 +24,24 @@ app.use(passport.session({
 app.use(passport.initialize());
 
 var fitbitStrategy = new FitbitStrategy({
-  clientID: authConfig.dustin.clientId,
-  clientSecret: authConfig.dustin.clientSecret,
+  clientID: authConfig.lex.clientId,
+  clientSecret: authConfig.lex.clientSecret,
   scope: ['activity', 'heartrate', 'location', 'profile'],
   callbackURL: authConfig.lex.callbackURL
 }, function(accessToken, refreshToken, params, profile, done) {
   User.find( {where: {fbUserId: params.user_id}} )
-   .then(function(user) {
-     if (user === null) {
-       console.log('user not found, creating user...');
+    .then(function(user) {
+      if (user === null) {
+        console.log('user not found, creating user...');
      // console.log('TOKEN.access_token', token.access_token);
-       User.create({
-         firstName: profile._json.user.fullName.split(' ')[0],
-         lastName: profile._json.user.fullName.split(' ')[profile._json.user.fullName.split(' ').length - 1],
-         accessToken: params.access_token,
-         refreshToken: params.refresh_token,
-         expiresIn: params.expires_in,
-         fbUserId: params.user_id
-       })
+        User.create({
+          firstName: profile._json.user.fullName.split(' ')[0],
+          lastName: profile._json.user.fullName.split(' ')[profile._json.user.fullName.split(' ').length - 1],
+          accessToken: params.access_token,
+          refreshToken: params.refresh_token,
+          expiresIn: params.expires_in,
+          fbUserId: params.user_id
+        })
     .then(function() { 
       User.find({where: {fbUserId: params.user_id}}).then(function(found) {
         done(null, {
@@ -52,11 +52,15 @@ var fitbitStrategy = new FitbitStrategy({
         });
       });
     });
-     } else {
-       // console.log('User found', user);
-     }
-   });
-  
+      } else {
+        done(null, {
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+          profile: profile,
+          userId: user.id
+        });
+      }
+    });
 });
 
 passport.use(fitbitStrategy);
@@ -237,6 +241,11 @@ app.get('/auth/fitbit/callback', fitbitAuthenticate);
 app.get('/auth/fitbit/success', function(req, res, next) {
 
   res.redirect('/allChallenges');
+});
+
+app.get('/auth/fitbit/failure', function (req, res, next) {
+
+  res.send('Failure');
 });
 
 app.get('/auth/checkLogin', function(req, res) {

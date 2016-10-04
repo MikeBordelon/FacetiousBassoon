@@ -40,21 +40,21 @@ class NewChallenge extends Component {
           <div className="form-group">
             <label className="col-md-4 control-label" >Ethereum Address</label>
             <div className="col-md-4">
-              <input ref='ethereum' id="ethereum" name="ethereum" type="text" placeholder="enter your ethereum address" className="form-control input-md"/>
+              <input ref='userEtherWallet' id="userEtherWallet" name="userEtherWallet" type="text" placeholder="enter your ethereum address" className="form-control input-md"/>
             </div>
           </div>
 
           <div className="form-group">
             <label className="col-md-4 control-label" >Goal</label>
             <div className="col-md-4">
-              <input ref='goal' id="goal" name="goal" type="text" placeholder="# of steps/floors" className="form-control input-md"/>
+              <input ref='goalAmount' id="goalAmount" name="goalAmount" type="text" placeholder="# of steps/floors" className="form-control input-md"/>
             </div>
           </div>
 
           <div className="form-group">
             <label className="col-md-4 control-label" >Buy In Amount</label>
             <div className="col-md-4">
-              <input ref='buyIn' id="buyIn" name="buyIn" type="number" placeholder="$0.00" className="form-control input-md"/>
+              <input ref='buyInAmount' id="buyInAmount" name="buyInAmount" type="number" placeholder="$0.00" className="form-control input-md"/>
             </div>
           </div>
 
@@ -66,9 +66,9 @@ class NewChallenge extends Component {
           </div>
 
           <div className="form-group">
-            <label className="col-md-4 control-label" >Ending Date</label>
+            <label className="col-md-4 control-label" >End Date</label>
             <div className="col-md-4">
-              <input ref='endDate' id="endDate" name="endDate" type="date" className="form-control input-md"/>
+              <input ref='expirationDate' id="expirationDate" name="expirationDate" type="date" className="form-control input-md"/>
             </div>
           </div>
 

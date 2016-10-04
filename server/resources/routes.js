@@ -37,7 +37,7 @@ module.exports = (app, express) => {
     res.redirect('/');
   });
   //End Authentication
-  
+
 
   //Get info from FitBit API
   app.get('/get_stats', function(req, res) {
@@ -91,7 +91,7 @@ module.exports = (app, express) => {
 
 
   //Challenges
-  app.route('/challenges')    
+  app.route('/challenges')
     .post(function(req, res) {
       fitCoinController.createChallenge(req, res);
     })
@@ -126,7 +126,7 @@ module.exports = (app, express) => {
     });
 
 //End of endpoint routes
-  
+
   //Wildcard to pass through to react router routes
   app.get('*', function (request, response) {
     response.sendFile(path.resolve(__dirname, '../../app/public', 'index.html'));

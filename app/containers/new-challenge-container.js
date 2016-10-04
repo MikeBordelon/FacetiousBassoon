@@ -27,36 +27,51 @@ class NewChallengeContainer extends Component {
     e.preventDefault();
 
     var userId = this.props.userId;
-    var ethereum = $('#ethereum').val();
-    var goal = $('#goal').val();
-    var buyIn = $('#buyIn').val();
+    var userEtherWallet = $('#userEtherWallet').val();
+    var goalAmount = $('#goalAmount').val();
+    var buyInAmount = $('#buyInAmount').val();
     var startDate = $('#startDate').val();
-    var endDate = $('#endDate').val('');
+    var expirationDate = $('#expirationDate').val();
     var goalType = $('#goalType').val();
 
-    // console.log( 'userId:', userId, 'etherAddress', ethereum, 'goal:', goal, 'buyIn:', buyIn, 'date:', date, 'goal type:', goalType);
+    console.log(
+      'userId:', userId,
+      'userEtherWallet', userEtherWallet,
+      'goalAmount:', goalAmount,
+      'goalType:', goalType,
+      'buyInAmount:', buyInAmount,
+      'startDate:', startDate,
+      'expirationDate:', expirationDate
+    );
+
+    // { userId: '1',
+    //   startDate: '2014-01-01T00:00:00.588Z',
+    //   expirationDate: '2014-01-01T00:00:00.588Z',
+    //   goalType: 'steps',
+    //   goalAmount: '10000',
+    //   buyInAmount: '1',
+    //   userEtherWallet: 'ABC123'
+    // },
 
 
+    axios.post('/challenges', {
 
+      data: {
+        ethereum: userEtherWallet,
+        goalAmount: goalAmount,
+        goalType: goalType,
+        buyInAmount: buyInAmount,
+        startDate: startDate,
+        expirationDate: expirationDate,
+      }
+    })
+    .then(function(res) {
 
-    // axios.post('/challenges', {
-    //   params: {
-    //     userId: this.props.userId
-    //   },
-    //   data: {
-    //     ethereum: ethereum,
-    //     goal: goal,
-    //     date: date,
-    //     goalType: goalType
-    //   }
-    // })
-    // .then(function(res) {
-    //
-    //   console.log('posted a challenge', res);
-    // })
-    // .catch(function(err) {
-    //   console.log('challenge error', err);
-    // });
+      console.log('posted a challenge', res);
+    })
+    .catch(function(err) {
+      console.log('challenge error', err);
+    });
 
   }
 

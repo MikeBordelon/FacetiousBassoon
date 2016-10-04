@@ -93,6 +93,8 @@ module.exports = {
       });
   },
   createChallenge: function (req, res) {
+    console.log('request hit createChallenge');
+    
     Challenge.create({
       ethereumAddress: req.body.ethereumAddress,
       status: 'new',

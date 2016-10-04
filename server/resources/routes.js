@@ -91,9 +91,10 @@ module.exports = (app, express) => {
 
 
   //Challenges
-  app.route('/challenges')
+  app.route('/challenges')    
     .post(function(req, res) {
       fitCoinController.createChallenge(req, res);
+      console.log('request hit challenges');
     })
     .put(function(req, res) {
       fitCoinController.updateChallenge(req, res);

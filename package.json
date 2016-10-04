@@ -6,7 +6,7 @@
   "scripts": {
     "start": "./wait-for-it.sh db:5432 && npm run dev-be",
     "dev-fe": "node server/server.js",
-    "dev-be": "nodemon server/server.js --ignore app"
+    "dev-be": "nodemon server/server.js --watch server"
   },
   "repository": {
     "type": "git",

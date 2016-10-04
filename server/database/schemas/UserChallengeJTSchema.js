@@ -1,5 +1,5 @@
 module.exports = (db, Sequelize) => {
-  const UserChallengeJT = db.define('UserChallengeJT', {
+  const UserChallenges = db.define('UserChallenge', {
     id: {
       type: Sequelize.INTEGER, autoIncrement: true, unique: true, primaryKey: true
     },
@@ -23,6 +23,6 @@ module.exports = (db, Sequelize) => {
     }
   });
   return {
-    UserChallengeJT: UserChallengeJT
+    UserChallenges: UserChallenges
   };
 };

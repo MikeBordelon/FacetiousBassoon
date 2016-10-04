@@ -1,6 +1,6 @@
 module.exports = (db, Sequelize) => {
   const Challenge = db.define('challenges', {
-    creatorUId: {
+    creatorUserId: {
       type: Sequelize.INTEGER
     },
     ethereumSCAddress: {

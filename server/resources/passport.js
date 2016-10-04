@@ -22,7 +22,7 @@ var fitbitStrategy = new FitbitStrategy({
           lastName: profile._json.user.fullName.split(' ')[profile._json.user.fullName.split(' ').length - 1],
           accessToken: params.access_token,
           refreshToken: params.refresh_token,
-          expiresIn: params.expires_in,
+          tokenExpiresIn: params.expires_in,
           fbUserId: params.user_id
         })
     .then(function() { 

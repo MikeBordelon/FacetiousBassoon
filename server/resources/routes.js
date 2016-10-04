@@ -94,13 +94,13 @@ module.exports = (app, express) => {
   app.route('/challenges')    
     .post(function(req, res) {
       fitCoinController.createChallenge(req, res);
-      console.log('request hit challenges');
     })
     .put(function(req, res) {
       fitCoinController.updateChallenge(req, res);
     });
 
   app.get('/challenges/:id', function(req, res) {
+    console.log('request hit challenges/' + req.params.id);
     // req.params: { "id": USER };
     fitCoinController.retrieveChallenges(req, res);
   });

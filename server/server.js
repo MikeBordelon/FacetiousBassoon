@@ -12,7 +12,9 @@ var authConfig = require('./resources/authConfig.js');
 
 helperFunctions.useWebpackMiddleware(app);
 app.use(cookieParser());
-app.use(bodyParser());
+// app.use(bodyParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 // app.use('/api', router); // added /api prefix to distinguish back end routes
 app.use(session({ secret: 'keyboard cat' }));
 app.use(passport.initialize());
@@ -112,7 +114,7 @@ var User = sequelize.define('users', {
 });
 
 
-var FbAttributes = sequelize.define('fb_attributes', {
+var FbAttribute = sequelize.define('fb_attributes', {
   avatar: {
     type: Sequelize.STRING
   },
@@ -168,7 +170,7 @@ var FbAttributes = sequelize.define('fb_attributes', {
 
 
 
-var FbActivityStats = sequelize.define('fb_lifetime_stats', {
+var FbActivityStat = sequelize.define('fb_lifetime_stats', {
   totalCaloriesOut: {
     type: Sequelize.INTEGER
   },
@@ -196,7 +198,7 @@ var FbActivityStats = sequelize.define('fb_lifetime_stats', {
 });
 
 
-var UserChallengesJT = sequelize.define('user_challenges_jt', {
+var UserChallengeJT = sequelize.define('user_challenges_jt', {
   userId: {
     type: Sequelize.STRING // num?
   },
@@ -217,7 +219,7 @@ var UserChallengesJT = sequelize.define('user_challenges_jt', {
   }
 });
 
-var Challenges = sequelize.define('challenges', {
+var Challenge = sequelize.define('challenges', {
   ethereumAddress: {
     type: Sequelize.STRING // just a string?
   },
@@ -232,6 +234,9 @@ var Challenges = sequelize.define('challenges', {
   }
 });
 
+// 
+User.belongsToMany(Challenge, {through: 'UserChallengeJT'});
+Challenge.belongsToMany(User, {through: 'UserChallengeJT'});
 
 app.use(express.static(path.join(__dirname, '../app/public')));
 
@@ -301,11 +306,18 @@ var fitCoinController = {
       });
   },
   createOne: function (req, res) {
-    User.findAll({})
-      .then(function(found) {
-        console.log('retrieve findAll', found);
+    User.create({
+      firstName: req.params.firstName,
+      lastName: req.params.lastName,
+      // accessToken: req.params.accessToken,
+      // refreshToken: req.params.refreshToken,
+      // expiresIn: req.params.expiresIn,
+      // fbUserId: req.params.fbUserId
+    })
+      .then(function(created) {
+        console.log('createOne create', created);
         res.statusCode === 200;
-        res.end(JSON.stringify(found));
+        res.end(JSON.stringify(created)); 
       })
       .catch(function(err) {
         console.error(err);
@@ -353,7 +365,40 @@ var fitCoinController = {
         res.statusCode === 404;
         res.end();
       });
-  }
+  },
+  createChallenge: function (req, res) {
+    // console.log('req: ', req);
+    console.log('req.body: ', req.body);
+    Challenge.create({
+      ethereumAddress: req.body.ethereumAddress,
+      creationDate: req.body.creationDate,
+      expirationDate: req.body.expirationDate,
+      status: req.body.status
+    })
+      .then(function(created) {
+        console.log('createChallenge create', created);
+        res.statusCode === 200;
+        res.end(JSON.stringify(created)); 
+      })
+      .catch(function(err) {
+        console.error(err);
+        res.statusCode === 404;
+        res.end(JSON.stringify(err)); 
+      });
+  },
+  retrieveChallenges: function (req, res) {
+    User.findAll({})
+      .then(function(found) {
+        console.log('retrieve findAll', found);
+        res.statusCode === 200;
+        res.end(JSON.stringify(found)); 
+      })
+      .catch(function(err) {
+        console.error(err);
+        res.statusCode === 404;
+        res.end(); 
+      });
+  },
 };
 
 
@@ -401,15 +446,24 @@ app.delete('/users', function(req, res) {
   fitCoinController.delete(req, res);
 });
 
+app.post('/users/:fbUserId', function(req, res) {
+  fitCoinController.retrieveOne(req, res);
+});
 // app.get('/users:userId/friends', function(req, res) {
 //   // req.params: { "userId": USER };
 // });
-// app.get('/challenges', function(req, res) {});
+// app.get('/challenges', function(req, res) {
+
+// });
+app.post('/challenges', function(req, res) {
+  fitCoinController.createChallenge(req, res);
+});
+app.get('/challenges/:id', function(req, res) {
+  // req.params: { "id": USER };
+  fitCoinController.retrieveChallenge(req, res);
+});
 // app.get('/challenges/:status', function(req, res) {
 //   // req.params: { "status": STATUS };
-// });
-// app.get('/challenges/:id', function(req, res) {
-//   // req.params: { "id": USER };
 // });
 // app.get('/challenges/:id/participants', function(req, res) {
 //   // req.params: { "id": ID };
@@ -418,56 +472,6 @@ app.delete('/users', function(req, res) {
 //   // req.params: { "id": ID };
 // });
 // app.get('/auth/:status', function(req, res) {});
-
-// Routes - basic format
-// app.route('/users')
-//   .get(fitCoinController.retrieve(req, res))
-//   .post(fitCoinController.createOne(req, res))
-//   .update(fitCoinController.updateOne(req, res))
-//   .delete(fitCoinController.delete(req, res));
-
-// app.route('/users/:userId')
-//   .get(fitCoinController.retrieveOne(req, res))
-//   .post(fitCoinController.createOne(req, res))
-//   .update(fitCoinController.updateOne(req, res))
-//   .delete(fitCoinController.delete(req, res));
-
-// app.route('/users:userId/friends')
-//   .get(fitCoinController.retrieveOne(req, res))
-//   .post(fitCoinController.createOne(req, res))
-//   .update(fitCoinController.updateOne(req, res))
-//   .delete(fitCoinController.delete(req, res));
-
-// app.route('/challenges')
-//   .get(fitCoinController.retrieveOne(req, res))
-//   .post(fitCoinController.createOne(req, res))
-//   .update(fitCoinController.updateOne(req, res))
-//   .delete(fitCoinController.delete(req, res));
-
-// app.route('/challenges/:status')
-//   .get(fitCoinController.retrieveOne(req, res))
-//   .post(fitCoinController.createOne(req, res))
-//   .update(fitCoinController.updateOne(req, res))
-//   .delete(fitCoinController.delete(req, res));
-
-// app.route('/challenges/:id')
-//   .get(fitCoinController.retrieveOne(req, res))
-//   .post(fitCoinController.createOne(req, res))
-//   .update(fitCoinController.updateOne(req, res))
-//   .delete(fitCoinController.delete(req, res));
-
-// app.route('/challenges/:id/participants')
-//   .get(fitCoinController.retrieveOne(req, res))
-//   .post(fitCoinController.createOne(req, res))
-//   .update(fitCoinController.updateOne(req, res))
-//   .delete(fitCoinController.delete(req, res));
-
-// app.route('/challenges/:id/participants')
-//   .get(fitCoinController.retrieveOne(req, res))
-//   .post(fitCoinController.createOne(req, res))
-//   .update(fitCoinController.updateOne(req, res))
-//   .delete(fitCoinController.delete(req, res));
-
 
 
 

@@ -91,7 +91,7 @@ module.exports = (app, express) => {
 
 
   //Challenges
-  app.route('/challenges')
+  app.route('/challenges')    
     .post(function(req, res) {
       fitCoinController.createChallenge(req, res);
     })
@@ -100,6 +100,7 @@ module.exports = (app, express) => {
     });
 
   app.get('/challenges/:id', function(req, res) {
+    console.log('request hit challenges/' + req.params.id);
     // req.params: { "id": USER };
     fitCoinController.retrieveChallenges(req, res);
   });

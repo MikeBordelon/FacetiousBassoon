@@ -13,4 +13,4 @@ User.belongsToMany(Challenge, {through: 'UserChallengeJT', foreignKey: 'userId'}
 Challenge.belongsToMany(User, {through: 'UserChallengeJT', foreignKey: 'challengeId'});
 User.belongsToMany(User, {as: 'friends', through: 'friends', otherKey: 'userId', foreignKey: 'friendId' }); //doublecheck
 
-module.exports = {db, User, UserChallengeJT, Challenge};
+module.exports = {db, User, UserChallengeJT, Challenge, Sequelize};

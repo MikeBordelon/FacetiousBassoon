@@ -1,12 +1,12 @@
 module.exports = (db, Sequelize) => {
-  const UserChallengeJT = db.define('user_challenges_jt', {
+  const UserChallengeJT = db.define('UserChallengeJT', {
     id: {
       type: Sequelize.INTEGER, autoIncrement: true, unique: true, primaryKey: true
     },
-    userid: {
+    userId: {
       type: Sequelize.INTEGER
     },
-    challengeid: {
+    challengeId: {
       type: Sequelize.INTEGER
     },
     goalType: {

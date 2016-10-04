@@ -1,4 +1,4 @@
-const {User, Challenge, UserChallengeJT, db} = require('./db-config.js');
+const {User, Challenge, UserChallengeJT, db, Sequelize} = require('./db-config.js');
 
 module.exports = {
   retrieve: function (req, res) {
@@ -93,21 +93,27 @@ module.exports = {
       });
   },
   createChallenge: function (req, res) {
+    console.log('request hit createChallenge');
+    
     Challenge.create({
-      ethereumAddress: req.body.ethereumAddress,
-      status: 'new',
+      creatorUserId: req.body.userId,
+      ethereumSCAddress: 'null',
+      startDate: req.body.startDate,
       expirationDate: req.body.expirationDate,
-      creationDate: Date.now()
+      status: 'new',
+      goalType: req.body.goalType,
+      goalAmount: req.body.goalAmount,
+      buyInAmount: req.body.buyInAmount
     })
       .then(function(challenge) {
         console.log(challenge);
         UserChallengeJT.create({
           userId: req.body.userId,
           challengeId: challenge.id,
-          metricType: req.body.metricType,
-          metricGoal: req.body.metricGoal,
-          metricCurrent: 10,
-          metricStart: 0
+          goalType: req.body.goalType,
+          // goalStart: 'null',  // worker will update these
+          // goalCurrent: 'null', // worker will update these
+          userEtherWallet: req.body.userEtherWallet,
         })
           .then(function(result) {
             res.statusCode === 200;
@@ -124,6 +130,8 @@ module.exports = {
       });
   },
   retrieveChallenges: function (req, res) {
+    console.log('request hit retrieveChallenges with id:' + req.params.id);
+
     // User.findAll(
     //   {
     //     include: {

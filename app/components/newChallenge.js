@@ -22,14 +22,20 @@ class NewChallenge extends Component {
 // metrictype = steps Picker
   render () {
 
-
-    console.log(this.refs.ethereum);
+    // console.log('store is: ', this.props.store);
     return (
     <div>
       <h1 style={style.text}>Create A Challenge!</h1>
 
       <form ref='form'className="form-horizontal">
         <fieldset>
+
+          <div className="form-group">
+            <label className="col-md-4 control-label" >Your UserId</label>
+            <div className="col-md-4">
+              <input ref='userId' id="userId" name="userId" type="text" placeholder={this.props.store.userState.userId} className="form-control input-md"/>
+            </div>
+          </div>
 
           <div className="form-group">
             <label className="col-md-4 control-label" >Ethereum Address</label>
@@ -42,6 +48,13 @@ class NewChallenge extends Component {
             <label className="col-md-4 control-label" >Goal</label>
             <div className="col-md-4">
               <input ref='goal' id="goal" name="goal" type="text" placeholder="# of steps/floors" className="form-control input-md"/>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label className="col-md-4 control-label" >Buy In Amount</label>
+            <div className="col-md-4">
+              <input ref='buyIn' id="buyIn" name="buyIn" type="text" placeholder="Buy-In Amount" className="form-control input-md"/>
             </div>
           </div>
 

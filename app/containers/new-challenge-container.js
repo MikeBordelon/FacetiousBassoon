@@ -26,14 +26,15 @@ class NewChallengeContainer extends Component {
   postChallenge (e) {
     e.preventDefault();
 
-
+    var userId = this.props.userId;
     var ethereum = $('#ethereum').val();
     var goal = $('#goal').val();
+    var buyIn = $('#buyIn').val();
     var date = $('#date').val();
     var goalType = $('#goalType').val();
 
-    console.log('etherAddress', ethereum, 'goal:', goal, 'date:', date, 'goal type:', goalType);
-    console.log('userId is: ', this.props.userId);
+    // console.log( 'userId:', userId, 'etherAddress', ethereum, 'goal:', goal, 'buyIn:', buyIn, 'date:', date, 'goal type:', goalType);
+
 
 
 
@@ -60,13 +61,17 @@ class NewChallengeContainer extends Component {
 
   cancel (e) {
     e.preventDefault();
+    $('#userId').val('');
     $('#ethereum').val('');
+    $('#buyIn').val();
     $('#goal').val('');
     $('#date').val('');
     $('#goalType').val('');
   }
 
   render () {
+
+    // console.log(this.props.userId);
     return (
       <NewChallenge postChallenge={this.postChallenge} cancel={this.cancel}/>
     );

@@ -1,6 +1,7 @@
 const express = require('express');
 const {db} = require('./database/db-config');
 
+
 var app = express();
 
 require('./resources/middleware.js')(app, express);

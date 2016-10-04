@@ -58,7 +58,8 @@ class NewChallengeContainer extends Component {
 
   }
 
-  cancel () {
+  cancel (e) {
+    e.preventDefault();
     $('#ethereum').val('');
     $('#goal').val('');
     $('#date').val('');

@@ -29,7 +29,7 @@ class MainNavBar extends Component {
       if (response.data.logInStatus === 'authenticated') {
         store.dispatch(authSuccess(response.data.user.userId));
       } else {
-        store.dispatch(authFailure());
+        // store.dispatch(authFailure());
       }
       // console.log(store.getState());
     });
@@ -37,7 +37,7 @@ class MainNavBar extends Component {
 
   render() {
     var loggedIn, loggerButton, openCV, newChallenge;
-
+    console.log(this.props.isLoggedIn);
     if (this.props.isLoggedIn === true) {
       loggerButton = <li><a href="/auth/logout"><span className="glyphicon glyphicon-log-in"></span> Logout</a></li>;
       loggedIn = <li><Link to='/allChallenges'>Challenges</Link></li>;

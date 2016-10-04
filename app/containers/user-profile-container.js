@@ -6,12 +6,15 @@ const UserProfileContainer = React.createClass({
 
   componentDidMount: function() {
 
-    userApi.getProfile(this.props.name);
+    // userApi.getProfile(this.props.name);
   },
 
   render: function() {
+    const profile = this.props.store.userState.profile;
     return (
-      <UserProfile {...this.props.profile} />
+      <UserProfile profile={profile}
+                   profile2={this.props.profile}
+      />
     );
   }
 
@@ -19,6 +22,7 @@ const UserProfileContainer = React.createClass({
 
 const mapStateToProps = function(store) {
   return {
+    store,
     profile: store.userState.userProfile
   };
 };

@@ -4,7 +4,12 @@ const initialState = {
   isLoggedIn: false,
   openCV: 'someCoolImages',
   newChallenge: false,
-  userId: null
+  userId: null,
+  profile: {
+    'name': 'Mike',
+    'age': '35',
+    'wallet': '$100,000,000'
+  }
 };
 
 const userReducer = function(state = initialState, action) {

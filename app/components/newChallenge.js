@@ -54,7 +54,7 @@ class NewChallenge extends Component {
           <div className="form-group">
             <label className="col-md-4 control-label" >Buy In Amount</label>
             <div className="col-md-4">
-              <input ref='buyIn' id="buyIn" name="buyIn" type="text" placeholder="Buy-In Amount" className="form-control input-md"/>
+              <input ref='buyIn' id="buyIn" name="buyIn" type="text" placeholder="$0.00" className="form-control input-md"/>
             </div>
           </div>
 

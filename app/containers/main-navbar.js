@@ -36,11 +36,14 @@ class MainNavBar extends Component {
   }
 
   render() {
-    var loggedIn, loggerButton, openCV, newChallenge;
-    console.log(this.props.isLoggedIn);
+    var loggedIn, loggerButton, openCV, newChallenge, userProfile;
+
+
+
     if (this.props.isLoggedIn === true) {
       loggerButton = <li><a href="/auth/logout"><span className="glyphicon glyphicon-log-in"></span> Logout</a></li>;
       loggedIn = <li><Link to='/allChallenges'>Challenges</Link></li>;
+      userProfile = <li><Link to='/profile'>Profile</Link></li>;
       newChallenge = <li><Link to='/newChallenge'>Make A New Challenge</Link></li>;
       openCV = <li><Link to='/openCV'>OpenCV</Link></li>;
     } else {
@@ -61,6 +64,7 @@ class MainNavBar extends Component {
             </ul>
             <ul className="nav navbar-nav navbar-right">
               {loggedIn}
+              {userProfile}
               {newChallenge}
               {openCV}
               {loggerButton}

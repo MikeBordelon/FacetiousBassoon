@@ -1,4 +1,4 @@
-const {User, Challenge, UserChallengeJT, db, Sequelize} = require('./db-config.js');
+const {User, Challenge, UserChallenges, db, Sequelize} = require('./db-config.js');
 
 module.exports = {
   retrieve: function (req, res) {
@@ -106,14 +106,14 @@ module.exports = {
       buyInAmount: req.body.buyInAmount
     })
       .then(function(challenge) {
-        console.log(challenge);
-        UserChallengeJT.create({
+        console.log('challenge created, now creating join table entry...');
+        UserChallenges.create({
           userId: req.body.userId,
           challengeId: challenge.id,
           goalType: req.body.goalType,
-          // goalStart: 'null',  // worker will update these
-          // goalCurrent: 'null', // worker will update these
-          userEtherWallet: req.body.userEtherWallet,
+          goalStart: 'null',  // worker will update these
+          goalCurrent: 'null', // worker will update these
+          userEtherWallet: req.body.userEtherWallet
         })
           .then(function(result) {
             res.statusCode === 200;
@@ -126,7 +126,7 @@ module.exports = {
       })
       .catch(function(err) {
         res.statusCode === 404;
-        res.end(err); 
+        res.end(JSON.stringify(err)); 
       });
   },
   retrieveChallenges: function (req, res) {

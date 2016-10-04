@@ -19,16 +19,10 @@ const About = function (props) {
       <h1>About us</h1>
         <div>
           <p>
-            Lorem Ipsum er rett og slett dummytekst fra og for trykkeindustrien.
-            Lorem Ipsum har vært bransjens standard for dummytekst helt siden
-            1500-tallet, da en ukjent boktrykker stokket en mengde bokstaver for å
-            lage et prøveeksemplar av en bok. Lorem Ipsum har tålt tidens tann
-            usedvanlig godt, og har i tillegg til å bestå gjennom fem århundrer
-            tålt spranget over til elektronisk typografi uten vesentlige endringer.
-            Lorem Ipsum ble gjort allment kjent i 1960-årene ved lanseringen av
-            Letraset-ark med avsnitt fra Lorem Ipsum, og senere med sideom
-            brekkingsprogrammet Aldus PageMaker som tok i bruk nettopp Lorem Ipsum for
-            dummytekst.
+            We are a company that is focused on helping you become a fitter you!
+            With the help of our tracking tools you can reach your goals with more transparency
+            than ever before. Our company is also committed to donating to charities that help
+            to foster a healthy lifestyle.
           </p>
         </div>
      </Paper>

@@ -57,7 +57,7 @@ class MainNavBar extends Component {
             </div>
             <ul className="nav navbar-nav">
               <li><Link to='/'>Home</Link></li>
-              <li><Link to='/about'>About us</Link></li>
+              <li><Link to='/about'>About Us</Link></li>
             </ul>
             <ul className="nav navbar-nav navbar-right">
               {loggedIn}

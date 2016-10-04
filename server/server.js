@@ -12,7 +12,9 @@ var authConfig = require('./resources/authConfig.js');
 
 helperFunctions.useWebpackMiddleware(app);
 app.use(cookieParser());
-app.use(bodyParser());
+// app.use(bodyParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 // app.use('/api', router); // added /api prefix to distinguish back end routes
 app.use(session({ secret: 'keyboard cat' }));
 app.use(passport.initialize());
@@ -23,12 +25,14 @@ app.use(passport.session({
 
 app.use(passport.initialize());
 
+// Passport strategy for FitBit API
 var fitbitStrategy = new FitbitStrategy({
   clientID: authConfig.lex.clientId,
   clientSecret: authConfig.lex.clientSecret,
   scope: ['activity', 'heartrate', 'location', 'profile'],
   callbackURL: authConfig.lex.callbackURL
 }, function(accessToken, refreshToken, params, profile, done) {
+
   User.find( {where: {fbUserId: params.user_id}} )
     .then(function(user) {
       if (user === null) {
@@ -61,6 +65,7 @@ var fitbitStrategy = new FitbitStrategy({
         });
       }
     });
+
 });
 
 passport.use(fitbitStrategy);
@@ -75,7 +80,6 @@ var fitbitAuthenticate = passport.authenticate('fitbit', {
   successRedirect: '/auth/fitbit/success',
   failureRedirect: '/auth/fitbit/failure'
 });
-
 
 // Database connection
 var Sequelize = require('sequelize');
@@ -112,7 +116,7 @@ var User = sequelize.define('users', {
 });
 
 
-var FbAttributes = sequelize.define('fb_attributes', {
+var FbAttribute = sequelize.define('fb_attributes', {
   avatar: {
     type: Sequelize.STRING
   },
@@ -168,7 +172,7 @@ var FbAttributes = sequelize.define('fb_attributes', {
 
 
 
-var FbActivityStats = sequelize.define('fb_lifetime_stats', {
+var FbActivityStat = sequelize.define('fb_lifetime_stats', {
   totalCaloriesOut: {
     type: Sequelize.INTEGER
   },
@@ -195,12 +199,14 @@ var FbActivityStats = sequelize.define('fb_lifetime_stats', {
   }
 });
 
-
-var UserChallengesJT = sequelize.define('user_challenges_jt', {
-  userId: {
+var UserChallengeJT = sequelize.define('user_challenges_jt', {
+  id: {
+    type: Sequelize.INTEGER, autoIncrement: true, unique: true, primaryKey: true
+  },
+  userid: {
     type: Sequelize.STRING // num?
   },
-  challengeId: {
+  challengeid: {
     type: Sequelize.STRING // num?
   },
   metricType: {
@@ -217,7 +223,7 @@ var UserChallengesJT = sequelize.define('user_challenges_jt', {
   }
 });
 
-var Challenges = sequelize.define('challenges', {
+var Challenge = sequelize.define('challenges', {
   ethereumAddress: {
     type: Sequelize.STRING // just a string?
   },
@@ -226,12 +232,12 @@ var Challenges = sequelize.define('challenges', {
   },
   expirationDate: {
     type: Sequelize.DATE // special date?
-  },
-  status: {
-    type: Sequelize.STRING
   }
 });
 
+// Create join table relationship
+User.belongsToMany(Challenge, {through: 'UserChallengeJT', foreignKey: 'userId'});  
+Challenge.belongsToMany(User, {through: 'UserChallengeJT', foreignKey: 'challengeId'});
 
 app.use(express.static(path.join(__dirname, '../app/public')));
 
@@ -246,6 +252,7 @@ app.get('/auth/fitbit/success', function(req, res, next) {
 app.get('/auth/fitbit/failure', function (req, res, next) {
 
   res.send('Failure');
+
 });
 
 app.get('/auth/checkLogin', function(req, res) {
@@ -254,6 +261,7 @@ app.get('/auth/checkLogin', function(req, res) {
     res.send(
       {logInStatus: 'authenticated',
       user: req.user});
+
   } else {
     res.send({logInStaus: 'unauthenticated', user: null});
   }
@@ -273,42 +281,42 @@ var fitCoinController = {
   retrieve: function (req, res) {
     User.findAll({})
       .then(function(found) {
-        console.log('retrieve findAll', found);
         res.statusCode === 200;
         res.end(JSON.stringify(found));
       })
       .catch(function(err) {
-        console.error(err);
         res.statusCode === 404;
         res.end();
       });
   },
   retrieveOne: function (req, res) {
-    console.log('retrieveOne findOne controller reached!');
     User.findOne({
       where: {fbUserId: req.params.fbUserId}, // fbUserId
       // attributes: ['id', ['name', 'title']] // can specifiy needed fields
     })
       .then(function(found) {
-        console.log('retrieveOne findOne', found);
         res.statusCode === 200;
         res.end(JSON.stringify(found));
       })
       .catch(function(err) {
-        console.error(err);
         res.statusCode === 404;
         res.end();
       });
   },
   createOne: function (req, res) {
-    User.findAll({})
-      .then(function(found) {
-        console.log('retrieve findAll', found);
+    User.create({
+      firstName: req.params.firstName,
+      lastName: req.params.lastName,
+      // accessToken: req.params.accessToken,
+      // refreshToken: req.params.refreshToken,
+      // expiresIn: req.params.expiresIn,
+      // fbUserId: req.params.fbUserId
+    })
+      .then(function(created) {
         res.statusCode === 200;
-        res.end(JSON.stringify(found));
+        res.end(JSON.stringify(created)); 
       })
       .catch(function(err) {
-        console.error(err);
         res.statusCode === 404;
         res.end();
       });
@@ -316,12 +324,10 @@ var fitCoinController = {
   updateOne: function (req, res) {
     User.findAll({})
       .then(function(found) {
-        console.log('retrieve findAll', found);
         res.statusCode === 200;
         res.end(JSON.stringify(found));
       })
       .catch(function(err) {
-        console.error(err);
         res.statusCode === 404;
         res.end();
       });
@@ -329,12 +335,10 @@ var fitCoinController = {
   deleteOne: function (req, res) {
     User.findAll({})
       .then(function(found) {
-        console.log('retrieve findAll', found);
         res.statusCode === 200;
         res.end(JSON.stringify(found));
       })
       .catch(function(err) {
-        console.error(err);
         res.statusCode === 404;
         res.end();
       });
@@ -344,14 +348,79 @@ var fitCoinController = {
       where: {}  // {status: 'inactive'} // specifics
     })
       .then(function(deleted) {
-        console.log('delete returned: ', deleted);
         res.statusCode === 200;
         res.end(JSON.stringify(deleted));
       })
       .catch(function(err) {
-        console.error(err);
         res.statusCode === 404;
         res.end();
+      });
+  },
+  createChallengeType: function (req, res) {
+    Challenge.create({
+      name: req.params.name
+    })
+      .then(function(created) {
+        res.statusCode === 200;
+        res.end(JSON.stringify(created)); 
+      })
+      .catch(function(err) {
+        res.statusCode === 404;
+        res.end(); 
+      });
+  },
+  createChallenge: function (req, res) {
+    Challenge.create({
+      ethereumAddress: req.body.ethereumAddress,
+      status: 'new',
+      expirationDate: req.body.expirationDate,
+      creationDate: Date.now()
+    })
+      .then(function(challenge) {
+        console.log(challenge);
+        UserChallengeJT.create({
+          userId: req.body.userId,
+          challengeId: challenge.id,
+          metricType: req.body.metricType,
+          metricGoal: req.body.metricGoal,
+          metricCurrent: 10,
+          metricStart: 0
+        })
+          .then(function(result) {
+            res.statusCode === 200;
+            res.end(JSON.stringify(result)); 
+          })
+          .catch(function(err) {
+            res.statusCode === 404;
+            res.end(JSON.stringify(err)); 
+          });
+      })
+      .catch(function(err) {
+        res.statusCode === 404;
+        res.end(err); 
+      });
+  },
+  retrieveChallenges: function (req, res) {
+    // User.findAll(
+    //   {
+    //     include: {
+    //       model: Challenge,
+    //       through: {
+    //         attributes: ['userId', 'metricType', 'metricStart', 'metricCurrent', 'metricGoal', 'createdAt', 'updatedAt'],
+    //         where: { id: req.params.id },
+    //       }
+
+    //     }
+    //   }
+    // )
+    sequelize.query("select * from users inner join ", { type: sequelize.QueryTypes.SELECT})
+      .then(function(found) {
+        res.statusCode === 200;
+        res.end(JSON.stringify(found)); 
+      })
+      .catch(function(err) {
+        res.statusCode === 404;
+        res.end(); 
       });
   }
 };
@@ -389,6 +458,8 @@ app.get('/get_stats', function(req, res) {
 });
 
 // Routes - basic format
+
+// Users
 app.get('/users', function(req, res) {
   fitCoinController.retrieve(req, res);
 });
@@ -401,15 +472,32 @@ app.delete('/users', function(req, res) {
   fitCoinController.delete(req, res);
 });
 
-// app.get('/users:userId/friends', function(req, res) {
-//   // req.params: { "userId": USER };
+app.post('/users/:fbUserId', function(req, res) {
+  fitCoinController.retrieveOne(req, res);
+});
+
+// Challenges
+
+// creates a new challenge type in the DB
+app.post('/challenges_types/:name', function(req, res) {
+  fitCoinController.createChallengeType(req, res);
+});
+
+// creates a new challenge for a userId
+app.post('/challenges', function(req, res) {
+  fitCoinController.createChallenge(req, res);
+});
+
+app.get('/challenges/:id', function(req, res) {
+  // req.params: { "id": USER };
+  fitCoinController.retrieveChallenges(req, res);
+});
+
+// app.get('/challenges', function(req, res) {
+
 // });
-// app.get('/challenges', function(req, res) {});
 // app.get('/challenges/:status', function(req, res) {
 //   // req.params: { "status": STATUS };
-// });
-// app.get('/challenges/:id', function(req, res) {
-//   // req.params: { "id": USER };
 // });
 // app.get('/challenges/:id/participants', function(req, res) {
 //   // req.params: { "id": ID };
@@ -418,55 +506,6 @@ app.delete('/users', function(req, res) {
 //   // req.params: { "id": ID };
 // });
 // app.get('/auth/:status', function(req, res) {});
-
-// Routes - basic format
-// app.route('/users')
-//   .get(fitCoinController.retrieve(req, res))
-//   .post(fitCoinController.createOne(req, res))
-//   .update(fitCoinController.updateOne(req, res))
-//   .delete(fitCoinController.delete(req, res));
-
-// app.route('/users/:userId')
-//   .get(fitCoinController.retrieveOne(req, res))
-//   .post(fitCoinController.createOne(req, res))
-//   .update(fitCoinController.updateOne(req, res))
-//   .delete(fitCoinController.delete(req, res));
-
-// app.route('/users:userId/friends')
-//   .get(fitCoinController.retrieveOne(req, res))
-//   .post(fitCoinController.createOne(req, res))
-//   .update(fitCoinController.updateOne(req, res))
-//   .delete(fitCoinController.delete(req, res));
-
-// app.route('/challenges')
-//   .get(fitCoinController.retrieveOne(req, res))
-//   .post(fitCoinController.createOne(req, res))
-//   .update(fitCoinController.updateOne(req, res))
-//   .delete(fitCoinController.delete(req, res));
-
-// app.route('/challenges/:status')
-//   .get(fitCoinController.retrieveOne(req, res))
-//   .post(fitCoinController.createOne(req, res))
-//   .update(fitCoinController.updateOne(req, res))
-//   .delete(fitCoinController.delete(req, res));
-
-// app.route('/challenges/:id')
-//   .get(fitCoinController.retrieveOne(req, res))
-//   .post(fitCoinController.createOne(req, res))
-//   .update(fitCoinController.updateOne(req, res))
-//   .delete(fitCoinController.delete(req, res));
-
-// app.route('/challenges/:id/participants')
-//   .get(fitCoinController.retrieveOne(req, res))
-//   .post(fitCoinController.createOne(req, res))
-//   .update(fitCoinController.updateOne(req, res))
-//   .delete(fitCoinController.delete(req, res));
-
-// app.route('/challenges/:id/participants')
-//   .get(fitCoinController.retrieveOne(req, res))
-//   .post(fitCoinController.createOne(req, res))
-//   .update(fitCoinController.updateOne(req, res))
-//   .delete(fitCoinController.delete(req, res));
 
 
 

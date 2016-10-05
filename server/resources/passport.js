@@ -18,8 +18,8 @@ var fitbitStrategy = new FitbitStrategy({
         console.log('user not found, creating user...');
      // console.log('TOKEN.access_token', token.access_token);
         User.create({
-          firstName: profile._json.user.fullName.split(' ')[0],
-          lastName: profile._json.user.fullName.split(' ')[profile._json.user.fullName.split(' ').length - 1],
+          name: profile._json.user.fullName,
+          email: 'user@user.com',
           accessToken: params.access_token,
           refreshToken: params.refresh_token,
           tokenExpiresIn: params.expires_in,

@@ -70,64 +70,44 @@ const style = {
 
 
 
-const iconButtonElement = (
-  <IconButton
-    touch={true}
-    tooltip="more"
-    tooltipPosition="bottom-left"
-  >
-    <MoreVertIcon color={grey400} />
-  </IconButton>
-);
-
-const rightIconMenu = (
-  <IconMenu iconButtonElement={iconButtonElement}>
-    <MenuItem>Join</MenuItem>
-    <MenuItem>Delete</MenuItem>
-  </IconMenu>
-);
-
-
-
-
-
-
-
-
 class Profile extends Component {
   constructor(props) {
     super(props);
-    this.handleChallengeRequest = this.handleChallengeRequest.bind(this);
-
   }
-
-
-  handleChallengeRequest() {
-    console.log('You clicked the challenge button.');
-
-
-  }
-
-
-
-
-
-
-
 
 
   render () {
 
+    const iconButtonElement = (
+      <IconButton
+        touch={true}
+        tooltip="more"
+        tooltipPosition="bottom-left"
+      >
+        <MoreVertIcon color={grey400} />
+      </IconButton>
+    );
+
+    const rightIconMenu = (
+      <IconMenu iconButtonElement={iconButtonElement}>
+        <MenuItem onClick={this.props.handleJoinChallengeRequest}>Join</MenuItem>
+      </IconMenu>
+    );
+
+
+    // FILTER ACTIVE CHALLENGES
+    var activeChallenges = this.props.allChallenges.filter(challenge => challenge.status !== 'failed');
+
     return (
       <div>
       <Paper style={style.paper} zDepth={1}>
-        <h3 style={style.h3}>See Your Friends Challenges</h3>
+        <h3 style={style.h3}>All FitCoin Challenges</h3>
+        <span>{this.props.profile.name}</span>{this.props.profile.age}<span>{this.props.profile.wallet}</span>
       </Paper>
 
-      {this.props.friendsChallenges.map((challenge, index) => {
+      {activeChallenges.map((challenge, index) => {
         return (
         <div>
-
          <List style={style.list}>
             <Subheader>{challenge.status}</Subheader>
             <ListItem
@@ -187,12 +167,12 @@ export default connect(mapStateToProps)(Profile);
 //                 <th></th>
 //             </tr>
 
-//           {this.props.friendsChallenges.map((challenge, index) => {
+//           {this.props.allChallenges.map((challenge, index) => {
 //             var joinChip;
 //             if (challenge.status === 'active') {
 //               joinChip =
 //                 <Chip
-//                   onRequestDelete={this.handleChallengeRequest}
+//                   onRequestDelete={this.handleJoinChallengeRequest}
 //                   style={style.chip}
 //                   >
 //                   <Avatar color="#444" icon={<SvgIconFace />} />

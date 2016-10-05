@@ -36,15 +36,15 @@ class MainNavBar extends Component {
   }
 
   render() {
-    var loggedIn, loggerButton, openCV, newChallenge, userProfile;
+    var loggedIn, loggerButton, openCV, newChallenge, userDashboard;
 
 
 
     if (this.props.isLoggedIn === true) {
       loggerButton = <li><a href="/auth/logout"><span className="glyphicon glyphicon-log-in"></span> Logout</a></li>;
-      loggedIn = <li><Link to='/allChallenges'>Challenges</Link></li>;
-      userProfile = <li><Link to='/profile'>Profile</Link></li>;
-      newChallenge = <li><Link to='/newChallenge'>Make A New Challenge</Link></li>;
+      userDashboard = <li><Link to='/dashboard'>Dashboard</Link></li>;
+      loggedIn = <li><Link to='/allChallenges'>myChallenges</Link></li>;
+      newChallenge = <li><Link to='/newChallenge'>Create Challenge</Link></li>;
       openCV = <li><Link to='/openCV'>OpenCV</Link></li>;
     } else {
       loggerButton = <li><a href="/auth/fitbit"><span className="glyphicon glyphicon-log-in"></span> Login</a></li>;
@@ -63,8 +63,8 @@ class MainNavBar extends Component {
               <li><Link to='/about'>About Us</Link></li>
             </ul>
             <ul className="nav navbar-nav navbar-right">
+              {userDashboard}
               {loggedIn}
-              {userProfile}
               {newChallenge}
               {openCV}
               {loggerButton}

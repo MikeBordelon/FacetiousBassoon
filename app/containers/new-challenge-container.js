@@ -37,8 +37,6 @@ class NewChallengeContainer extends Component {
     console.log(startDate);
 
 
-
-
     axios.post('/challenges', {
       'userId': userId,
       'startDate': startDate,

@@ -6,10 +6,10 @@ export function getChallengesSuccess(challenges) {
 }
 
 
-export function getFriendsChallenges(friendsChallenges) {
+export function getAllChallenges(allChallenges) {
   return {
-    type: 'GET_FRIENDS_CHALLENGES_SUCCESS',
-    friendsChallenges: friendsChallenges
+    type: 'GET_ALL_CHALLENGES_SUCCESS',
+    allChallenges: allChallenges
   };
 }
 

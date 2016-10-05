@@ -1,7 +1,7 @@
 
 const initialState = {
   challenges: [],
-  friendsChallenges: [],
+  allChallenges: [],
   isLoggedIn: false,
   openCV: 'someCoolImages',
   newChallenge: false,
@@ -24,10 +24,10 @@ const userReducer = function(state = initialState, action) {
       challenges: action.challenges
     };
 
-    case 'GET_FRIENDS_CHALLENGES_SUCCESS':
+    case 'GET_ALL_CHALLENGES_SUCCESS':
     return {
       ...state,
-      friendsChallenges: action.friendsChallenges
+      allChallenges: action.allChallenges
     };
 
     case 'DELETE_CHALLENGE_SUCCESS':

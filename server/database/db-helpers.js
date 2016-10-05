@@ -33,6 +33,26 @@ module.exports = {
         res.end();
       });
   },
+  retrieveAllUsers: function (req, res) {
+    User.findAll({
+      attributes: ['name', 'email', 'fbUserId'],
+      include: {
+        model: Challenge,
+        through: {
+          attributes: ['userId', 'createdAt', 'updatedAt']
+        }
+
+      }
+    })
+      .then(function(found) {
+        res.statusCode === 200;
+        res.end(JSON.stringify(found));
+      })
+      .catch(function(err) {
+        res.statusCode === 404;
+        res.end();
+      });
+  },
   retrieveOne: function (req, res) {
     User.findOne({
       where: {fbUserId: req.params.fbUserId}, // fbUserId
@@ -115,6 +135,53 @@ module.exports = {
   },
   createChallenge: function (req, res) {
     console.log('request hit createChallenge');
+    Challenge.findOne({
+      where: { id: req.params.challengeId },
+      attributes: ['name', 'email', 'fbUserId'],
+      include: {
+        model: Challenge,
+        through: {
+          attributes: ['userId', 'createdAt', 'updatedAt']
+        }
+
+      }
+    })
+    Challenge.create({
+      creatorUserId: req.body.userId,
+      ethereumSCAddress: 'null',
+      startDate: req.body.startDate,
+      expirationDate: req.body.expirationDate,
+      status: 'new',
+      goalType: req.body.goalType,
+      goalAmount: req.body.goalAmount,
+      buyInAmount: req.body.buyInAmount
+    })
+      .then(function(challenge) {
+        console.log('challenge created, now creating join table entry...');
+        UserChallenges.create({
+          userId: req.body.userId,
+          challengeId: challenge.id,
+          goalType: req.body.goalType,
+          goalStart: 'null',  // worker will update these
+          goalCurrent: 'null', // worker will update these
+          userEtherWallet: req.body.userEtherWallet
+        })
+          .then(function(result) {
+            res.statusCode === 200;
+            res.end(JSON.stringify(result)); 
+          })
+          .catch(function(err) {
+            res.statusCode === 404;
+            res.end(JSON.stringify(err)); 
+          });
+      })
+      .catch(function(err) {
+        res.statusCode === 404;
+        res.end(JSON.stringify(err)); 
+      });
+  },
+  updateChallenge: function (req, res) {
+    console.log('request hit updateChallenge');
     
     Challenge.create({
       creatorUserId: req.body.userId,

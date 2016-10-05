@@ -81,9 +81,9 @@ module.exports = (app, express) => {
       fitCoinController.retrieve(req, res);
     });
 
-  app.route('/user/:id')
+  app.route('/user/:userId')
     .get(function(req, res) {
-      fitCoinController.retrieveOne(req, res);
+      fitCoinController.retrieveOneUser(req, res);
     })
     .delete(function(req, res) {
       fitCoinController.delete(req, res);

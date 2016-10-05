@@ -12,6 +12,27 @@ module.exports = {
         res.end();
       });
   },
+  retrieveOneUser: function (req, res) {
+    User.findOne({
+      where: { id: req.params.userId },
+      attributes: ['name', 'email', 'fbUserId'],
+      include: {
+        model: Challenge,
+        through: {
+          attributes: ['userId', 'createdAt', 'updatedAt']
+        }
+
+      }
+    })
+      .then(function(found) {
+        res.statusCode === 200;
+        res.end(JSON.stringify(found));
+      })
+      .catch(function(err) {
+        res.statusCode === 404;
+        res.end();
+      });
+  },
   retrieveOne: function (req, res) {
     User.findOne({
       where: {fbUserId: req.params.fbUserId}, // fbUserId

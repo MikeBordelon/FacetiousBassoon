@@ -4,7 +4,7 @@
   "description": "Thesis App",
   "main": "server.js",
   "scripts": {
-    "start": "./wait-for-it.sh db:5432 && npm run dev-be",
+    "start": "./wait-for-it.sh db:5432 && ./wait-for-it.sh redisdb:6379 && npm run dev-be",
     "dev-fe": "node server/server.js",
     "dev-be": "nodemon server/server.js --watch server"
   },
@@ -22,6 +22,7 @@
     "axios": "^0.14.0",
     "body-parser": "^1.15.2",
     "bootstrap": "^3.3.7",
+    "connect-redis": "^3.1.0",
     "cookie-parser": "^1.4.3",
     "ethereumjs-testrpc": "^2.2.7",
     "express-session": "^1.14.1",

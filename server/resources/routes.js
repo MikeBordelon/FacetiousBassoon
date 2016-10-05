@@ -96,9 +96,13 @@ module.exports = (app, express) => {
       fitCoinController.createChallenge(req, res);
     })
     .get(function(req, res) {
-      // fitCoinController.retrieveChallenges(req, res);
+      fitCoinController.retrieveAllChallenges(req, res);
     });
 
+  app.route('/user_joinable_challenges/:userId')
+    .get(function(req, res) {
+      fitCoinController.retrieveAllJoinableChallenges(req, res);
+    }); 
 
   app.route('/challenges/:id')
     .get(function(req, res) {

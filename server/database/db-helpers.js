@@ -217,25 +217,47 @@ module.exports = {
         res.end(JSON.stringify(err)); 
       });
   },
-  retrieveChallenges: function (req, res) {
-    console.log('request hit retrieveChallenges with id:' + req.params.id);
-
-    // User.findAll(
-    //   {
-    //     include: {
-    //       model: Challenge,
-    //       through: {
-    //         attributes: ['userId', 'metricType', 'metricStart', 'metricCurrent', 'metricGoal', 'createdAt', 'updatedAt'],
-    //         where: { id: req.params.id },
-    //       }
-
-    //     }
-    //   }
-    // )
-    db.query('select * from users inner join ', { type: db.QueryTypes.SELECT})
+  retrieveAllChallenges: function (req, res) {
+    console.log('request hit retrieveAllChallenges');
+    
+    Challenge.findAll({
+      where: {},
+    })
       .then(function(found) {
         res.statusCode === 200;
         res.end(JSON.stringify(found)); 
+      })
+      .catch(function(err) {
+        res.statusCode === 404;
+        res.end(); 
+      });
+  },
+  retrieveAllJoinableChallenges: function (req, res) {
+    console.log('request hit retrieveAllJoinableChallenges');
+    Challenge.findAll({
+      where: {status: 'new'}
+    })
+      .then(function(allChallenges) {
+        UserChallenges.findAll({
+          where: { userId: req.params.userId }
+        })
+        .then(function(usersChallenges) {
+          // find challenges user is already a part of
+          var badChallengeIds = [];
+          usersChallenges.forEach(function(elem){
+            badChallengeIds.push(elem.challengeId);
+          });
+          // filter out challenges user is already part of
+          var result = allChallenges.filter(function(challenge) {
+            return !badChallengeIds.includes(challenge.id);
+          });
+          res.statusCode === 200;
+          res.end(JSON.stringify(result)); 
+        })
+        .catch(function(err) {
+          res.statusCode === 404;
+          res.end(); 
+        });
       })
       .catch(function(err) {
         res.statusCode === 404;

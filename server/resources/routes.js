@@ -72,7 +72,7 @@ module.exports = (app, express) => {
   //Users
   app.route('/user')
     .get(function(req, res) {
-      fitCoinController.retrieve(req, res);
+      fitCoinController.retrieveAllUsers(req, res);
     })
     .post(function(req, res) {
       fitCoinController.retrieve(req, res);
@@ -95,15 +95,20 @@ module.exports = (app, express) => {
     .post(function(req, res) {
       fitCoinController.createChallenge(req, res);
     })
+    .get(function(req, res) {
+      // fitCoinController.retrieveChallenges(req, res);
+    });
+
+
+  app.route('/challenges/:id')
+    .get(function(req, res) {
+      console.log('request hit challenges/' + req.params.id);
+      // req.params: { "id": USER };
+      fitCoinController.retrieveChallenges(req, res);
+    })
     .put(function(req, res) {
       fitCoinController.updateChallenge(req, res);
     });
-
-  app.get('/challenges/:id', function(req, res) {
-    console.log('request hit challenges/' + req.params.id);
-    // req.params: { "id": USER };
-    fitCoinController.retrieveChallenges(req, res);
-  });
 
   //Friends
   app.route('/friends')

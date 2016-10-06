@@ -2,77 +2,53 @@ import React, {Component} from 'react';
 import store from '../store';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { getChallengesSuccess, deleteChallenge } from '../actions/user-actions';
+import { getChallengesSuccess } from '../actions/user-actions';
 import Challenges from '../components/challenges';
+
 
 class ChallengesContainer extends Component {
   constructor(props) {
     super(props);
 
-    this.deleteChallenge = this.deleteChallenge.bind(this);
+    this.state = {
+      visibility: 'collapse'
+    };
+    this.hideChallenge = this.hideChallenge.bind(this);
+    this.console = this.console.bind(this);
   }
 
   componentDidMount () {
-    // axios.get('https://www.googleapis.com/books/v1/volumes?', {
-    //   params: {
-    //     q: 'Pot'
-    //   }
-    // })
-    // .then(response => {
-    var dummyData = [
-      {
-        id: 1523523424,
-        challengeType: 'steps',
-        challengeGoal: 100000,
-        challengeCurrent: 43242,
-        creationDate: Date.now() - 100000000,
-        expirationDate: Date.now() + 1000000000,
-        status: 'active'
-      },
-      {
-        id: 1523523423,
-        challengeType: 'floors',
-        challengeGoal: 720,
-        challengeCurrent: 719,
-        creationDate: Date.now() - 1000000000,
-        expirationDate: Date.now() - 10000000,
-        status: 'failed'
+    console.log('Challenge Cont', this.props.userId);
+
+    axios.get('/user/', {
+      params: {
+        id: this.props.userId
       }
-    ];
-    store.dispatch(getChallengesSuccess(dummyData));
-    //   return response.data.items;
-    // });
+    })
+
+      .then(function(challenges) {
+        console.log('got myChallenges', challenges.data);
+        var challenges = challenges.data[0].challenges;
+        store.dispatch(getChallengesSuccess(challenges));
+      })
+      .catch(function(err) {
+        console.log('challenge error', err);
+      });
   }
 
+  console () {
+    // console.log(this.props.store);
+  }
 
-  deleteChallenge(index) {
-
-    // update ID to match DB ID
+  hideChallenge(index) {
     var challengeID = this.props.challenges[index].id;
-
-    store.dispatch(deleteChallenge(challengeID));
-
-
-    // axios.delete('/challenges', {
-    //   params: {
-    //     id: challengeID
-    //   },
-    // })
-    // .then(function(res) {
-    //   store.dispatch(deleteChallenge(challengeID));
-    //   console.log('deleted a challenge', res);
-
-    // })
-    // .catch(function(err) {
-    //   // console.log('delete challenge error', err);
-    // });
   }
 
   render () {
-    // console.log(this.props)
+    // console.log('chall COnt ID', this.props.userId);
     return (
       <Challenges challenges={this.props.challenges}
-                  deleteChallenge={this.deleteChallenge}
+                  console={this.console}
       />
     );
   }
@@ -81,9 +57,10 @@ class ChallengesContainer extends Component {
 
 const mapStateToProps = function(store) {
   return {
-    store,
-    challenges: store.userState.challenges
+    challenges: store.userState.challenges,
+    userId: store.userState.userId,
+
   };
 };
-// users are now props on UserListContainer
+
 export default connect(mapStateToProps)(ChallengesContainer);

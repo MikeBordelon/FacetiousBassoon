@@ -5,6 +5,9 @@ import axios from 'axios';
 import { postChallengeSuccess } from '../actions/user-actions';
 import NewChallenge from '../components/newChallenge';
 import ReactDOM, { findDOMNode } from 'react-dom';
+import moment from 'moment';
+
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 class NewChallengeContainer extends Component {
   constructor(props) {
@@ -15,57 +18,58 @@ class NewChallengeContainer extends Component {
   }
 
   componentDidMount () {
-    // console.log(this.props.userId);
-    // axios.get()
-    // .then(response => {
-    //   store.dispatch(getChallengesSuccess(response.data.items));
-    //   return response.data.items;
-    // });
+
   }
 
   postChallenge (e) {
     e.preventDefault();
 
-
-    var ethereum = $('#ethereum').val();
-    var goal = $('#goal').val();
-    var date = $('#date').val();
+    var userId = this.props.userId;
+    var userEtherWallet = $('#userEtherWallet').val();
+    var goalAmount = $('#goalAmount').val();
+    var buyInAmount = $('#buyInAmount').val();
+    var startDate = $('#startDate').val();
+    var expirationDate = $('#expirationDate').val();
     var goalType = $('#goalType').val();
+    startDate = startDate + ':' + new Date().getSeconds() + '.' + new Date().getMilliseconds() + 'Z';
+    expirationDate = expirationDate + ':' + new Date().getSeconds() + '.' + new Date().getMilliseconds() + 'Z';
+    // console.log(moment(startDate).format());
+    console.log(startDate);
 
-    console.log('etherAddress', ethereum, 'goal:', goal, 'date:', date, 'goal type:', goalType);
-    console.log('userId is: ', this.props.userId);
 
+    axios.post('/challenges', {
+      'userId': userId,
+      'startDate': startDate,
+      'expirationDate': expirationDate,
+      'goalType': goalType,
+      'goalAmount': goalAmount,
+      'buyInAmount': buyInAmount,
+      'userEtherWallet': userEtherWallet
+    })
+    .then(function(res) {
 
-
-    // axios.post('/challenges', {
-    //   params: {
-    //     userId: this.props.userId
-    //   },
-    //   data: {
-    //     ethereum: ethereum,
-    //     goal: goal,
-    //     date: date,
-    //     goalType: goalType
-    //   }
-    // })
-    // .then(function(res) {
-    // this.forceUpdate();
-    //   console.log('posted a challenge', res);
-    // })
-    // .catch(function(err) {
-    //   console.log('challenge error', err);
-    // });
+      console.log('posted a challenge', res);
+    })
+    .catch(function(err) {
+      console.log('challenge error', err);
+    });
 
   }
 
-  cancel () {
+  cancel (e) {
+    e.preventDefault();
+    $('#userId').val('');
     $('#ethereum').val('');
+    $('#buyIn').val();
     $('#goal').val('');
-    $('#date').val('');
+    $('#startDate').val('');
+    $('#endDate').val('');
     $('#goalType').val('');
   }
 
   render () {
+
+    // console.log(this.props.userId);
     return (
       <NewChallenge postChallenge={this.postChallenge} cancel={this.cancel}/>
     );

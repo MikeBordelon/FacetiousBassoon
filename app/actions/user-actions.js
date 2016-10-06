@@ -5,6 +5,14 @@ export function getChallengesSuccess(challenges) {
   };
 }
 
+
+export function getAllChallenges(allChallenges) {
+  return {
+    type: 'GET_ALL_CHALLENGES_SUCCESS',
+    allChallenges: allChallenges
+  };
+}
+
 export function deleteChallenge(challengeID) {
   // console.log('ID in user-actions', challengeID);
   return {

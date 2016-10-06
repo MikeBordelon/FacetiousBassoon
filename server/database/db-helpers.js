@@ -79,7 +79,7 @@ module.exports = {
     })
       .then(function(created) {
         res.statusCode === 200;
-        res.end(JSON.stringify(created)); 
+        res.end(JSON.stringify(created));
       })
       .catch(function(err) {
         res.statusCode === 404;
@@ -127,15 +127,16 @@ module.exports = {
     })
       .then(function(created) {
         res.statusCode === 200;
-        res.end(JSON.stringify(created)); 
+        res.end(JSON.stringify(created));
       })
       .catch(function(err) {
         res.statusCode === 404;
-        res.end(); 
+        res.end();
       });
   },
   createChallenge: function (req, res) {
     console.log('request hit createChallenge');
+
     Challenge.findOne({
       where: { id: req.params.challengeId },
       attributes: ['name', 'email', 'fbUserId'],
@@ -170,16 +171,16 @@ module.exports = {
         })
           .then(function(result) {
             res.statusCode === 200;
-            res.end(JSON.stringify(result)); 
+            res.end(JSON.stringify(result));
           })
           .catch(function(err) {
             res.statusCode === 404;
-            res.end(JSON.stringify(err)); 
+            res.end(JSON.stringify(err));
           });
       })
       .catch(function(err) {
         res.statusCode === 404;
-        res.end(JSON.stringify(err)); 
+        res.end(JSON.stringify(err));
       });
   },
   updateChallenge: function (req, res) {
@@ -203,36 +204,36 @@ module.exports = {
         })
         .then(function(result) {
           res.statusCode === 200;
-          res.end(JSON.stringify(result)); 
+          res.end(JSON.stringify(result));
         })
         .catch(function(err) {
           res.statusCode === 404;
-          res.end(JSON.stringify(err)); 
+          res.end(JSON.stringify(err));
         });
       })
       .catch(function(err) {
         res.statusCode === 404;
-        res.end(JSON.stringify(err)); 
+        res.end(JSON.stringify(err));
       });
     })
     .catch(function(err) {
       res.statusCode === 404;
-      res.end(JSON.stringify(err)); 
+      res.end(JSON.stringify(err));
     });
   },
   retrieveAllChallenges: function (req, res) {
     console.log('request hit retrieveAllChallenges');
-    
+
     Challenge.findAll({
       where: {},
     })
       .then(function(found) {
         res.statusCode === 200;
-        res.end(JSON.stringify(found)); 
+        res.end(JSON.stringify(found));
       })
       .catch(function(err) {
         res.statusCode === 404;
-        res.end(); 
+        res.end();
       });
   },
   retrieveAllJoinableChallenges: function (req, res) {
@@ -255,16 +256,16 @@ module.exports = {
             return !badChallengeIds.includes(challenge.id);
           });
           res.statusCode === 200;
-          res.end(JSON.stringify(result)); 
+          res.end(JSON.stringify(result));
         })
         .catch(function(err) {
           res.statusCode === 404;
-          res.end(); 
+          res.end();
         });
       })
       .catch(function(err) {
         res.statusCode === 404;
-        res.end(); 
+        res.end();
       });
   }
 };

@@ -13,10 +13,6 @@ const style = {
 
   },
 
-  // text: {
-  //   margin: '0 0 20px 500px'
-  // },
-
   h3: {
     display: 'flex',
     // textAlign: 'center',
@@ -29,26 +25,6 @@ const style = {
     display: 'flex',
     margin: '0px 0px 0px 160px'
   }
-
-
-  // h4: {
-  //   // display: 'inline-block',
-  //   width: 400,
-  //   margin: '0 0 0 0'
-
-  // },
-
-  // button: {
-  //   float: 'right',
-  //   height: 30,
-  //   width: 80
-  // },
-  // tableCNT: {
-  //   // textAlign: 'center'
-  // },
-  // tableRGT: {
-  //   margin: '0px 90px 0px 0px'
-  // }
 };
 
 
@@ -88,12 +64,12 @@ export default function (props) {
             return (
                     <tr key={index}>
                       <td style={style.tableCNT}>{challenge.id}</td>
-                      <td className=''>{challenge.challengeGoal + ' ' + challenge.challengeType}</td>
+                      <td className=''>{challenge.goalAmount + ' ' + challenge.goalType}</td>
                       <td className=''>{challenge.challengeCurrent + ' ' + challenge.challengeType}</td>
                       <td className=''>{moment(challenge.creationDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</td>
                       <td className=''>{moment(challenge.expirationDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</td>
                       <td className=''>{challenge.status}</td>
-                      <td onClick={()=> props.deleteChallenge(index)} key={index} style={style.button} href="#" className="btn btn-xs btn-danger"><span className="glyphicon glyphicon-remove-sign" ></span> Delete</td>
+                      <td onClick={()=> props.console(index)} key={index} style={style.button} href="#" className="btn btn-xs btn-danger"><span className="glyphicon glyphicon-remove-sign" ></span>Hide</td>
                     </tr>
             );
           })}

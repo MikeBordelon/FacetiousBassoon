@@ -22,33 +22,54 @@ class NewChallenge extends Component {
 // metrictype = steps Picker
   render () {
 
-
-    console.log(this.refs.ethereum);
+    // console.log('store is: ', this.props);
     return (
     <div>
+    <h5 style={style.text}>Add conf submit thingy</h5>
       <h1 style={style.text}>Create A Challenge!</h1>
 
       <form ref='form'className="form-horizontal">
         <fieldset>
 
           <div className="form-group">
+            <label className="col-md-4 control-label" >Your UserId</label>
+            <div className="col-md-4">
+              <input ref='userId' id="userId" name="userId" type="text" placeholder={this.props.store.userState.userId} className="form-control input-md"/>
+            </div>
+          </div>
+
+          <div className="form-group">
             <label className="col-md-4 control-label" >Ethereum Address</label>
             <div className="col-md-4">
-              <input ref='ethereum' id="ethereum" name="ethereum" type="text" placeholder="enter your ethereum address" className="form-control input-md"/>
+              <input ref='userEtherWallet' id="userEtherWallet" name="userEtherWallet" type="text" placeholder="enter your ethereum address" className="form-control input-md"/>
             </div>
           </div>
 
           <div className="form-group">
             <label className="col-md-4 control-label" >Goal</label>
             <div className="col-md-4">
-              <input ref='goal' id="goal" name="goal" type="text" placeholder="# of steps/floors" className="form-control input-md"/>
+              <input ref='goalAmount' id="goalAmount" name="goalAmount" type="text" placeholder="# of steps/floors" className="form-control input-md"/>
             </div>
           </div>
 
           <div className="form-group">
-            <label className="col-md-4 control-label" >Ending Date</label>
+            <label className="col-md-4 control-label" >Buy In Amount</label>
             <div className="col-md-4">
-              <input ref='date' id="date" name="date" type="date" className="form-control input-md"/>
+              <input ref='buyInAmount' id="buyInAmount" name="buyInAmount" type="number" placeholder="$0.00" className="form-control input-md"/>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label className="col-md-4 control-label" >Starting Date</label>
+            <div className="col-md-4">
+              <input ref='startDate' id="startDate" name="startDate" type="datetime-local" className="form-control input-md"/>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label className="col-md-4 control-label" >End Date</label>
+            <div className="col-md-4">
+              <input ref='expirationDate' id="expirationDate" name="expirationDate" type="datetime-local" className="form-control input-md"/>
             </div>
           </div>
 
@@ -57,8 +78,8 @@ class NewChallenge extends Component {
             <label className="col-md-4 control-label" >Goal Type</label>
             <div className="col-md-4">
               <select ref='goalType' id="goalType" name="goalType" className="form-control">
-                <option value="1">Steps</option>
-                <option value="2">Floors</option>
+                <option value="steps">Steps</option>
+                <option value="floors">Floors</option>
               </select>
             </div>
           </div>

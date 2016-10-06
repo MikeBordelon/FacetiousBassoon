@@ -1,10 +1,16 @@
 
 const initialState = {
   challenges: [],
+  allChallenges: [],
   isLoggedIn: false,
   openCV: 'someCoolImages',
   newChallenge: false,
-  userId: null
+  userId: null,
+  profile: {
+    name: 'mike',
+    age: '35',
+    wallet: '1000000'
+  }
 };
 
 const userReducer = function(state = initialState, action) {
@@ -18,8 +24,13 @@ const userReducer = function(state = initialState, action) {
       challenges: action.challenges
     };
 
-    case 'DELETE_CHALLENGE_SUCCESS':
+    case 'GET_ALL_CHALLENGES_SUCCESS':
+    return {
+      ...state,
+      allChallenges: action.allChallenges
+    };
 
+    case 'DELETE_CHALLENGE_SUCCESS':
     return {
       ...state,
       // need the correct dbID
@@ -34,6 +45,7 @@ const userReducer = function(state = initialState, action) {
 
 
   case 'AUTH_SUCCESS':
+  console.log('setting userId');
     return {
       ...state,
       isLoggedIn: true,

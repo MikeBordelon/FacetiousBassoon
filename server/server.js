@@ -1,5 +1,6 @@
 const express = require('express');
 const {db} = require('./database/db-config');
+const worker = require('./worker.js');
 
 
 var app = express();

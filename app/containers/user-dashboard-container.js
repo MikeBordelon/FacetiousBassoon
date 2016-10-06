@@ -11,12 +11,17 @@ class UserDashboardContainer extends Component {
     this.handleJoinChallengeRequest = this.handleJoinChallengeRequest.bind(this);
   }
 
-  componentDidMount () {
-    axios.get('/user_joinable_challenges/', {
-      params: { id: this.props.userId }
+  componentWillMount () {
+    // console.log(this.props.userId);
+
+    axios.get('user_joinable_challenges/1', {
+      // params: { id: this.props.userId }
     })
     .then(function(challenges) {
-      console.log(challenges);
+      // console.log(challenges);
+
+      var challenges = challenges.data;
+
       // store.dispatch(getAllChallenges(challenges));
     })
     .catch(function(err) {
@@ -47,7 +52,7 @@ class UserDashboardContainer extends Component {
 
 
   render () {
-    // console.log(store)
+    // console.log(this.props.userId);
 
 
     // const profile = this.props.store.userState.profile;

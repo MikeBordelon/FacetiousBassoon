@@ -25,6 +25,7 @@ class NewChallenge extends Component {
     // console.log('store is: ', this.props);
     return (
     <div>
+    <h5 style={style.text}>Add conf submit thingy</h5>
       <h1 style={style.text}>Create A Challenge!</h1>
 
       <form ref='form'className="form-horizontal">

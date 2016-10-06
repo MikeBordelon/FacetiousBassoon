@@ -7,9 +7,9 @@ const initialState = {
   newChallenge: false,
   userId: null,
   profile: {
-    'name': 'Mike',
-    'age': '35',
-    'wallet': '$100,000,000'
+    name: 'mike',
+    age: '35',
+    wallet: '1000000'
   }
 };
 
@@ -45,6 +45,7 @@ const userReducer = function(state = initialState, action) {
 
 
   case 'AUTH_SUCCESS':
+  console.log('setting userId');
     return {
       ...state,
       isLoggedIn: true,

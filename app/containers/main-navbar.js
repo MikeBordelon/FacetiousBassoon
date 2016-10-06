@@ -25,7 +25,9 @@ class MainNavBar extends Component {
   }
 
   componentDidMount() {
-    axios.get('/auth/checkLogin').then(response => {
+    axios.get('/auth/checkLogin')
+    .then(response => {
+      // console.log('authIng');
       if (response.data.logInStatus === 'authenticated') {
         store.dispatch(authSuccess(response.data.user.userId));
       } else {
@@ -82,7 +84,8 @@ class MainNavBar extends Component {
 const mapStateToProps = function(store) {
   return {
     store,
-    isLoggedIn: store.userState.isLoggedIn
+    isLoggedIn: store.userState.isLoggedIn,
+    userId: store.userState.userId
   };
 };
 // users are now props on UserListContainer

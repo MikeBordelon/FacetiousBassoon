@@ -14,21 +14,30 @@ class ChallengesContainer extends Component {
       visibility: 'collapse'
     };
     this.hideChallenge = this.hideChallenge.bind(this);
+    this.console = this.console.bind(this);
   }
 
   componentDidMount () {
-    axios.get('/user', {
-      params: { id: this.props.userId }
-    })
-    .then(function(challenges) {
-      console.log('got user challenges', challenges.data[0]);
-      var challenges = challenges.data[0].challenges;
-      store.dispatch(getChallengesSuccess(challenges));
-    })
-    .catch(function(err) {
-      console.log('challenge error', err);
-    });
+    console.log('Challenge Cont', this.props.userId);
 
+    axios.get('/user/', {
+      params: {
+        id: this.props.userId
+      }
+    })
+
+      .then(function(challenges) {
+        console.log('got myChallenges', challenges.data);
+        var challenges = challenges.data[0].challenges;
+        store.dispatch(getChallengesSuccess(challenges));
+      })
+      .catch(function(err) {
+        console.log('challenge error', err);
+      });
+  }
+
+  console () {
+    // console.log(this.props.store);
   }
 
   hideChallenge(index) {
@@ -36,10 +45,10 @@ class ChallengesContainer extends Component {
   }
 
   render () {
-    // console.log(this.props)
+    // console.log('chall COnt ID', this.props.userId);
     return (
       <Challenges challenges={this.props.challenges}
-                  hideChallenge={this.hideChallenge}
+                  console={this.console}
       />
     );
   }
@@ -48,8 +57,9 @@ class ChallengesContainer extends Component {
 
 const mapStateToProps = function(store) {
   return {
-    store,
-    challenges: store.userState.challenges
+    challenges: store.userState.challenges,
+    userId: store.userState.userId,
+
   };
 };
 

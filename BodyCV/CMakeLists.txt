@@ -1,0 +1,6 @@
+project(IMAGE_OUTLINE2)
+cmake_minimum_required(VERSION 2.8)
+find_package( OpenCV REQUIRED )
+add_executable( imageproc2 imageproc2.cpp )
+target_link_libraries( imageproc2 ${OpenCV_LIBS} )
+add_executable( helloWorld helloWorld.cpp )

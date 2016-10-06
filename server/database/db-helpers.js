@@ -19,6 +19,7 @@ module.exports = {
       include: {
         model: Challenge,
         through: {
+          where: { userId: req.params.userId }, // added this
           attributes: ['userId', 'createdAt', 'updatedAt']
         }
 
@@ -154,7 +155,8 @@ module.exports = {
       status: 'new',
       goalType: req.body.goalType,
       goalAmount: req.body.goalAmount,
-      buyInAmount: req.body.buyInAmount
+      buyInAmount: req.body.buyInAmount,
+      numOfParticipants: 1
     })
       .then(function(challenge) {
         console.log('challenge created, now creating join table entry...');
@@ -182,40 +184,41 @@ module.exports = {
   },
   updateChallenge: function (req, res) {
     console.log('request hit updateChallenge');
-    
-    Challenge.create({
-      creatorUserId: req.body.userId,
-      ethereumSCAddress: 'null',
-      startDate: req.body.startDate,
-      expirationDate: req.body.expirationDate,
-      status: 'new',
-      goalType: req.body.goalType,
-      goalAmount: req.body.goalAmount,
-      buyInAmount: req.body.buyInAmount
+    Challenge.findOne({
+      where: { id: req.params.id }
     })
-      .then(function(challenge) {
-        console.log('challenge created, now creating join table entry...');
+    .then(function(challenge) {
+      console.log('findOne returned: ' + challenge);
+      challenge.update(
+        { numOfParticipants: challenge.numOfParticipants + 1 },
+        { totalPot: challenge.totalPot + challenge.buyInAmount },
+        { where: { id: req.params.id } }
+      )
+      .then(function(result) {
         UserChallenges.create({
           userId: req.body.userId,
-          challengeId: challenge.id,
-          goalType: req.body.goalType,
-          goalStart: 'null',  // worker will update these
-          goalCurrent: 'null', // worker will update these
+          challengeId: req.params.id,
+          goalType: result.goalType,
           userEtherWallet: req.body.userEtherWallet
         })
-          .then(function(result) {
-            res.statusCode === 200;
-            res.end(JSON.stringify(result)); 
-          })
-          .catch(function(err) {
-            res.statusCode === 404;
-            res.end(JSON.stringify(err)); 
-          });
+        .then(function(result) {
+          res.statusCode === 200;
+          res.end(JSON.stringify(result)); 
+        })
+        .catch(function(err) {
+          res.statusCode === 404;
+          res.end(JSON.stringify(err)); 
+        });
       })
       .catch(function(err) {
         res.statusCode === 404;
         res.end(JSON.stringify(err)); 
       });
+    })
+    .catch(function(err) {
+      res.statusCode === 404;
+      res.end(JSON.stringify(err)); 
+    });
   },
   retrieveAllChallenges: function (req, res) {
     console.log('request hit retrieveAllChallenges');

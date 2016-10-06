@@ -34,6 +34,24 @@ class UserProfileContainer extends Component {
         creationDate: Date.now() - 1000000000,
         expirationDate: Date.now() - 10000000,
         status: 'failed'
+      },
+      {
+        id: 1523523423,
+        challengeType: 'floors',
+        challengeGoal: 720,
+        challengeCurrent: 719,
+        creationDate: Date.now() - 1000000000,
+        expirationDate: Date.now() - 10000000,
+        status: 'active'
+      },
+      {
+        id: 1523523423,
+        challengeType: 'floors',
+        challengeGoal: 720,
+        challengeCurrent: 719,
+        creationDate: Date.now() - 1000000000,
+        expirationDate: Date.now() - 10000000,
+        status: 'failed'
       }
     ];
     store.dispatch(getFriendsChallenges(dummyData2));

@@ -61,14 +61,14 @@ class NewChallenge extends Component {
           <div className="form-group">
             <label className="col-md-4 control-label" >Starting Date</label>
             <div className="col-md-4">
-              <input ref='startDate' id="startDate" name="startDate" type="date" className="form-control input-md"/>
+              <input ref='startDate' id="startDate" name="startDate" type="datetime-local" className="form-control input-md"/>
             </div>
           </div>
 
           <div className="form-group">
             <label className="col-md-4 control-label" >End Date</label>
             <div className="col-md-4">
-              <input ref='expirationDate' id="expirationDate" name="expirationDate" type="date" className="form-control input-md"/>
+              <input ref='expirationDate' id="expirationDate" name="expirationDate" type="datetime-local" className="form-control input-md"/>
             </div>
           </div>
 
@@ -77,8 +77,8 @@ class NewChallenge extends Component {
             <label className="col-md-4 control-label" >Goal Type</label>
             <div className="col-md-4">
               <select ref='goalType' id="goalType" name="goalType" className="form-control">
-                <option value="1">Steps</option>
-                <option value="2">Floors</option>
+                <option value="steps">Steps</option>
+                <option value="floors">Floors</option>
               </select>
             </div>
           </div>

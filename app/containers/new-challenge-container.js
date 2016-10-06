@@ -5,6 +5,9 @@ import axios from 'axios';
 import { postChallengeSuccess } from '../actions/user-actions';
 import NewChallenge from '../components/newChallenge';
 import ReactDOM, { findDOMNode } from 'react-dom';
+import moment from 'moment';
+
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 class NewChallengeContainer extends Component {
   constructor(props) {
@@ -15,12 +18,7 @@ class NewChallengeContainer extends Component {
   }
 
   componentDidMount () {
-    // console.log(this.props.userId);
-    // axios.get()
-    // .then(response => {
-    //   store.dispatch(getChallengesSuccess(response.data.items));
-    //   return response.data.items;
-    // });
+
   }
 
   postChallenge (e) {
@@ -33,37 +31,22 @@ class NewChallengeContainer extends Component {
     var startDate = $('#startDate').val();
     var expirationDate = $('#expirationDate').val();
     var goalType = $('#goalType').val();
+    startDate = startDate + ':' + new Date().getSeconds() + '.' + new Date().getMilliseconds() + 'Z';
+    expirationDate = expirationDate + ':' + new Date().getSeconds() + '.' + new Date().getMilliseconds() + 'Z';
+    // console.log(moment(startDate).format());
+    console.log(startDate);
 
-    console.log(
-      'userId:', userId,
-      'userEtherWallet', userEtherWallet,
-      'goalAmount:', goalAmount,
-      'goalType:', goalType,
-      'buyInAmount:', buyInAmount,
-      'startDate:', startDate,
-      'expirationDate:', expirationDate
-    );
 
-    // { userId: '1',
-    //   startDate: '2014-01-01T00:00:00.588Z',
-    //   expirationDate: '2014-01-01T00:00:00.588Z',
-    //   goalType: 'steps',
-    //   goalAmount: '10000',
-    //   buyInAmount: '1',
-    //   userEtherWallet: 'ABC123'
-    // },
 
 
     axios.post('/challenges', {
-
-      data: {
-        ethereum: userEtherWallet,
-        goalAmount: goalAmount,
-        goalType: goalType,
-        buyInAmount: buyInAmount,
-        startDate: startDate,
-        expirationDate: expirationDate,
-      }
+      'userId': userId,
+      'startDate': startDate,
+      'expirationDate': expirationDate,
+      'goalType': goalType,
+      'goalAmount': goalAmount,
+      'buyInAmount': buyInAmount,
+      'userEtherWallet': userEtherWallet
     })
     .then(function(res) {
 

@@ -11,7 +11,7 @@ module.exports = {
         res.status(404).send(err);
       });
   },
-  retrieveOneUser: function (req, res) {
+  retrieveOneUser: function (req, res) { // to do: send also challenges you are a part of, not just ones you created
     User.findOne({
       where: { id: req.params.userId },
       attributes: ['name', 'email', 'fbUserId'],

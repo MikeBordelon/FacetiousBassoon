@@ -1,29 +1,75 @@
 const {User, Challenge, UserChallenges, db, Sequelize} = require('./database/db-config.js');
+var request = require('request');
+
 
 var tendChallenges = function() {
   var startedChallenges = [];
 
-    // look up FitBit steps for newly started challenges
+  // look up FitBit steps for newly started challenges
   var checkFitBitStats = function(challengeId) {
-    console.log('checkFitBitStats called', challengeId);
+    
+    // get a single challenge by challengeId
     Challenge.findOne({
       where: { id: challengeId }
     })
     .then(function(challenge) {
-      console.log('checkFitBitStats challenge lookup: ', challenge);
+
+      // get all users associated with that challenge
       challenge.getUsers({
+        where: {}
       })
-      .then(function(result) {
-        console.log(results);
+      .then(function(resultChallengesArr) {
+        console.log('getUsers: ', JSON.stringify( resultChallengesArr[0].dataValues.UserChallenge ));
+
+        // get the UserChallenge 
+        resultChallengesArr.forEach(function(challengePlusJT) {
+          
+          // make an API call to FitBit
+          var options = { method: 'GET',
+            url: 'https://api.fitbit.com/1/user/' + challengePlusJT.dataValues.fbUserId + '/activities.json',
+            headers: 
+             { 'postman-token': '7dbc8c9f-431c-b847-16be-2fba85f0eab9',
+               'cache-control': 'no-cache',
+               'content-type': 'application/json',
+               authorization: 'Bearer ' + challengePlusJT.dataValues.accessToken },
+            json: true };
+          request(options, function (error, response, body) {
+            if (error) { throw new Error(error); }
+            // console.log('FitBit API returned: ', JSON.stringify(body));
+            console.log('userID: ' + challengePlusJT.dataValues.fbUserId + ' Total steps: ', JSON.stringify(body.lifetime.tracker.steps)); // distance floors steps caloriesOut
+            
+            // 
+            challengePlusJT.dataValues.UserChallenge.update(
+              {
+                goalStart: body.lifetime.tracker.steps,
+                goalCurrent: body.lifetime.tracker.steps
+              }
+            )
+            .then(function(result) {
+              console.log(JSON.stringify(result)); 
+            })
+            .catch(function(err) {
+              console.log(JSON.stringify(err));
+            });
+          });
+
+          // available fields
+          // challengePlusJT.id;
+          // challengePlusJT.fbUserId;
+          // challengePlusJT.access_token;
+          // challengePlusJT.refresh_token;
+          // challengePlusJT.UserChallenge.challengeId;
+          // challengePlusJT.UserChallenge.goalStart;
+          // challengePlusJT.UserChallenge.goalCurrent;
+        });
       })
-      .catch(function(results) {
-        console.log(results);
+      .catch(function(result) {
       });
     })
     .catch(function(err) {
-      console.log(err);
     });
   };
+
 
   // main worker interval loop
   setInterval(function() {

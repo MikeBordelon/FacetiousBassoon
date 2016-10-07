@@ -2,11 +2,11 @@ const {User, Challenge, UserChallenges, db, Sequelize} = require('./database/db-
 var request = require('request');
 
 
-// container function for worker to tend challenge statuses and fitbit data
+// worker container function
 var tendChallenges = function() {
   var startedChallenges = [];
 
-  // look up FitBit steps for newly started challenges
+  // helper function to grab FitBit steps from API for challenges
   var checkFitBitStats = function(challengeId, needsBaseline) {
     
     // get a single challenge by challengeId
@@ -20,7 +20,7 @@ var tendChallenges = function() {
         where: {}
       })
       .then(function(resultChallengesArr) {
-        console.log('getUsers: ', JSON.stringify( resultChallengesArr[0].dataValues.UserChallenge ));
+        // console.log('getUsers: ', JSON.stringify( resultChallengesArr[0].dataValues.UserChallenge ));
 
         // get the UserChallenge 
         resultChallengesArr.forEach(function(challengePlusJT) {
@@ -35,9 +35,11 @@ var tendChallenges = function() {
                authorization: 'Bearer ' + challengePlusJT.dataValues.accessToken },
             json: true };
           request(options, function (error, response, body) {
-            if (error) { throw new Error(error); }
+            if (error) { 
+              throw new Error(error); 
+            }
             // console.log('FitBit API returned: ', JSON.stringify(body));
-            console.log('userID: ' + challengePlusJT.dataValues.fbUserId + ' Total steps: ', JSON.stringify(body.lifetime.tracker.steps)); // distance floors steps caloriesOut
+            console.log('Worker - challenge ' + challengePlusJT.UserChallenge.challengeId + ' participant userID: ' + challengePlusJT.dataValues.fbUserId + ' Total steps: ', JSON.stringify(body.lifetime.tracker.steps)); // distance floors steps caloriesOut
             
             var updateFields;
             if (needsBaseline) {
@@ -53,17 +55,18 @@ var tendChallenges = function() {
               };
             }
 
-            // 
+            // update challenge join table
             challengePlusJT.dataValues.UserChallenge.update(updateFields)
             .then(function(result) {
-              console.log(JSON.stringify(result)); 
+              // console.log(JSON.stringify(result)); 
+              return;
             })
             .catch(function(err) {
               console.log(JSON.stringify(err));
             });
             return;
           });
-          // available fields
+          // some available fields
           // challengePlusJT.id;
           // challengePlusJT.fbUserId;
           // challengePlusJT.access_token;
@@ -80,6 +83,7 @@ var tendChallenges = function() {
     });
   };
 
+  // helper function to update challenge status and grab steps from FitBit API
   var updateChallenge = function(newChallenge, updateText) {
     Challenge.findOne({
       where: { id: newChallenge.id } 
@@ -93,6 +97,7 @@ var tendChallenges = function() {
       // check FitBit API and update goal fields
       checkFitBitStats(challenge.id, needsBaseline);
       
+      // update challenge status
       challenge.update(
         {
           status: updateText,
@@ -100,7 +105,7 @@ var tendChallenges = function() {
       )
       .then(function(result) {
         console.log('Worker - challenge ' + challenge.id + ' status changed to: ', updateText);
-        console.log(JSON.stringify(result));
+        // console.log(JSON.stringify(result));
         return;
       })
       .catch(function(err) {
@@ -110,6 +115,7 @@ var tendChallenges = function() {
     .catch(function(err) {
       console.log(err);
     });
+    return;
   };
 
   // main worker interval loop
@@ -124,24 +130,20 @@ var tendChallenges = function() {
       }
     })
     .then(function(newChallenges) {
-      // console.log(JSON.stringify(newChallenges));
-      newChallenges.forEach(function(newChallenge) {
-        // if challenge is status 'new' but should be 'started'...
-        // console.log('newChallenge.status HERE: ', newChallenge.status);
-        // console.log('newChallenge.status = new: ', newChallenge.status = 'new');
-        // console.log('Date.parse(newChallenge.startDate): ', Date.parse(newChallenge.startDate));
-        // console.log('Date.now(): ', Date.now());
-        // console.log('Date.parse(newChallenge.expirationDate): ', Date.parse(newChallenge.expirationDate));
-        // console.log('entire if statement: ', ( (newChallenge.status = 'new') && ( Date.parse(newChallenge.startDate) >= Date.now() ) && ( Date.now() < Date.parse(newChallenge.expirationDate) ) ));
 
-        if ( (newChallenge.status = 'new') && ( Date.parse(newChallenge.startDate) <= Date.now() ) && ( Date.now() < Date.parse(newChallenge.expirationDate) ) ) {
+      // check and update challenges that should change status 
+      newChallenges.forEach(function(newChallenge) {
+        var nowNow = Date.now();
+        // challenges of two statuses need tending - new and started
+        if ( (newChallenge.status === 'new') && ( Date.parse(newChallenge.startDate) <= nowNow ) ) {
           // update the challenge status - new->started
-          console.log('updating challenge: new->started');
           updateChallenge(newChallenge, 'started');
+          newChallenge.status = 'new';
         }
-        if ( (newChallenge.status = 'started') && ( Date.parse(newChallenge.expirationDate) >= Date.now() ) ) {
+        if ( (newChallenge.status === 'started') && ( nowNow >= Date.parse(newChallenge.expirationDate) ) ) {
           // update the challenge status - started->expired
           updateChallenge(newChallenge, 'expired');
+          newChallenge.status = 'started';
         }
       });
     })
@@ -149,8 +151,8 @@ var tendChallenges = function() {
       console.log(err);
     });
 
-
-  }, 10000); // 10000 every ten seconds
+  // end setTimeout
+  }, 10000); // 20000 every twenty seconds
 
 };
 

@@ -114,17 +114,6 @@ module.exports = (app, express) => {
       fitCoinController.updateChallenge(req, res);
     });
 
-  //Friends
-  app.route('/friends')
-    .get(function (req, res) {
-
-    });
-
-  app.route('/friends/:id')
-    .delete(function (req, res) {
-
-    });
-
 //End of endpoint routes
 
   //Wildcard to pass through to react router routes

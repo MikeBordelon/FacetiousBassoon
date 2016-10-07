@@ -1,5 +1,5 @@
 module.exports = (db, Sequelize) => {
-  const Picture = db.define('pictures', {
+  const Picture = db.define('picture', {
     userId: {
       type: Sequelize.INTEGER
     },

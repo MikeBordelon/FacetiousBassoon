@@ -1,5 +1,5 @@
 module.exports = (db, Sequelize) => {
-  const Challenge = db.define('challenges', {
+  const Challenge = db.define('challenge', {
     creatorUserId: {
       type: Sequelize.INTEGER
     },

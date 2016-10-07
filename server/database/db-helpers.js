@@ -112,7 +112,7 @@ module.exports = {
               .catch(function(err) {
                 res.status(404).send(err);
               });
-            
+
           }).catch((error) => {
             res.status(400).send(error);
           });
@@ -124,7 +124,7 @@ module.exports = {
     .catch((err) => {
       res.status(404).send(err);
     });
-    
+
   },
   updateChallenge: function (req, res) {
     console.log('request hit updateChallenge');

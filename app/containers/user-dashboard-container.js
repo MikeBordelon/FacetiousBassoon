@@ -11,40 +11,46 @@ class UserDashboardContainer extends Component {
     this.handleJoinChallengeRequest = this.handleJoinChallengeRequest.bind(this);
   }
 
-  componentWillMount () {
-    // console.log(this.props.userId);
+  componentDidMount () {
+ // + this.props.userId
+    axios.get('/user_joinable_challenges/' + this.props.userId)
+      .then(function(challenges) {
+        // console.log(challenges.data);
 
-    axios.get('user_joinable_challenges/1', {
-      // params: { id: this.props.userId }
-    })
-    .then(function(challenges) {
-      // console.log(challenges);
+        var challenges = challenges.data;
 
-      var challenges = challenges.data;
-
-      // store.dispatch(getAllChallenges(challenges));
-    })
-    .catch(function(err) {
-      console.log('error getting All Challenges', err);
-    });
+        store.dispatch(getAllChallenges(challenges));
+      })
+      .catch(function(err) {
+        console.log('error getting All Challenges', err);
+      });
   }
 
-  handleJoinChallengeRequest() {
-    console.log('You clicked the join button.');
 
-    // axios.put('/challenges', {
-    //   params: {
-    //     'challengeId': challengeId
-    //   },
-    //   'userId': this.props.userId,
-    //   'userEtherWallet': userEtherWallet
-    // })
-    // .then(function(res) {
-    //   console.log('user joined a challenge', res);
-    // })
-    // .catch(function(err) {
-    //   console.log('challenge error', err);
-    // });
+
+  handleJoinChallengeRequest(challengeId) {
+
+    axios.put('/challenges/ ' + challengeId, {
+      'userId': this.props.userId,
+      'userEtherWallet': 'testWallet'
+    })
+    .then(function(res) {
+      axios.get('/user_joinable_challenges/' + this.props.userId)
+        .then(function(challenges) {
+          // console.log(challenges.data);
+
+          var challenges = challenges.data;
+
+          store.dispatch(getAllChallenges(challenges));
+        })
+        .catch(function(err) {
+          console.log('error getting All Challenges', err);
+        });
+      console.log('user joined a challenge', res.data);
+    })
+    .catch(function(err) {
+      console.log('challenge error', err);
+    });
   }
 
 
@@ -52,7 +58,7 @@ class UserDashboardContainer extends Component {
 
 
   render () {
-    // console.log(this.props.userId);
+    // console.log(store)
 
 
     // const profile = this.props.store.userState.profile;

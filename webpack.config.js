@@ -23,6 +23,11 @@ module.exports = {
         test: /\.jsx?$/,
         loaders: ['react-hot', 'babel'],
         include: APP_DIR
+      },
+      {
+        test: /\.(png|jpg|svg)$/,
+        include: path.join(__dirname, 'public'),
+        loader: 'url-loader?limit=30000&name=images/[name].[ext]'
       }]
   }
 };

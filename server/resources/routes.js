@@ -14,7 +14,7 @@ module.exports = (app, express) => {
   app.get('/auth/fitbit/callback', fitbitAuthenticate);
 
   app.get('/auth/fitbit/success', function(req, res, next) {
-    res.redirect('/allChallenges');
+    res.redirect('/');
   });
 
   app.get('/auth/fitbit/failure', function (req, res, next) {
@@ -102,7 +102,7 @@ module.exports = (app, express) => {
   app.route('/user_joinable_challenges/:userId')
     .get(function(req, res) {
       fitCoinController.retrieveAllJoinableChallenges(req, res);
-    }); 
+    });
 
   app.route('/challenges/:id')
     .get(function(req, res) {

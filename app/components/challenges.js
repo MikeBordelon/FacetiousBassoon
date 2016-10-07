@@ -69,7 +69,6 @@ export default function (props) {
                       <td className=''>{moment(challenge.creationDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</td>
                       <td className=''>{moment(challenge.expirationDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</td>
                       <td className=''>{challenge.status}</td>
-                      <td onClick={()=> props.console(index)} key={index} style={style.button} href="#" className="btn btn-xs btn-danger"><span className="glyphicon glyphicon-remove-sign" ></span>Hide</td>
                     </tr>
             );
           })}

@@ -28,7 +28,7 @@ services:
   redisdb:
     image: redis
   ethereum:
-    image: eth
+    image: apantelides/eth
     ports:
       - "3002:3002"
     links:

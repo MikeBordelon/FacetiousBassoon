@@ -7,6 +7,7 @@ services:
     links:
       - db
       - redisdb
+      - ethereum
     environment:
       SEQ_DB: fitcoin
       SEQ_USER: docker
@@ -26,3 +27,15 @@ services:
       POSTGRES_DB: fitcoin
   redisdb:
     image: redis
+  ethereum:
+    image: apantelides/eth
+    ports:
+      - "3002:3002"
+    links:
+      - testrpc
+    depends_on:
+      - "testrpc"
+  testrpc:
+    image: apantelides/testrpc
+    ports: 
+      - "8545:8545"

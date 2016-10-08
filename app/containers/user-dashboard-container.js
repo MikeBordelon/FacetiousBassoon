@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import UserDashboard from '../components/user-dashboard';
+
 import store from '../store';
 import { getAllChallenges } from '../actions/user-actions';
 import axios from 'axios';
@@ -32,21 +33,10 @@ class UserDashboardContainer extends Component {
 
     axios.put('/challenges/ ' + challengeId, {
       'userId': this.props.userId,
-      'userEtherWallet': 'testWallet'
+      'userEtherWallet': '0x5a81d53f7b1439639ca67e0efef0ec37eb24e138'
     })
     .then(function(res) {
-      axios.get('/user_joinable_challenges/' + this.props.userId)
-        .then(function(challenges) {
-          // console.log(challenges.data);
-
-          var challenges = challenges.data;
-
-          store.dispatch(getAllChallenges(challenges));
-        })
-        .catch(function(err) {
-          console.log('error getting All Challenges', err);
-        });
-      console.log('user joined a challenge', res.data);
+      console.log('challenge joined', res );
     })
     .catch(function(err) {
       console.log('challenge error', err);
@@ -67,6 +57,7 @@ class UserDashboardContainer extends Component {
       <UserDashboard profile={this.props.profile}
                    allChallenges={this.props.allChallenges}
                    handleJoinChallengeRequest={this.handleJoinChallengeRequest}
+
       />
     );
   }

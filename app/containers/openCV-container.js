@@ -21,7 +21,6 @@ class OpenCVContainer extends Component {
 
 const mapStateToProps = function(store) {
   return {
-    store,
     openCV: store.userState.openCV
   };
 };

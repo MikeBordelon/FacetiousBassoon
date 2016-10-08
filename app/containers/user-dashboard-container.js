@@ -30,10 +30,11 @@ class UserDashboardContainer extends Component {
 
 
   handleJoinChallengeRequest(challengeId) {
+    console.log($('#etherAddress').val());
 
     axios.put('/challenges/ ' + challengeId, {
       'userId': this.props.userId,
-      'userEtherWallet': '0x5a81d53f7b1439639ca67e0efef0ec37eb24e138'
+      'userEtherWallet': $('#etherAddress').val()
     })
     .then(function(res) {
       console.log('challenge joined', res );

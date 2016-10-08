@@ -96,6 +96,11 @@ class Profile extends Component {
         <span>{this.props.profile.name}</span>{this.props.profile.age}<span>{this.props.profile.wallet}</span>
       </Paper>
 
+
+      <TextField id='etherAddress'
+      floatingLabelText="Enter Your Ethereum Address"
+      />
+
       {activeChallenges.map((challenge, index) => {
         return (
         <div key={index}>

@@ -20,10 +20,6 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 
 
-/////////DropDown////////
-
-
-
 
 const style = {
 
@@ -92,7 +88,7 @@ class Profile extends Component {
     return (
       <div>
       <Paper style={style.paper} zDepth={1}>
-        <h3 style={style.h3}>All FitCoin Challenges</h3>
+        <h3 style={style.h3}>Dashboard</h3>
         <span>{this.props.profile.name}</span>{this.props.profile.age}<span>{this.props.profile.wallet}</span>
       </Paper>
 
@@ -138,59 +134,9 @@ class Profile extends Component {
 
 const mapStateToProps = function(store) {
   return {
-    store
 
   };
 };
-// users are now props on UserListContainer
+
 export default connect(mapStateToProps)(Profile);
 
-
-
-
-
-
-
-
-
-
-
-// <table className="table">
-//           <tbody>
-//             <tr className="thead-inverse">
-//                 <th>Challenge ID</th>
-//                 <th>Challenge Goal</th>
-//                 <th>Current Stats</th>
-//                 <th>Start Date</th>
-//                 <th>End Date</th>
-//                 <th>Challenge Status</th>
-//                 <th></th>
-//             </tr>
-
-//           {this.props.allChallenges.map((challenge, index) => {
-//             var joinChip;
-//             if (challenge.status === 'active') {
-//               joinChip =
-//                 <Chip
-//                   onRequestDelete={this.handleJoinChallengeRequest}
-//                   style={style.chip}
-//                   >
-//                   <Avatar color="#444" icon={<SvgIconFace />} />
-//                   Join Challenge!
-//                 </Chip>;
-//             }
-
-//             return (
-//               <tr key={index}>
-//                 <td className=''>{challenge.id}</td>
-//                 <td className=''>{challenge.challengeGoal + ' ' + challenge.challengeType}</td>
-//                 <td className=''>{challenge.challengeCurrent + ' ' + challenge.challengeType}</td>
-//                 <td className=''>{moment(challenge.creationDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</td>
-//                 <td className=''>{moment(challenge.expirationDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</td>
-//                 <td className=''>{challenge.status}</td>
-//                 {joinChip}
-//               </tr>
-//             );
-//           })}
-//           </tbody>
-//         </table>

@@ -127,14 +127,8 @@ class NewChallenge extends Component {
 }
 
 
-
-const mapStateToProps = function(store) {
-  return {
-    store
-  };
-};
 // users are now props on UserListContainer
-export default connect(mapStateToProps)(NewChallenge);
+export default NewChallenge;
 
 
 

@@ -67,7 +67,6 @@ class UserDashboardContainer extends Component {
 
 const mapStateToProps = function(store) {
   return {
-    store,
     profile: store.userState.profile,
     allChallenges: store.userState.allChallenges,
     userId: store.userState.userId

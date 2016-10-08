@@ -84,7 +84,6 @@ class NewChallengeContainer extends Component {
 
 const mapStateToProps = function(store) {
   return {
-    store,
     newChallenge: store.userState.newChallenge,
     userId: store.userState.userId
   };

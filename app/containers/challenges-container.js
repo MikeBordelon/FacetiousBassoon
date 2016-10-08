@@ -10,30 +10,24 @@ class ChallengesContainer extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      visibility: 'collapse'
-    };
     this.hideChallenge = this.hideChallenge.bind(this);
     this.console = this.console.bind(this);
   }
 
-  componentDidMount () {
-    console.log('Challenge Cont', this.props.userId);
+  componentWillMount () {
 
-    axios.get('/user/', {
-      params: {
-        id: this.props.userId
-      }
+    axios.get('/user/' + this.props.userId)
+    .then(function(challenges) {
+      // console.log('got myChallenges', challenges.data.challenges[0].id);
+
+      var challenges = challenges.data.challenges;
+      store.dispatch(getChallengesSuccess(challenges));
     })
+    .catch(function(err) {
+      console.log('challenge error', err);
+    });
 
-      .then(function(challenges) {
-        console.log('got myChallenges', challenges.data);
-        var challenges = challenges.data[0].challenges;
-        store.dispatch(getChallengesSuccess(challenges));
-      })
-      .catch(function(err) {
-        console.log('challenge error', err);
-      });
+
   }
 
   console () {

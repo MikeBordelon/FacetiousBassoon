@@ -31,10 +31,11 @@ class NewChallengeContainer extends Component {
     var startDate = $('#startDate').val();
     var expirationDate = $('#expirationDate').val();
     var goalType = $('#goalType').val();
-    startDate = startDate + ':' + new Date().getSeconds() + '.' + new Date().getMilliseconds() + 'Z';
-    expirationDate = expirationDate + ':' + new Date().getSeconds() + '.' + new Date().getMilliseconds() + 'Z';
+    startDate = startDate + ':' + new Date().getSeconds() + '.' + '000' + 'Z';
+    expirationDate = expirationDate + ':' + new Date().getSeconds() + '.' + '000' + 'Z';
     // console.log(moment(startDate).format());
     console.log(startDate);
+    console.log(expirationDate);
 
 
     axios.post('/challenges', {
@@ -48,7 +49,7 @@ class NewChallengeContainer extends Component {
     })
     .then(function(res) {
 
-      console.log('posted a challenge', res);
+      console.log('posted a challenge', res.data);
     })
     .catch(function(err) {
       console.log('challenge error', err);
@@ -59,11 +60,11 @@ class NewChallengeContainer extends Component {
   cancel (e) {
     e.preventDefault();
     $('#userId').val('');
-    $('#ethereum').val('');
-    $('#buyIn').val();
-    $('#goal').val('');
+    $('#userEtherWallet').val('');
+    $('#buyInAmount').val('');
+    $('#goalAmount').val('');
     $('#startDate').val('');
-    $('#endDate').val('');
+    $('#expirationDate').val('');
     $('#goalType').val('');
   }
 

@@ -45,7 +45,6 @@ const userReducer = function(state = initialState, action) {
 
 
   case 'AUTH_SUCCESS':
-  console.log('setting userId');
     return {
       ...state,
       isLoggedIn: true,

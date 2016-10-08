@@ -1,32 +1,56 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import store from '../store.js';
+import RaisedButton from 'material-ui/RaisedButton';
+import Snackbar from 'material-ui/Snackbar';
 
 
-
-const style = {
+let style = {
   text: {
     textAlign: 'center',
     margin: '40px 0px 50px 0px'
+  },
+  submit: {
+    margin: '0 0 0 440px'
+  },
+  cancel: {
+    margin: '0 0px 100px 40px'
   }
 };
 
 class NewChallenge extends Component {
   constructor (props) {
     super(props);
+
+    this.state = {
+      open: false,
+    };
+
+    this.handleRequestClose = this.handleRequestClose.bind(this);
+    this.handleTouchTap = this.handleTouchTap.bind(this);
   }
-  // console.log(props);
-//   ethereumAdd string
-// date
-// metricGoal number textbox
-// metrictype = steps Picker
+
+
+  handleTouchTap () {
+    this.setState({
+      open: true,
+    });
+  }
+
+
+  handleRequestClose () {
+    this.setState({
+      open: false,
+    });
+  }
   render () {
 
     // console.log('store is: ', this.props);
     return (
     <div>
-    <h5 style={style.text}>Add conf submit thingy</h5>
+    <h4 style={style.text}>Fix TimeStamps</h4>
       <h1 style={style.text}>Create A Challenge!</h1>
+
 
       <form ref='form'className="form-horizontal">
         <fieldset>
@@ -84,19 +108,27 @@ class NewChallenge extends Component {
             </div>
           </div>
 
-          <div className="form-group">
-            <label className="col-md-4 control-label" ></label>
-            <div className="col-md-1">
-              <button onClick={this.props.postChallenge} id="submitButton" name="submitButton" className="btn btn-primary">Submit</button>
-            </div>
-            <div className="col-md-1">
-              <button onClick={this.props.cancel} id="cancelButton" name="cancelButton" className="btn btn-danger">Cancel</button>
-            </div>
-          </div>
-
         </fieldset>
       </form>
-
+      <span>
+         <RaisedButton
+          style={style.submit}
+          onTouchTap={this.handleTouchTap}
+          onClick={this.props.postChallenge}
+          label="Add to my Challenges"
+         />
+         <RaisedButton
+          style={style.cancel}
+          onClick={this.props.cancel}
+          label="Cancel"
+         />
+         <Snackbar
+          open={this.state.open}
+          message="Event added to your challenges"
+          autoHideDuration={2000}
+          onRequestClose={this.handleRequestClose}
+         />
+      </span>
     </div>
   );
   }

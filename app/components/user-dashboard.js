@@ -5,20 +5,13 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
 import {connect} from 'react-redux';
 var moment = require('moment');
-
+var path = require ('path');
+import TextField from 'material-ui/TextField';
 import Avatar from 'material-ui/Avatar';
-import Chip from 'material-ui/Chip';
-import FontIcon from 'material-ui/FontIcon';
-import SvgIconFace from 'material-ui/svg-icons/action/face';
-import {blue300, indigo900} from 'material-ui/styles/colors';
-
 
 import {List, ListItem} from 'material-ui/List';
-import ActionGrade from 'material-ui/svg-icons/action/grade';
-import Divider from 'material-ui/Divider';
-import {pinkA200, transparent} from 'material-ui/styles/colors';
 
-import Subheader from 'material-ui/Subheader';
+import Divider from 'material-ui/Divider';
 
 import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
@@ -60,7 +53,7 @@ const style = {
 
   list: {
     flex: 1,
-    width: '450'
+    width: '450px'
 
   }
 
@@ -88,13 +81,6 @@ class Profile extends Component {
       </IconButton>
     );
 
-    const rightIconMenu = (
-      <IconMenu iconButtonElement={iconButtonElement}>
-        <MenuItem onClick={this.props.handleJoinChallengeRequest}>Join</MenuItem>
-      </IconMenu>
-    );
-
-
     // FILTER ACTIVE CHALLENGES
     var activeChallenges = this.props.allChallenges.filter(challenge => challenge.status !== 'failed');
 
@@ -107,13 +93,17 @@ class Profile extends Component {
 
       {activeChallenges.map((challenge, index) => {
         return (
-        <div>
+        <div key={index}>
          <List style={style.list}>
-            <Subheader>{challenge.status}</Subheader>
             <ListItem
-              leftAvatar={<Avatar src="images/ok-128.jpg" />}
-              rightIconButton={rightIconMenu}
-              primaryText={challenge.challengeGoal + ' ' + challenge.challengeType}
+              leftAvatar={<Avatar />}
+              rightIconButton={
+                <IconMenu onClick={() => this.props.handleJoinChallengeRequest(challenge.id)} iconButtonElement={iconButtonElement}>
+                  <MenuItem >Join</MenuItem>
+                </IconMenu>
+              }
+
+              primaryText={challenge.goalAmount + ' ' + challenge.goalType}
               secondaryText={
                 <p>
                   <span style={{color: darkBlack}}>{'Starts: ' + moment(challenge.creationDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</span><br />

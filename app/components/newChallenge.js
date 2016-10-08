@@ -54,14 +54,6 @@ class NewChallenge extends Component {
 
       <form ref='form'className="form-horizontal">
         <fieldset>
-
-          <div className="form-group">
-            <label className="col-md-4 control-label" >Your UserId</label>
-            <div className="col-md-4">
-              <input ref='userId' id="userId" name="userId" type="text" placeholder={this.props.store.userState.userId} className="form-control input-md"/>
-            </div>
-          </div>
-
           <div className="form-group">
             <label className="col-md-4 control-label" >Ethereum Address</label>
             <div className="col-md-4">
@@ -72,14 +64,14 @@ class NewChallenge extends Component {
           <div className="form-group">
             <label className="col-md-4 control-label" >Goal</label>
             <div className="col-md-4">
-              <input ref='goalAmount' id="goalAmount" name="goalAmount" type="text" placeholder="# of steps/floors" className="form-control input-md"/>
+              <input ref='goalAmount' id="goalAmount" name="goalAmount" type="number" placeholder="# of steps/floors" className="form-control input-md"/>
             </div>
           </div>
 
           <div className="form-group">
             <label className="col-md-4 control-label" >Buy In Amount</label>
             <div className="col-md-4">
-              <input ref='buyInAmount' id="buyInAmount" name="buyInAmount" type="number" placeholder="$0.00" className="form-control input-md"/>
+              <input ref='buyInAmount' id="buyInAmount" name="buyInAmount" type="number" placeholder="wei's" className="form-control input-md"/>
             </div>
           </div>
 

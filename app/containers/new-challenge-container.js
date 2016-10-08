@@ -20,9 +20,14 @@ class NewChallengeContainer extends Component {
   componentDidMount () {
 
   }
-
+////////////////////////UNCOMMENT variables below before deployment
   postChallenge (e) {
     e.preventDefault();
+
+    //      var startDate = '2017-12-12T00:12:28.000Z';
+    // var expirationDate = '2018-12-12T00:12:28.000Z';
+    // var goalAmount = '100';
+    // var buyInAmount = '100';
 
     var userId = this.props.userId;
     var userEtherWallet = $('#userEtherWallet').val();
@@ -35,7 +40,7 @@ class NewChallengeContainer extends Component {
     expirationDate = expirationDate + ':' + new Date().getSeconds() + '.' + '000' + 'Z';
     // console.log(moment(startDate).format());
     console.log(startDate);
-    console.log(expirationDate);
+    console.log(expirationDate, goalType, goalAmount, buyInAmount);
 
 
     axios.post('/challenges', {
@@ -59,7 +64,6 @@ class NewChallengeContainer extends Component {
 
   cancel (e) {
     e.preventDefault();
-    $('#userId').val('');
     $('#userEtherWallet').val('');
     $('#buyInAmount').val('');
     $('#goalAmount').val('');

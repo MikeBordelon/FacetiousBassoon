@@ -20,6 +20,11 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 
 
+/////////DropDown////////
+
+
+
+
 const style = {
 
   chip: {
@@ -90,6 +95,11 @@ class Profile extends Component {
         <h3 style={style.h3}>All FitCoin Challenges</h3>
         <span>{this.props.profile.name}</span>{this.props.profile.age}<span>{this.props.profile.wallet}</span>
       </Paper>
+
+
+      <TextField id='etherAddress'
+      floatingLabelText="Enter Your Ethereum Address"
+      />
 
       {activeChallenges.map((challenge, index) => {
         return (

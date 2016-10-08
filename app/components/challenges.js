@@ -41,25 +41,25 @@ export default function (props) {
         <table className="table">
           <tbody>
             <tr className="thead-inverse">
-                <th>Challenge ID</th>
-                <th>Challenge Goal</th>
-                <th>Stats</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>Challenge Status</th>
-                <th></th>
+              <th>Challenge ID</th>
+              <th>Challenge Goal</th>
+              <th>Stats</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Challenge Status</th>
+              <th></th>
             </tr>
           {props.myChallenges.map((challenge, index) => {
 
             return (
-                    <tr key={index}>
-                      <td style={style.tableCNT}>{challenge.id}</td>
-                      <td className=''>{challenge.goalAmount + ' ' + challenge.goalType}</td>
-                      <td className=''>{'Created by UserId: ' + ' ' + challenge.creatorUserId + ' ' + 'Num of People: ' + challenge.numOfParticipants}</td>
-                      <td className=''>{moment(challenge.creationDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</td>
-                      <td className=''>{moment(challenge.expirationDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</td>
-                      <td className=''>{challenge.status}</td>
-                    </tr>
+              <tr key={index}>
+                <td style={style.tableCNT}>{challenge.id}</td>
+                <td className=''>{challenge.goalAmount + ' ' + challenge.goalType}</td>
+                <td className=''>{'Created by UserId: ' + ' ' + challenge.creatorUserId + ' ' + 'Num of People: ' + challenge.numOfParticipants}</td>
+                <td className=''>{moment(challenge.creationDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</td>
+                <td className=''>{moment(challenge.expirationDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</td>
+                <td className=''>{challenge.status}</td>
+              </tr>
             );
           })}
           </tbody>

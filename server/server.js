@@ -6,7 +6,26 @@ var app = express();
 
 require('./resources/middleware.js')(app, express);
 
-require('./resources/routes.js')(app, express);
+cloudinary.config({ 
+  cloud_name: 'dsz0gov6k', 
+  api_key: '674192445522955', 
+  api_secret: 't6uJBD_T4bzaAYa1-YXJ2E7Oxtw' 
+});
+
+app.get('/cloudSignature', function(req, res) {
+  var secret='t6uJBD_T4bzaAYa1-YXJ2E7Oxtw';
+  var str='context=true&prefix=' + req.params.userId + '&timestamp=' + Date.now() + secret;
+  res.json(sha1(str));
+});
+
+app.get('/cloudinaryGet/:userId', function(req, res) {
+  // res.json('fadsdas');
+  console.log(req.params.userId);
+  cloudinary.api.resources(function(result){
+    res.json(result);
+  },
+  { type: 'upload', prefix: req.params.userId, context: 'true' });
+});
 
 app.get('/openCV', function(req, res) {
   var result = [];
@@ -36,41 +55,9 @@ app.get('/openCV', function(req, res) {
     console.log(`child process exited with code ${code}`);
   });
 
-  // var child = execFile(program, [picture], 
-  //   function(error, stdout, stderr) {
-  //     console.log( process.cwd() );
-  //     res.setHeader('Content-Type', 'application/json');
-  //     res.json(stdout);
-  //     console.log('area is:' + stdout);
-  //     console.log(error);
-  //   }
-  // );
 });
-// app.get('/openCV', function(req, res) {
-//   var fs = require('fs');
-//   var temp = require('temp');
-//   var execFile = require('child_process').execFile;
-//   var picture = "After1.jpg";
-//   var program = "../openCV/imageproc2";
-//   temp.mkdir('node_example', function(err, dirPath) {
-//       // build full paths for the input/output files
-//       var inputPath = path.join(dirPath, 'input.txt');
-//       var outputPath = path.join(dirPath, 'output.txt');
 
-//       // write the "under" value to the input files
-//       fs.writeFile(inputPath, picture, function(err) {
-//         if (err) throw err;
-//         var child = execFile(program, [inputPath],
-//           function (error, stdout, stderr) {
-//             // This function is still executed once the program terminates...
-//             res.setHeader('Content-Type', 'application/json');
-//             res.json(stdout);
-//             console.log('area is:' + stdout);
-//             console.log(error);
-//         });
-//       });
-//   });
-// });
+require('./resources/routes.js')(app, express);
 
 app.listen(3000, function () {
   console.log('Our app is listening on port 3000!');

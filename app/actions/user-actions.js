@@ -29,3 +29,28 @@ export function authFailure() {
   };
 }
 
+export function generatePictureList(pics) {
+  return {
+    type: 'GET_PICTURES',
+    pictures: pics
+  };
+}
+
+export function changePicture(num, idx) {
+  var unchangedNum = '';
+  
+  if (num === 'one') {
+    unchangedNum = 'two';
+  } else {
+    unchangedNum = 'one';
+  }
+
+  return {
+    type: 'CHANGE_PICTURE',
+    num: num,
+    unchangedNum: unchangedNum,
+    pictureIdx: idx
+  };
+}
+
+

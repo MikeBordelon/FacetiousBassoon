@@ -1,5 +1,5 @@
 var Sequelize = require('sequelize');
-var db = new Sequelize(process.env.DATABASE_URL || 'postgres://docker:docker@db:5432/fitcoin', { logging: false });
+var db = new Sequelize(process.env.DATABASE_URL || 'postgres://docker:docker@db:5432/fitcoin', { logging: false});
 
 db.sync({force: true});
 

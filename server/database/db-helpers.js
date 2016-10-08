@@ -132,29 +132,42 @@ module.exports = {
       where: { id: req.params.id }
     })
     .then(function(challenge) {
-      console.log('findOne returned: ' + challenge);
-      challenge.update(
-        { numOfParticipants: challenge.numOfParticipants + 1 },
-        { totalPot: challenge.totalPot + challenge.buyInAmount },
-        { where: { id: req.params.id } }
-      )
-      .then(function(result) {
-        UserChallenges.create({
-          userId: req.body.userId,
-          challengeId: req.params.id,
-          goalType: result.goalType,
-          userEtherWallet: req.body.userEtherWallet
-        })
+      console.log(challenge.dataValues, 'this is the challenge from updateChallenge!');
+      axios.post('http://ethereum:3002/api/addUser', {
+        fromAddress: req.body.userEtherWallet,
+        contractAddress: challenge.dataValues.ethereumSCAddress,
+        buyInAmount: challenge.dataValues.buyInAmount,
+        userId: req.body.userId,
+        userName: 'sampleUsername',
+        gas: 300000
+      }).then((response) => {
+        challenge.update(
+          { numOfParticipants: challenge.numOfParticipants + 1 },
+          { totalPot: challenge.totalPot + challenge.buyInAmount },
+          { where: { id: req.params.id } }
+        )
         .then(function(result) {
-          res.status(200).send(result);
+          UserChallenges.create({
+            userId: req.body.userId,
+            challengeId: req.params.id,
+            goalType: result.goalType,
+            userEtherWallet: req.body.userEtherWallet
+          })
+          .then(function(result) {
+            res.status(200).send(result);
+          })
+          .catch(function(err) {
+            res.status(404).send(err);
+          });
         })
         .catch(function(err) {
           res.status(404).send(err);
         });
       })
-      .catch(function(err) {
-        res.status(404).send(err);
+      .catch((error) => {
+        res.status(404).send(error);
       });
+      console.log('findOne returned: ' + challenge);
     })
     .catch(function(err) {
       res.status(404).send(err);

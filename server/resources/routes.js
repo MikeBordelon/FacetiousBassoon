@@ -2,6 +2,14 @@ const fitCoinController = require('../database/db-helpers.js');
 const passport = require('./passport.js');
 const path = require('path');
 
+var isAuthMiddleware = (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
+  } else {
+    res.redirect('/');
+  }
+};
+
 module.exports = (app, express) => {
   //Passport Oauth 2.0 - Fitbit Strategy
   var fitbitAuthenticate = passport.authenticate('fitbit', {
@@ -22,7 +30,7 @@ module.exports = (app, express) => {
   });
 
   app.get('/auth/checkLogin', function(req, res) {
-    if (req.user) {
+    if (req.isAuthenticated()) {
       // console.log(req.session);
       res.send(
         {logInStatus: 'authenticated',
@@ -115,9 +123,14 @@ module.exports = (app, express) => {
     });
 
 //End of endpoint routes
-
+  app.get('/', function (request, response) {
+    response.sendFile(path.resolve(__dirname, '../../app/public', 'index.html'));
+  });
+  app.get('/about', function (request, response) {
+    response.sendFile(path.resolve(__dirname, '../../app/public', 'index.html'));
+  });
   //Wildcard to pass through to react router routes
-  app.get('*', function (request, response) {
+  app.get('*', isAuthMiddleware, function (request, response) {
     response.sendFile(path.resolve(__dirname, '../../app/public', 'index.html'));
   });
 };

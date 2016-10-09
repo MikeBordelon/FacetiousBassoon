@@ -15,54 +15,148 @@ var tendChallenges = function() {
     })
     .then(function(challenge) {
 
+      // collect win conditions
+      var winnerIds = [];
+      var ethereumSCAddress = challenge.ethereumSCAddress;
+      var creatorWalletAddress = null; 
+      var goalAmount = challenge.goalAmount;
+
       // get all users associated with that challenge
       challenge.getUsers({
         where: {}
       })
       .then(function(resultChallengesArr) {
         // console.log('getUsers: ', JSON.stringify( resultChallengesArr[0].dataValues.UserChallenge ));
+        
 
         // get the UserChallenge 
-        resultChallengesArr.forEach(function(challengePlusJT) {
+        resultChallengesArr.forEach(function(userPlusJT) {
+          
+          // some available fields
+            // userPlusJT.id
+            // userPlusJT.fbUserId
+            // userPlusJT.access_token
+            // userPlusJT.refresh_token
+            // userPlusJT.UserChallenge.challengeId
+            // userPlusJT.UserChallenge.goalStart
+            // userPlusJT.UserChallenge.goalCurrent
+            // userPlusJT.UserChallenge.userEtherWallet
+            // challenge.creatorUserId
+
+          // find challenge creator
+          if (challenge.creatorUserId === userPlusJT.id) {
+            creatorWalletAddress = userPlusJT.UserChallenge.userEtherWallet;
+          }
+
+          // log winner ids
+          if (userPlusJT.UserChallenge.goalStart - userPlusJT.UserChallenge.goalCurrent >= goalAmount) {
+            winnerIds.push(userPlusJT.id);
+          }
           
           // make an API call to FitBit
           var options = { method: 'GET',
-            url: 'https://api.fitbit.com/1/user/' + challengePlusJT.dataValues.fbUserId + '/activities.json',
+            url: 'https://api.fitbit.com/1/user/' + userPlusJT.dataValues.fbUserId + '/activities.json',
             headers: 
              { 'postman-token': '7dbc8c9f-431c-b847-16be-2fba85f0eab9',
                'cache-control': 'no-cache',
                'content-type': 'application/json',
-               authorization: 'Bearer ' + challengePlusJT.dataValues.accessToken },
+               authorization: 'Bearer ' + userPlusJT.dataValues.accessToken },
             json: true };
           request(options, function (error, response, body) {
+
+            // if FitBit API call fails
             if (error) { 
               console.log('Worker - FitBit API call failed: ', error);
 
-              // handle expired access token for FitBit API: https://dev.fitbit.com/docs/oauth2/#refreshing-tokens
+              // If FitBit API call fails because access token is expired...
               if (body.errors[0].errorType === 'expired_token') {
                
-                // make request to FitBit API using refresh token 
+                // Then re-up tokens using refresh token: https://dev.fitbit.com/docs/oauth2/#refreshing-tokens
+                // POST request with user's  refresh token in order to... refresh tokens
                 var options = { method: 'POST',
                   url: 'https://api.fitbit.com/oauth2/token',
                   qs: 
                    { grant_type: 'refresh_token',
-                     refresh_token: challengePlusJT.refresh_token },
+                     refresh_token: userPlusJT.refresh_token },
                   headers: 
                    { 'postman-token': '03443faa-a85f-bfb0-193f-898295898d27',
                      'cache-control': 'no-cache',
                      'content-type': 'application/x-www-form-urlencoded',
                      authorization: 'Basic ' + btoa(authKeys.lex.clientId + ':' + authKeys.lex.clientSecret)},
                   form: false };
-
                 request(options, function (error, response, body) {
+                  // 
                   if (error) { 
                     console.log('Worker - refresh token update has failed: ', error);
                     throw new Error(error);
+                  } else {
 
-                    // handle expired access token for FitBit API: https://dev.fitbit.com/docs/oauth2/#refreshing-tokens
-                    if (body.errors[0].errorType === 'expired_token') {
-                     
-                    }
+                    // have new access token and refresh token
+                    console.log('  New access_token: ', response.access_token);
+                    console.log('  New refresh_token: ', response.refresh_token);
+
+                    // save access token and refresh token
+                    User.findOne({
+                      where: {id: userPlusJT.id }
+                    })
+                    .then(function(userRow) {
+                      
+                      // save access token and refresh token to userRow
+                      userRow.update(
+                        { accessToken: response.access_token },
+                        { refreshToken: response.refresh_token }
+                      )
+                      .then(function(result) {
+                        console.log('Worker - refreshed tokens save has succeeed: ', result);
+                      })
+                      .catch(function(err) {
+                        console.log('Worker - refreshed tokens save has failed: ', error);
+                      });
+                    })
+                    .catch(function(err) {
+                      console.log('Worker - refreshed tokens user lookup, save has failed: ', error);
+                    });
+
+                    // make an API call to FitBit with new access token
+                    var options = { method: 'GET',
+                      url: 'https://api.fitbit.com/1/user/' + userPlusJT.dataValues.fbUserId + '/activities.json',
+                      headers: 
+                       { 'postman-token': '7dbc8c9f-431c-b847-16be-2fba85f0eab9',
+                         'cache-control': 'no-cache',
+                         'content-type': 'application/json',
+                         authorization: 'Bearer ' + response.access_token },
+                      json: true };
+                    request(options, function (error, response, body) {
+
+                      // have new auth token now and can re-query FitBit API
+                      // console.log('FitBit API returned: ', JSON.stringify(body));
+                      console.log('Worker - challenge ' + userPlusJT.UserChallenge.challengeId + ' participant userID: ' + userPlusJT.dataValues.fbUserId + ' Total steps: ', JSON.stringify(body.lifetime.tracker.steps)); // distance floors steps caloriesOut
+                      
+                      var updateFields;
+                      if (needsBaseline) {
+                        updateFields = 
+                        {
+                          goalStart: body.lifetime.tracker.steps,
+                          goalCurrent: body.lifetime.tracker.steps
+                        };
+                      } else {
+                        updateFields = 
+                        {
+                          goalCurrent: body.lifetime.tracker.steps
+                        };
+                      }
+
+                      // update challenge join table
+                      userPlusJT.dataValues.UserChallenge.update(updateFields)
+                      .then(function(result) {
+                        // console.log(JSON.stringify(result)); 
+                        return;
+                      })
+                      .catch(function(err) {
+                        console.log(JSON.stringify(err));
+                      });
+                      return;
+                    });
                   }
                 });
                 return; 
@@ -72,7 +166,7 @@ var tendChallenges = function() {
 
             // FitBit API worker 
             // console.log('FitBit API returned: ', JSON.stringify(body));
-            console.log('Worker - challenge ' + challengePlusJT.UserChallenge.challengeId + ' participant userID: ' + challengePlusJT.dataValues.fbUserId + ' Total steps: ', JSON.stringify(body.lifetime.tracker.steps)); // distance floors steps caloriesOut
+            console.log('Worker - challenge ' + userPlusJT.UserChallenge.challengeId + ' participant userID: ' + userPlusJT.dataValues.fbUserId + ' Total steps: ', JSON.stringify(body.lifetime.tracker.steps)); // distance floors steps caloriesOut
             
             var updateFields;
             if (needsBaseline) {
@@ -89,7 +183,7 @@ var tendChallenges = function() {
             }
 
             // update challenge join table
-            challengePlusJT.dataValues.UserChallenge.update(updateFields)
+            userPlusJT.dataValues.UserChallenge.update(updateFields)
             .then(function(result) {
               // console.log(JSON.stringify(result)); 
               return;
@@ -99,15 +193,27 @@ var tendChallenges = function() {
             });
             return;
           });
-          // some available fields
-          // challengePlusJT.id;
-          // challengePlusJT.fbUserId;
-          // challengePlusJT.access_token;
-          // challengePlusJT.refresh_token;
-          // challengePlusJT.UserChallenge.challengeId;
-          // challengePlusJT.UserChallenge.goalStart;
-          // challengePlusJT.UserChallenge.goalCurrent;
+
         });
+
+        if (!needsBaseline) {
+          if (winnerIds.length === 0) {
+            winnerIds.push(/* NO WINNERs ADDRESS */);
+          }
+          
+          console.log('Winners: ');
+          console.log('winnerIds', winnerIds);
+          console.log('ethereumSCAddress', ethereumSCAddress);
+          console.log('goalAmount', goalAmount);
+          console.log('creatorWalletAddress', creatorWalletAddress);
+          
+          // Make request to eth:3002/API/outcomeChallenge with 
+            // winnerIds
+            // ethereumSCAddress
+            // goalAmount
+            // creatorWalletAddress
+
+        }
       })
       .catch(function(err) {
         console.log(JSON.stringify(err));

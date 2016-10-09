@@ -1,6 +1,6 @@
 const {User, Challenge, UserChallenges, db, Sequelize} = require('./database/db-config.js');
 var request = require('request');
-
+var authKeys = require('./resources/passportAuth.js');
 
 // worker container function
 var tendChallenges = function() {
@@ -36,8 +36,41 @@ var tendChallenges = function() {
             json: true };
           request(options, function (error, response, body) {
             if (error) { 
-              throw new Error(error); 
+              console.log('Worker - FitBit API call failed: ', error);
+
+              // handle expired access token for FitBit API: https://dev.fitbit.com/docs/oauth2/#refreshing-tokens
+              if (body.errors[0].errorType === 'expired_token') {
+               
+                // make request to FitBit API using refresh token 
+                var options = { method: 'POST',
+                  url: 'https://api.fitbit.com/oauth2/token',
+                  qs: 
+                   { grant_type: 'refresh_token',
+                     refresh_token: challengePlusJT.refresh_token },
+                  headers: 
+                   { 'postman-token': '03443faa-a85f-bfb0-193f-898295898d27',
+                     'cache-control': 'no-cache',
+                     'content-type': 'application/x-www-form-urlencoded',
+                     authorization: 'Basic ' + btoa(authKeys.lex.clientId + ':' + authKeys.lex.clientSecret)},
+                  form: false };
+
+                request(options, function (error, response, body) {
+                  if (error) { 
+                    console.log('Worker - refresh token update has failed: ', error);
+                    throw new Error(error);
+
+                    // handle expired access token for FitBit API: https://dev.fitbit.com/docs/oauth2/#refreshing-tokens
+                    if (body.errors[0].errorType === 'expired_token') {
+                     
+                    }
+                  }
+                });
+                return; 
+              }
+              return; 
             }
+
+            // FitBit API worker 
             // console.log('FitBit API returned: ', JSON.stringify(body));
             console.log('Worker - challenge ' + challengePlusJT.UserChallenge.challengeId + ' participant userID: ' + challengePlusJT.dataValues.fbUserId + ' Total steps: ', JSON.stringify(body.lifetime.tracker.steps)); // distance floors steps caloriesOut
             
@@ -76,10 +109,12 @@ var tendChallenges = function() {
           // challengePlusJT.UserChallenge.goalCurrent;
         });
       })
-      .catch(function(result) {
+      .catch(function(err) {
+        console.log(JSON.stringify(err));
       });
     })
     .catch(function(err) {
+      console.log(JSON.stringify(err));
     });
   };
 
@@ -120,6 +155,7 @@ var tendChallenges = function() {
 
   // main worker interval loop
   setInterval(function() {
+
     // Find and transition all challenges that need to flip from 'new' to 'started'
     Challenge.findAll({
       where: {
@@ -152,7 +188,7 @@ var tendChallenges = function() {
     });
 
   // end setTimeout
-  }, 10000); // 20000 every twenty seconds
+  }, process.env.WORKER_1_SETTIMEOUT); // 20000 every twenty seconds
 
 };
 

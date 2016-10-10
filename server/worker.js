@@ -1,6 +1,7 @@
 const {User, Challenge, UserChallenges, db, Sequelize} = require('./database/db-config.js');
 var request = require('request');
 var authKeys = require('./resources/passportAuth.js');
+var axios = require('axios');
 
 // worker container function
 var tendChallenges = function() {
@@ -198,21 +199,26 @@ var tendChallenges = function() {
 
         if (!needsBaseline) {
           if (winnerIds.length === 0) {
-            winnerIds.push(/* NO WINNERs ADDRESS */);
+            winnerIds.push('None');
           }
           
-          console.log('Winners: ');
-          console.log('winnerIds', winnerIds);
-          console.log('ethereumSCAddress', ethereumSCAddress);
-          console.log('goalAmount', goalAmount);
-          console.log('creatorWalletAddress', creatorWalletAddress);
+          // console.log('Winners: ');
+          // console.log('winnerIds', winnerIds);
+          // console.log('ethereumSCAddress', ethereumSCAddress);
+          // console.log('goalAmount', goalAmount);
+          // console.log('creatorWalletAddress', creatorWalletAddress);
           
-          // Make request to eth:3002/API/outcomeChallenge with 
-            // winnerIds
-            // ethereumSCAddress
-            // goalAmount
-            // creatorWalletAddress
-
+          if (winnerIds[0] !== 'None') {
+            axios.post('http://ethereum:3002/api/outcomeChallenge', {
+              fromAddress: creatorWalletAddress,
+              contractAddress: ethereumSCAddress,
+              winnerIds: winnerIds
+            }).then((response) => {
+              console.log('Successfully resolved a challenge. The response from the ethereum handler is: ' + response);
+            }).catch((error) => {
+              console.log('Error resolving challenge: ' + ethereumSCAddress + ', Error is: ' + error);
+            });
+          }
         }
       })
       .catch(function(err) {

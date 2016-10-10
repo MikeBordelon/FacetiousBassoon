@@ -11,6 +11,8 @@ var fitbitStrategy = new FitbitStrategy({
   scope: ['activity', 'heartrate', 'location', 'profile'],
   callbackURL: authKeys.lex.callbackURL
 }, function(accessToken, refreshToken, params, profile, done) {
+  console.log('accessToken: ', accessToken);
+  console.log('refreshToken: ', refreshToken);
   User.find( {where: {fbUserId: params.user_id}} )
     .then(function(user) {
       if (user === null) {

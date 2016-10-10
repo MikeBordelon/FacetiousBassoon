@@ -17,7 +17,7 @@ import {deepOrange700, cyan500, cyan700,
   pinkA200,
   grey100, grey300, grey400, grey500,
   white, darkBlack, fullBlack} from 'material-ui/styles/colors';
-
+import {browserHistory} from 'react-router';
 
 
 const muiTheme = getMuiTheme({
@@ -63,9 +63,9 @@ const Login = (props) => (
     targetOrigin={{horizontal: 'right', vertical: 'top'}}
     anchorOrigin={{horizontal: 'right', vertical: 'top'}}
   >
-    <MenuItem children={<a href="/auth/fitbit">Login</a>} />
-    <MenuItem children={<Link to='/about'>About Us</Link>} />
-    <MenuItem children={<Link to='/'>Home</Link>} />
+    <MenuItem href='/auth/fitbit'> Login </MenuItem>
+    <MenuItem onClick={()=> { browserHistory.push('/about'); }}> About </MenuItem>
+    <MenuItem onClick={()=> { browserHistory.push('/'); }}> Home </MenuItem>
   </IconMenu>
 );
 
@@ -79,13 +79,13 @@ const Logged = (props) => (
     anchorOrigin={{horizontal: 'right', vertical: 'top'}}
   >
 
-    <MenuItem children={<Link to='/dashboard'>Dashboard</Link>} />
-    <MenuItem children={<Link to='/allChallenges'>All Challenges</Link>} />
-    <MenuItem children={<Link to='/newChallenge'>Create Challenge</Link>} />
-    <MenuItem children={<Link to='/openCV'>OpenCV</Link>}/>
-    <MenuItem children={<Link to='/about'>About Us</Link>} />
-    <MenuItem children={<Link to='/'>Home</Link>} />
-    <MenuItem children={<a href="/auth/logout">Logout</a>} />
+    <MenuItem onClick={()=> { browserHistory.push('/dashboard'); }}> Dashboard </MenuItem>
+    <MenuItem onClick={()=> { browserHistory.push('/allChallenges'); }}> All Challenges </MenuItem>
+    <MenuItem onClick={()=> { browserHistory.push('/newChallenge'); }}> Create Challenge </MenuItem>
+    <MenuItem onClick={()=> { browserHistory.push('/openCV'); }}> OpenCV </MenuItem>
+    <MenuItem onClick={()=> { browserHistory.push('/about'); }}> About Us </MenuItem>
+    <MenuItem onClick={()=> { browserHistory.push('/'); }}> Home </MenuItem> 
+    <MenuItem href='/auth/logout'>Logout</MenuItem>
   </IconMenu>
 );
 

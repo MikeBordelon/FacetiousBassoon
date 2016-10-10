@@ -7,6 +7,7 @@ var path = require('path');
 var RedisStore = require('connect-redis')(session);
 var options = {url: 'redis://redisdb:6379/0', logErrors: true};
 
+
 module.exports = (app, express) => {
   hotModuleReload.useWebpackMiddleware(app);
   app.use(cookieParser());

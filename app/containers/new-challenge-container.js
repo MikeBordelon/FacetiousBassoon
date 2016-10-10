@@ -34,10 +34,10 @@ class NewChallengeContainer extends Component {
     var goalAmount = $('#goalAmount').val();
     var buyInAmount = $('#buyInAmount').val();
     var startDate = $('#startDate').val();
+    console.log('This is the start date: ' + startDate);
     var expirationDate = $('#expirationDate').val();
+    console.log('This is the expiration date: ' + expirationDate);
     var goalType = $('#goalType').val();
-    startDate = startDate + ':' + new Date().getSeconds() + '.' + '000' + 'Z';
-    expirationDate = expirationDate + ':' + new Date().getSeconds() + '.' + '000' + 'Z';
     // console.log(moment(startDate).format());
     console.log(startDate);
     console.log(expirationDate, goalType, goalAmount, buyInAmount);

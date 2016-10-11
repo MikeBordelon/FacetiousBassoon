@@ -39,7 +39,6 @@ const style = {
 export default function (props) {
 
   if (props.myChallenges.length > 0) {
-
     return (
 
       <div>

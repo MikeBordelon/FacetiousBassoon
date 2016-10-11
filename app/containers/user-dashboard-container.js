@@ -13,7 +13,7 @@ class UserDashboardContainer extends Component {
   }
 
   componentDidMount () {
-    axios.get('/user_joinable_challenges/' + this.props.user.id)
+    axios.get('/user_joinable_challenges/')
       .then(function(challenges) {
         console.log(challenges);
         var challenges = challenges.data;

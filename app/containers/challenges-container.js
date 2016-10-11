@@ -14,7 +14,7 @@ class ChallengesContainer extends Component {
 
   componentWillMount () {
 
-    axios.get('/user/' + this.props.user.id)
+    axios.get('/myInfo')
     .then(function(challenges) {
 
       var challenges = challenges.data.challenges;

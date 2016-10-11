@@ -43,20 +43,25 @@ export default function (props) {
             <tr className="thead-inverse">
                 <th>Challenge ID</th>
                 <th>Challenge Goal</th>
-                <th>Current Stats</th>
+                <th>Stats</th>
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Challenge Status</th>
                 <th></th>
             </tr>
 
+<<<<<<< ca838754cf032a2183dd45e7854f61a7a9a2da95
           {props.myChallenges.map((challenge, index) => {
             // console.log(index);
+=======
+          {props.challenges.map((challenge, index) => {
+            console.log(challenge)
+>>>>>>> rebasing
             return (
                     <tr key={index}>
                       <td style={style.tableCNT}>{challenge.id}</td>
                       <td className=''>{challenge.goalAmount + ' ' + challenge.goalType}</td>
-                      <td className=''>{challenge.challengeCurrent + ' ' + challenge.challengeType}</td>
+                      <td className=''>{'Created by UserId: ' + ' ' + challenge.creatorUserId + ' ' + 'Num of People: ' + challenge.numOfParticipants}</td>
                       <td className=''>{moment(challenge.creationDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</td>
                       <td className=''>{moment(challenge.expirationDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</td>
                       <td className=''>{challenge.status}</td>

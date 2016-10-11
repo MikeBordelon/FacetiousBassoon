@@ -37,6 +37,10 @@ class NewChallengeContainer extends Component {
     var expirationDate = $('#expirationDate').val();
     console.log('This is the expiration date: ' + expirationDate);
     var goalType = $('#goalType').val();
+<<<<<<< ca838754cf032a2183dd45e7854f61a7a9a2da95
+=======
+
+>>>>>>> rebasing
     // console.log(moment(startDate).format());
     console.log(startDate);
     console.log(expirationDate, goalType, goalAmount, buyInAmount);
@@ -53,7 +57,7 @@ class NewChallengeContainer extends Component {
     })
     .then(function(res) {
 
-      console.log('posted a challenge', res.data);
+      console.log('posted a challenge', res);
     })
     .catch(function(err) {
       console.log('challenge error', err);

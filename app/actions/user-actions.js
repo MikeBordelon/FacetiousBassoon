@@ -1,38 +1,24 @@
-export function getChallengesSuccess(challenges) {
+export function getMyChallenges(myChallenges) {
   return {
-    type: 'GET_CHALLENGES_SUCCESS',
-    challenges: challenges
+    type: 'GET_MY_CHALLENGES',
+    myChallenges: myChallenges
   };
 }
 
 
-export function getAllChallenges(allChallenges) {
+export function getJoinableChallenges(joinableChallenges) {
   return {
-    type: 'GET_ALL_CHALLENGES_SUCCESS',
-    allChallenges: allChallenges
+    type: 'GET_JOINABLE_CHALLENGES',
+    joinableChallenges: joinableChallenges
   };
 }
 
-export function deleteChallenge(challengeID) {
-  // console.log('ID in user-actions', challengeID);
-  return {
-    type: 'DELETE_CHALLENGE_SUCCESS',
-    challengeID: challengeID
-  };
-}
 
-export function postChallengeSuccess(newChallenge) {
-  return {
-    type: 'POST_CHALLENGE_SUCCESS',
-    newChallenge: newChallenge
-  };
-}
-
-export function authSuccess(userId) {
+export function authSuccess(user) {
   return {
     type: 'AUTH_SUCCESS',
     isLoggedIn: true,
-    userId: userId
+    user: user
   };
 }
 
@@ -40,13 +26,6 @@ export function authFailure() {
   return {
     type: 'AUTH_FAILURE',
     isLoggedIn: false
-  };
-}
-
-export function userProfileSuccess(userProfile) {
-  return {
-    type: 'USER_PROFILE_SUCCESS',
-    userProfile: userProfile
   };
 }
 

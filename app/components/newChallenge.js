@@ -48,7 +48,6 @@ class NewChallenge extends Component {
     // console.log('store is: ', this.props);
     return (
     <div>
-    <h4 style={style.text}>Fix TimeStamps</h4>
       <h1 style={style.text}>Create A Challenge!</h1>
 
 

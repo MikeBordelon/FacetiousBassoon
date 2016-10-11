@@ -83,13 +83,12 @@ class Profile extends Component {
     );
 
     // FILTER ACTIVE CHALLENGES
-    var activeChallenges = this.props.allChallenges.filter(challenge => challenge.status !== 'failed');
+    var activeChallenges = this.props.joinableChallenges.filter(challenge => challenge.status !== 'failed');
 
     return (
       <div>
       <Paper style={style.paper} zDepth={1}>
         <h3 style={style.h3}>Dashboard</h3>
-        <span>{this.props.profile.name}</span>{this.props.profile.age}<span>{this.props.profile.wallet}</span>
       </Paper>
 
 

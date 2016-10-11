@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import store from '../store';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { postChallengeSuccess } from '../actions/user-actions';
 import NewChallenge from '../components/newChallenge';
 import ReactDOM, { findDOMNode } from 'react-dom';
 import moment from 'moment';
@@ -29,7 +28,7 @@ class NewChallengeContainer extends Component {
     // var goalAmount = '100';
     // var buyInAmount = '100';
 
-    var userId = this.props.userId;
+    var userId = this.props.user.id;
     var userEtherWallet = $('#userEtherWallet').val();
     var goalAmount = $('#goalAmount').val();
     var buyInAmount = $('#buyInAmount').val();
@@ -84,8 +83,7 @@ class NewChallengeContainer extends Component {
 
 const mapStateToProps = function(store) {
   return {
-    newChallenge: store.userState.newChallenge,
-    userId: store.userState.userId
+    user: store.userState.user
   };
 };
 // users are now props on UserListContainer

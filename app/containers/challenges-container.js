@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import store from '../store';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { getChallengesSuccess } from '../actions/user-actions';
+import { getMyChallenges } from '../actions/user-actions';
 import Challenges from '../components/challenges';
 
 
@@ -10,18 +10,15 @@ class ChallengesContainer extends Component {
   constructor(props) {
     super(props);
 
-    this.hideChallenge = this.hideChallenge.bind(this);
-    this.console = this.console.bind(this);
   }
 
   componentWillMount () {
 
-    axios.get('/user/' + this.props.userId)
+    axios.get('/user/' + this.props.user.id)
     .then(function(challenges) {
-      // console.log('got myChallenges', challenges.data.challenges[0].id);
 
       var challenges = challenges.data.challenges;
-      store.dispatch(getChallengesSuccess(challenges));
+      store.dispatch(getMyChallenges(challenges));
     })
     .catch(function(err) {
       console.log('challenge error', err);
@@ -30,19 +27,10 @@ class ChallengesContainer extends Component {
 
   }
 
-  console () {
-    // console.log(this.props.store);
-  }
-
-  hideChallenge(index) {
-    var challengeID = this.props.challenges[index].id;
-  }
 
   render () {
-    // console.log('chall COnt ID', this.props.userId);
     return (
-      <Challenges challenges={this.props.challenges}
-                  console={this.console}
+      <Challenges myChallenges={this.props.myChallenges}
       />
     );
   }
@@ -51,8 +39,8 @@ class ChallengesContainer extends Component {
 
 const mapStateToProps = function(store) {
   return {
-    challenges: store.userState.challenges,
-    userId: store.userState.userId,
+    myChallenges: store.userState.myChallenges,
+    user: store.userState.user,
 
   };
 };

@@ -34,7 +34,7 @@ module.exports = (app, express) => {
       // console.log(req.session);
       res.send(
         {logInStatus: 'authenticated',
-        user: req.user});
+        user: req.user.user});
     } else {
       res.send({logInStaus: 'unauthenticated', user: null});
     }

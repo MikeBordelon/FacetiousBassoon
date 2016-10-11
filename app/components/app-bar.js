@@ -116,8 +116,8 @@ class AppBar2 extends Component {
         <MuiThemeProvider muiTheme={muiTheme}>
           <AppBar
             title="FitCoin"
-            iconElementLeft={<IconButton></IconButton>}
-            iconElementRight={this.props.isLoggedIn ? <div style={{marginBottom: '30px'}}><Avatar src={this.props.avatar}/> style={{borderRadius: '50px', border: '2px solid ' + pinkA200}} /><Logged /></div> : <Login />}
+            iconElementLeft={<IconButton><Avatar src={this.props.avatar150}/></IconButton>}
+            iconElementRight={this.props.isLoggedIn ? <div style={{marginBottom: '30px'}}><Logged /></div> : <Login />}
           />
         </MuiThemeProvider>
       </div>

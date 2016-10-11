@@ -9,7 +9,7 @@ const style = {
   paper: {
     height: '70px',
     width: '500px',
-    margin: '90px 0px 50px 400px',
+    margin: '30px 0px 50px 400px',
 
   },
 
@@ -28,14 +28,6 @@ const style = {
 };
 
 
-// const style = {
-  // height: '200px',
-  // width: '600px',
-  // margin: '100px 20px 20px 340px',
-  // textAlign: 'center',
-  // display: 'center'
-// };
-
 export default function (props) {
 
   if (props.myChallenges.length > 0) {
@@ -51,20 +43,19 @@ export default function (props) {
             <tr className="thead-inverse">
                 <th>Challenge ID</th>
                 <th>Challenge Goal</th>
-                <th>Current Stats</th>
+                <th>Stats</th>
                 <th>Start Date</th>
                 <th>End Date</th>
                 <th>Challenge Status</th>
                 <th></th>
             </tr>
-
           {props.myChallenges.map((challenge, index) => {
-            // console.log(index);
+
             return (
                     <tr key={index}>
                       <td style={style.tableCNT}>{challenge.id}</td>
                       <td className=''>{challenge.goalAmount + ' ' + challenge.goalType}</td>
-                      <td className=''>{challenge.challengeCurrent + ' ' + challenge.challengeType}</td>
+                      <td className=''>{'Created by UserId: ' + ' ' + challenge.creatorUserId + ' ' + 'Num of People: ' + challenge.numOfParticipants}</td>
                       <td className=''>{moment(challenge.creationDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</td>
                       <td className=''>{moment(challenge.expirationDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</td>
                       <td className=''>{challenge.status}</td>
@@ -87,9 +78,3 @@ export default function (props) {
   }
 
 }
-
-
-      // <Paper style={style.paper} zDepth={1}>
-      //   <span><h4 style={style.h4}>Walk 10,000 steps in one day</h4></span>
-      //   <span style={style.button}href="#" className="btn btn-primary btn-warning"><span className="glyphicon glyphicon-flash"></span> GO!</span>
-      // </Paper>

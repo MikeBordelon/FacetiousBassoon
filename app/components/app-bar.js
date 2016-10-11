@@ -98,7 +98,7 @@ class AppBar2 extends Component {
   componentDidMount() {
     axios.get('/auth/checkLogin')
     .then(response => {
-      // console.log('authIng');
+      console.log(response);
       if (response.data.logInStatus === 'authenticated') {
         store.dispatch(authSuccess(response.data.user));
       } else {
@@ -110,7 +110,7 @@ class AppBar2 extends Component {
 
 
   render() {
-    console.log(this.props.isLoggedIn);
+    // console.log(this.props);
     return (
       <div>
         <MuiThemeProvider muiTheme={muiTheme}>

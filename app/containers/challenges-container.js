@@ -17,6 +17,7 @@ class ChallengesContainer extends Component {
     axios.get('/myInfo')
     .then(function(challenges) {
 
+
       var challenges = challenges.data.challenges;
       store.dispatch(getMyChallenges(challenges));
     })
@@ -29,6 +30,7 @@ class ChallengesContainer extends Component {
 
 
   render () {
+
     return (
       <Challenges myChallenges={this.props.myChallenges}
       />
@@ -41,6 +43,7 @@ const mapStateToProps = function(store) {
   return {
     myChallenges: store.userState.myChallenges,
     user: store.userState.user,
+
 
   };
 };

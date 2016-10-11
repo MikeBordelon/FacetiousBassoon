@@ -237,7 +237,7 @@ module.exports = {
     })
     .then((message) => {
       message.update({
-        read: req.data.read
+        read: req.body.read
       }).then((updated) => {
         res.status(200).send(updated);
       })

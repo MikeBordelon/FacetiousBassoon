@@ -89,10 +89,7 @@ class Profile extends Component {
       <div>
       <Paper style={style.paper} zDepth={1}>
         <h3 style={style.h3}>Dashboard</h3>
-<<<<<<< df78dd1fea87396a53882c4070e444aca29c57f2
-=======
 
->>>>>>> rebasing
       </Paper>
 
 

@@ -49,14 +49,8 @@ export default function (props) {
                 <th>Challenge Status</th>
                 <th></th>
             </tr>
-
-<<<<<<< ca838754cf032a2183dd45e7854f61a7a9a2da95
           {props.myChallenges.map((challenge, index) => {
-            // console.log(index);
-=======
-          {props.challenges.map((challenge, index) => {
-            console.log(challenge)
->>>>>>> rebasing
+
             return (
                     <tr key={index}>
                       <td style={style.tableCNT}>{challenge.id}</td>

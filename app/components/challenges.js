@@ -9,7 +9,7 @@ const style = {
   paper: {
     height: '70px',
     width: '500px',
-    margin: '90px 0px 50px 400px',
+    margin: '30px 0px 50px 400px',
 
   },
 
@@ -27,14 +27,6 @@ const style = {
   }
 };
 
-
-// const style = {
-  // height: '200px',
-  // width: '600px',
-  // margin: '100px 20px 20px 340px',
-  // textAlign: 'center',
-  // display: 'center'
-// };
 
 export default function (props) {
 
@@ -87,9 +79,3 @@ export default function (props) {
   }
 
 }
-
-
-      // <Paper style={style.paper} zDepth={1}>
-      //   <span><h4 style={style.h4}>Walk 10,000 steps in one day</h4></span>
-      //   <span style={style.button}href="#" className="btn btn-primary btn-warning"><span className="glyphicon glyphicon-flash"></span> GO!</span>
-      // </Paper>

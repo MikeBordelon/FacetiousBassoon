@@ -33,9 +33,9 @@ const style = {
   },
 
   paper: {
-    height: '70px',
-    width: '500px',
-    margin: '90px 0px 50px 400px',
+    height: '28px',
+    width: '140px',
+    margin: '20px 0px 20px 10px',
 
   },
 
@@ -43,7 +43,7 @@ const style = {
     display: 'flex',
     // textAlign: 'center',
     // verticalAlign: 'middle',
-    margin: '0px 0px 0px 120px'
+    margin: '0px 0px 0px 10px'
 
   },
 
@@ -89,6 +89,10 @@ class Profile extends Component {
       <div>
       <Paper style={style.paper} zDepth={1}>
         <h3 style={style.h3}>Dashboard</h3>
+<<<<<<< df78dd1fea87396a53882c4070e444aca29c57f2
+=======
+
+>>>>>>> rebasing
       </Paper>
 
 

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import UserDashboard from '../components/user-dashboard';
 
 import store from '../store';
-import { getAllChallenges } from '../actions/user-actions';
+import { getJoinableChallenges } from '../actions/user-actions';
 import axios from 'axios';
 
 class UserDashboardContainer extends Component {
@@ -13,14 +13,11 @@ class UserDashboardContainer extends Component {
   }
 
   componentDidMount () {
- // + this.props.userId
-    axios.get('/user_joinable_challenges/' + this.props.userId)
+    axios.get('/user_joinable_challenges/' + this.props.user.id)
       .then(function(challenges) {
-        // console.log(challenges.data);
-
+        console.log(challenges);
         var challenges = challenges.data;
-
-        store.dispatch(getAllChallenges(challenges));
+        store.dispatch(getJoinableChallenges(challenges));
       })
       .catch(function(err) {
         console.log('error getting All Challenges', err);
@@ -33,7 +30,7 @@ class UserDashboardContainer extends Component {
     console.log($('#etherAddress').val());
 
     axios.put('/challenges/ ' + challengeId, {
-      'userId': this.props.userId,
+      'userId': this.props.user.id,
       'userEtherWallet': $('#etherAddress').val()
     })
     .then(function(res) {
@@ -44,32 +41,21 @@ class UserDashboardContainer extends Component {
     });
   }
 
-
-
-
-
   render () {
-    // console.log(store)
-
-
-    // const profile = this.props.store.userState.profile;
-    // const allChallenges = this.props.store.userState.allChallenges;
+    console.log(this.props);
     return (
-      <UserDashboard profile={this.props.profile}
-                   allChallenges={this.props.allChallenges}
+      <UserDashboard user={this.props.user} joinableChallenges={this.props.joinableChallenges}
                    handleJoinChallengeRequest={this.handleJoinChallengeRequest}
 
       />
     );
   }
-
 }
 
 const mapStateToProps = function(store) {
   return {
-    profile: store.userState.profile,
-    allChallenges: store.userState.allChallenges,
-    userId: store.userState.userId
+    joinableChallenges: store.userState.joinableChallenges,
+    user: store.userState.user
   };
 };
 

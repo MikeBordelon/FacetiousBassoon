@@ -100,7 +100,7 @@ class AppBar2 extends Component {
     .then(response => {
       // console.log('authIng');
       if (response.data.logInStatus === 'authenticated') {
-        store.dispatch(authSuccess(response.data.user.userId));
+        store.dispatch(authSuccess(response.data.user));
       } else {
         // store.dispatch(authFailure());
       }
@@ -127,9 +127,7 @@ class AppBar2 extends Component {
 
 const mapStateToProps = function(store) {
   return {
-    store,
-    isLoggedIn: store.userState.isLoggedIn,
-    userId: store.userState.userId
+    isLoggedIn: store.userState.isLoggedIn
   };
 };
 

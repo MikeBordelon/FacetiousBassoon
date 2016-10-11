@@ -38,7 +38,7 @@ const style = {
 
 export default function (props) {
 
-  if (props.challenges.length > 0) {
+  if (props.myChallenges.length > 0) {
 
     return (
 
@@ -59,7 +59,7 @@ export default function (props) {
                 <th></th>
             </tr>
 
-          {props.challenges.map((challenge, index) => {
+          {props.myChallenges.map((challenge, index) => {
             // console.log(index);
             return (
                     <tr key={index}>

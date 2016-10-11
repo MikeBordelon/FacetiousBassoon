@@ -12,6 +12,7 @@ class OpenCVContainer extends Component {
   }
 
   render () {
+    console.log(store.getState());
     return (
       <OpenCV openCVStuff={this.props.openCV}/>
     );

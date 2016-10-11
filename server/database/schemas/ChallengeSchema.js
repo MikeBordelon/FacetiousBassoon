@@ -19,13 +19,13 @@ module.exports = (db, Sequelize) => {
       type: Sequelize.STRING
     },
     goalAmount: {
-      type: Sequelize.INTEGER
+      type: Sequelize.BIGINT
     },
     buyInAmount: {
-      type: Sequelize.INTEGER
+      type: Sequelize.NUMERIC
     },
     totalPot: {
-      type: Sequelize.INTEGER
+      type: Sequelize.NUMERIC
     },
     numOfParticipants: {
       type: Sequelize.INTEGER

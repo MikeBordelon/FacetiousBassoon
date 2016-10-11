@@ -1,15 +1,13 @@
 
 const initialState = {
-  challenges: [],
-  allChallenges: [],
+  myChallenges: [],
+  joinableChallenges: [],
   isLoggedIn: false,
-  openCV: 'someCoolImages',
-  newChallenge: false,
-  userId: null,
-  profile: {
-    name: 'mike',
-    age: '35',
-    wallet: '1000000'
+  user: {
+    id: null,
+    name: null,
+    avatar: null,
+    avatar150: null
   }
 };
 
@@ -18,29 +16,16 @@ const userReducer = function(state = initialState, action) {
   switch (action.type) {
 
 
-  case 'GET_CHALLENGES_SUCCESS':
+  case 'GET_MY_CHALLENGES':
     return {
       ...state,
-      challenges: action.challenges
+      myChallenges: action.myChallenges
     };
 
-    case 'GET_ALL_CHALLENGES_SUCCESS':
+  case 'GET_JOINABLE_CHALLENGES':
     return {
       ...state,
-      allChallenges: action.allChallenges
-    };
-
-    case 'DELETE_CHALLENGE_SUCCESS':
-    return {
-      ...state,
-      // need the correct dbID
-      challenges: state.challenges.filter(challenge => challenge.id !== action.challengeID)
-    };
-
-    case 'POST_CHALLENGE_SUCCESS':
-    return {
-      ...state,
-      newChallenge: action.newChallenge
+      joinableChallenges: action.joinableChallenges
     };
 
 
@@ -48,7 +33,7 @@ const userReducer = function(state = initialState, action) {
     return {
       ...state,
       isLoggedIn: true,
-      userId: action.userId
+      user: action.user
     };
 
 

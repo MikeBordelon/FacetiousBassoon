@@ -14,8 +14,6 @@ services:
       SEQ_PW: docker
       WORKER_1_SETTIMEOUT: 30000
       DATABASE_URL: postgres://docker:docker@db:5432/fitcoin
-    depends_on:
-      - "db"
     volumes:
       - .:/usr/src/app
   db:
@@ -34,8 +32,6 @@ services:
       - "3002:3002"
     links:
       - testrpc
-    depends_on:
-      - "testrpc"
   testrpc:
     image: apantelides/testrpc
     ports: 

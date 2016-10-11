@@ -1,35 +1,20 @@
 
 import React, {Component} from 'react';
 import { Link, browserHistory} from 'react-router';
-
-import RaisedButton from 'material-ui/RaisedButton';
-import Paper from 'material-ui/Paper';
 import {connect} from 'react-redux';
-var moment = require('moment');
-var path = require ('path');
 import TextField from 'material-ui/TextField';
 import Avatar from 'material-ui/Avatar';
-
 import {List, ListItem} from 'material-ui/List';
-
 import Divider from 'material-ui/Divider';
-
 import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 
-import GridListExampleSimple from './dashboard';
+
 
 const style = {
-  textField: {
-    margin: '0px 0px 0px 0px'
-  },
-
-  chip: {
-    margin: 4,
-  },
 
   wrapper: {
     display: 'flex',
@@ -67,8 +52,23 @@ const style = {
 
 
 
+const messages = [
+  {
+    id: 1,
+    amount: 300
+  },
+  {
+    id: 2,
+    amount: 300
+  },
+  {
+    id: 3,
+    amount: 300
+  },
 
-class Profile extends Component {
+];
+
+class Messages extends Component {
   constructor(props) {
     super(props);
   }
@@ -86,40 +86,28 @@ class Profile extends Component {
       </IconButton>
     );
 
-    // FILTER ACTIVE CHALLENGES
-    var activeChallenges = this.props.joinableChallenges.filter(challenge => challenge.status !== 'failed');
+    // var activemessages = this.props.joinablemessages.filter(challenge => challenge.status !== 'failed');
 
-    return (
-      <div>
-      <Paper style={style.paper} zDepth={1}>
-        <h3 style={style.h3}>Dashboard</h3>
-
-      </Paper>
-
-      <GridListExampleSimple />
-
-      <TextField style={style.textField} id='etherAddress'
-      floatingLabelText="Enter Your Ethereum Address"
-      />
+    // return (
 
 
-      {activeChallenges.map((challenge, index) => {
+      // messages.map((message, index) => {
         return (
-        <div key={index}>
+        <div >
          <List style={style.list}>
             <ListItem
               leftAvatar={<Avatar />}
               rightIconButton={
-                <IconMenu onClick={() => this.props.handleJoinChallengeRequest(challenge.id)} iconButtonElement={iconButtonElement}>
-                  <MenuItem >Join</MenuItem>
+                <IconMenu iconButtonElement={iconButtonElement}>
+                  <MenuItem >Hide Message</MenuItem>
                 </IconMenu>
               }
 
-              primaryText={challenge.goalAmount < 0 ? 'You Won ' + challenge.goalAmount + ' Ethereum!' : 'Sorry You Didn\'t Win, Your Loss is ' + challenge.goalAmount + ' Ethereum.'}
+
               secondaryText={
                 <p>
-                  <span style={{color: darkBlack}}>{'Starts: ' + moment(challenge.creationDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</span><br />
-                  {'Ends: ' + moment(challenge.expirationDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}
+                  <span style={{color: darkBlack}}>{'Other info: '}</span><br />
+                  {'More Info?: '}
                 </p>
               }
               secondaryTextLines={2}
@@ -127,12 +115,8 @@ class Profile extends Component {
             <Divider inset={true} />
           </List>
         </div>
-      );
-      })}
-
-
-      </div>
-
+      // );
+      // })
     );
 
   }
@@ -144,5 +128,5 @@ const mapStateToProps = function(store) {
   };
 };
 
-export default connect(mapStateToProps)(Profile);
+export default connect(mapStateToProps)(Messages);
 

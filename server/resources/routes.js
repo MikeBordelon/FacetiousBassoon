@@ -89,7 +89,7 @@ module.exports = (app, express) => {
       fitCoinController.retrieve(req, res);
     });
 
-  app.route('/user/:userId')
+  app.route('/myInfo')
     .get(function(req, res) {
       fitCoinController.retrieveOneUser(req, res);
     })
@@ -107,7 +107,7 @@ module.exports = (app, express) => {
       fitCoinController.retrieveAllChallenges(req, res);
     });
 
-  app.route('/user_joinable_challenges/:userId')
+  app.route('/user_joinable_challenges')
     .get(function(req, res) {
       fitCoinController.retrieveAllJoinableChallenges(req, res);
     });

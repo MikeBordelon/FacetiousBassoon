@@ -13,12 +13,12 @@ module.exports = {
   },
   retrieveOneUser: function (req, res) { // to do: send also challenges you are a part of, not just ones you created
     User.findOne({
-      where: { id: req.params.userId },
+      where: { id: req.user.user.id },
       attributes: ['name', 'email', 'fbUserId'],
       include: {
         model: Challenge,
         through: {
-          where: { userId: req.params.userId }, // added this
+          where: { userId: req.user.user.id }, // added this
           attributes: ['userId', 'createdAt', 'updatedAt']
         }
 
@@ -193,7 +193,7 @@ module.exports = {
     })
       .then(function(allChallenges) {
         UserChallenges.findAll({
-          where: { userId: req.params.userId }
+          where: { userId: req.user.user.id }
         })
         .then(function(usersChallenges) {
           // find challenges user is already a part of

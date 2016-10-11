@@ -37,7 +37,7 @@ const muiTheme = getMuiTheme({
     shadowColor: fullBlack
   },
   appBar: {
-    height: 50,
+    height: 125,
     color: grey300,
     textColor: pinkA200,
     // textColor: darkBlack,
@@ -117,7 +117,7 @@ class AppBar2 extends Component {
           <AppBar
             title="FitCoin"
             iconElementLeft={<IconButton></IconButton>}
-            iconElementRight={this.props.isLoggedIn ? <Logged /> : <Login />}
+            iconElementRight={this.props.isLoggedIn ? <div style={{marginBottom: '30px'}}><span>{this.props.userName}</span><img src={this.props.avatar} style={{borderRadius: '50px', border: '2px solid ' + pinkA200}} /><Logged /></div> : <Login />}
           />
         </MuiThemeProvider>
       </div>
@@ -127,7 +127,10 @@ class AppBar2 extends Component {
 
 const mapStateToProps = function(store) {
   return {
-    isLoggedIn: store.userState.isLoggedIn
+    isLoggedIn: store.userState.isLoggedIn,
+    avatar: store.userState.user.avatar,
+    avatar150: store.userState.user.avatar150,
+    userName: store.userState.user.name
   };
 };
 

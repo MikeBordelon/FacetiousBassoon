@@ -18,7 +18,7 @@ import {deepOrange700, cyan500, cyan700,
   grey100, grey300, grey400, grey500,
   white, darkBlack, fullBlack} from 'material-ui/styles/colors';
 import {browserHistory} from 'react-router';
-
+import Avatar from 'material-ui/Avatar';
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -37,7 +37,7 @@ const muiTheme = getMuiTheme({
     shadowColor: fullBlack
   },
   appBar: {
-    height: 125,
+    height: 90,
     color: grey300,
     textColor: pinkA200,
     // textColor: darkBlack,
@@ -117,7 +117,7 @@ class AppBar2 extends Component {
           <AppBar
             title="FitCoin"
             iconElementLeft={<IconButton></IconButton>}
-            iconElementRight={this.props.isLoggedIn ? <div style={{marginBottom: '30px'}}><span>{this.props.userName}</span><img src={this.props.avatar} style={{borderRadius: '50px', border: '2px solid ' + pinkA200}} /><Logged /></div> : <Login />}
+            iconElementRight={this.props.isLoggedIn ? <div style={{marginBottom: '30px'}}><Avatar src={this.props.avatar}/> style={{borderRadius: '50px', border: '2px solid ' + pinkA200}} /><Logged /></div> : <Login />}
           />
         </MuiThemeProvider>
       </div>

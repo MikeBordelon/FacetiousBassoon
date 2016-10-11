@@ -5,6 +5,12 @@ export function getMyChallenges(myChallenges) {
   };
 }
 
+export function getMessages(messages) {
+  return {
+    type: 'GET_MY_MESSAGES',
+    messages: messages
+  };
+}
 
 export function getJoinableChallenges(joinableChallenges) {
   return {

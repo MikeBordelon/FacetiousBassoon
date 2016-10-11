@@ -38,7 +38,7 @@ export default function (props) {
       <Paper style={style.paper} zDepth={1}>
         <h3 style={style.h3}>Your Challenges</h3>
       </Paper>
-      <Messages/>
+      <MessagesContainer/>
 
         <table className="table">
           <tbody>

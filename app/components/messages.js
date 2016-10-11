@@ -11,7 +11,7 @@ import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
-
+import Subheader from 'material-ui/Subheader';
 
 
 const style = {
@@ -45,6 +45,11 @@ const style = {
     flex: 1,
     width: '450px'
 
+  },
+
+  menuItem: {
+    width: '100px',
+    height: '50px'
   }
 
 };
@@ -75,6 +80,7 @@ class Messages extends Component {
 
 
   render () {
+    console.log(this.props);
 
     const iconButtonElement = (
       <IconButton
@@ -88,18 +94,19 @@ class Messages extends Component {
 
     // var activemessages = this.props.joinablemessages.filter(challenge => challenge.status !== 'failed');
 
-    // return (
+    return (
+    <div>
 
-
-      // messages.map((message, index) => {
+      <Subheader>Win/Lose Notifications</Subheader>
+      {messages.map((message, index) => {
         return (
-        <div >
+        <div key={index}>
          <List style={style.list}>
             <ListItem
-              leftAvatar={<Avatar />}
+              leftAvatar={<Avatar src={this.props.avatar}/>}
               rightIconButton={
-                <IconMenu iconButtonElement={iconButtonElement}>
-                  <MenuItem >Hide Message</MenuItem>
+                <IconMenu onClick={() => this.props.hideMessage(message.id)} iconButtonElement={iconButtonElement}>
+                  <MenuItem primaryText={'Mark as Read'}/>
                 </IconMenu>
               }
 
@@ -115,8 +122,10 @@ class Messages extends Component {
             <Divider inset={true} />
           </List>
         </div>
-      // );
-      // })
+      );
+      }
+      )}
+    </div>
     );
 
   }
@@ -124,7 +133,7 @@ class Messages extends Component {
 
 const mapStateToProps = function(store) {
   return {
-
+    avatar: store.userState.user.avatar,
   };
 };
 

@@ -1,6 +1,7 @@
 
 const initialState = {
   myChallenges: [],
+  messages : [],
   joinableChallenges: [],
   isLoggedIn: false,
   user: {
@@ -20,6 +21,12 @@ const userReducer = function(state = initialState, action) {
     return {
       ...state,
       myChallenges: action.myChallenges
+    };
+
+    case 'GET_MY_MESSAGES':
+    return {
+      ...state,
+      messages: action.messages
     };
 
   case 'GET_JOINABLE_CHALLENGES':

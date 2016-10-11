@@ -9,6 +9,7 @@ import axios from 'axios';
 class UserDashboardContainer extends Component {
   constructor(props) {
     super(props);
+
     this.handleJoinChallengeRequest = this.handleJoinChallengeRequest.bind(this);
   }
 

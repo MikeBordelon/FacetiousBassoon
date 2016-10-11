@@ -84,7 +84,7 @@ const Logged = (props) => (
     <MenuItem onClick={()=> { browserHistory.push('/newChallenge'); }}> Create Challenge </MenuItem>
     <MenuItem onClick={()=> { browserHistory.push('/openCV'); }}> OpenCV </MenuItem>
     <MenuItem onClick={()=> { browserHistory.push('/about'); }}> About Us </MenuItem>
-    <MenuItem onClick={()=> { browserHistory.push('/'); }}> Home </MenuItem> 
+    <MenuItem onClick={()=> { browserHistory.push('/'); }}> Home </MenuItem>
     <MenuItem href='/auth/logout'>Logout</MenuItem>
   </IconMenu>
 );
@@ -98,7 +98,7 @@ class AppBar2 extends Component {
   componentDidMount() {
     axios.get('/auth/checkLogin')
     .then(response => {
-      console.log(response);
+      // console.log(response);
       if (response.data.logInStatus === 'authenticated') {
         store.dispatch(authSuccess(response.data.user));
       } else {

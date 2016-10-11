@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 import { getMyChallenges } from '../actions/user-actions';
 import Challenges from '../components/challenges';
-
+import Messages from '../components/messages';
+import MessagesContainer from './messages-container';
 
 class ChallengesContainer extends Component {
   constructor(props) {

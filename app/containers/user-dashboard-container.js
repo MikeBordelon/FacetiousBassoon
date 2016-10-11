@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import UserDashboard from '../components/user-dashboard';
-
+import Dashboard from '../components/dashboard';
 import store from '../store';
 import { getJoinableChallenges } from '../actions/user-actions';
 import axios from 'axios';
@@ -15,7 +15,7 @@ class UserDashboardContainer extends Component {
   componentDidMount () {
     axios.get('/user_joinable_challenges/')
       .then(function(challenges) {
-        console.log(challenges);
+        console.log('Joined a challenge');
         var challenges = challenges.data;
         store.dispatch(getJoinableChallenges(challenges));
       })
@@ -28,7 +28,7 @@ class UserDashboardContainer extends Component {
 
   handleJoinChallengeRequest(challengeId) {
     console.log($('#etherAddress').val());
-
+    console.log('clicked');
     axios.put('/challenges/ ' + challengeId, {
       'userId': this.props.user.id,
       'userEtherWallet': $('#etherAddress').val()
@@ -42,9 +42,9 @@ class UserDashboardContainer extends Component {
   }
 
   render () {
-    console.log(this.props);
+    // console.log(this.props);
     return (
-      <UserDashboard user={this.props.user} joinableChallenges={this.props.joinableChallenges}
+      <Dashboard user={this.props.user} joinableChallenges={this.props.joinableChallenges}
                    handleJoinChallengeRequest={this.handleJoinChallengeRequest}
 
       />

@@ -1,4 +1,4 @@
-const {User, Challenge, UserChallenges, db, Sequelize} = require('./db-config.js');
+const {User, Challenge, UserChallenges, db, Message, Sequelize} = require('./db-config.js');
 const axios = require('axios');
 
 module.exports = {
@@ -86,7 +86,8 @@ module.exports = {
         goalType: req.body.goalType,
         goalAmount: req.body.goalAmount,
         buyInAmount: req.body.buyInAmount,
-        numOfParticipants: 1
+        numOfParticipants: 1,
+        totalPot: req.body.buyInAmount
       })
         .then(function(challenge) {
           axios.post('http://ethereum:3002/api/addUser', {
@@ -142,8 +143,8 @@ module.exports = {
         gas: 300000
       }).then((response) => {
         challenge.update(
-          { numOfParticipants: challenge.numOfParticipants + 1 },
-          { totalPot: challenge.totalPot + challenge.buyInAmount },
+          { numOfParticipants: challenge.numOfParticipants + 1,
+          totalPot: challenge.totalPot + challenge.buyInAmount},
           { where: { id: req.params.id } }
         )
         .then(function(result) {
@@ -214,6 +215,39 @@ module.exports = {
       .catch(function(err) {
         res.status(404).end();
       });
+  },
+  getMessage: (req, res) => {
+    Message.findAll({
+      where: {
+        userId: req.user.user.id
+      }
+    })
+    .then((results) => {
+      res.status(200).send(results);
+    })
+    .catch((err) => {
+      res.status(404).send(err);
+    });
+  },
+  updateMessage: (req, res) => {
+    Message.findOne({
+      where: {
+        id: req.params.msgId
+      }
+    })
+    .then((message) => {
+      message.update({
+        read: req.data.read
+      }).then((updated) => {
+        res.status(200).send(updated);
+      })
+      .catch((err) => {
+        res.status(404).send(err);
+      });
+    })
+    .catch((err) => {
+      res.status(404).send(err);
+    });
   }
 };
 

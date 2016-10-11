@@ -1,4 +1,4 @@
-const {User, Challenge, UserChallenges, db, Sequelize} = require('./database/db-config.js');
+const {User, Challenge, UserChallenges, db, Sequelize, Message} = require('./database/db-config.js');
 var request = require('request');
 var authKeys = require('./resources/passportAuth.js');
 var axios = require('axios');
@@ -18,9 +18,13 @@ var tendChallenges = function() {
 
       // collect win conditions
       var winnerIds = [];
+      var loserIds = [];
       var ethereumSCAddress = challenge.ethereumSCAddress;
       var creatorWalletAddress = null; 
       var goalAmount = challenge.goalAmount;
+      var challengeId = challenge.id;
+      var totalPot = challenge.totalPot;
+      var buyInAmount = challenge.buyInAmount;
 
       // get all users associated with that challenge
       challenge.getUsers({
@@ -52,6 +56,8 @@ var tendChallenges = function() {
           // log winner ids
           if (userPlusJT.UserChallenge.goalStart - userPlusJT.UserChallenge.goalCurrent >= goalAmount) {
             winnerIds.push(userPlusJT.id);
+          } else {
+            loserIds.push(userPlusJT.id);
           }
           
           // make an API call to FitBit
@@ -200,6 +206,35 @@ var tendChallenges = function() {
         if (!needsBaseline) {
           if (winnerIds.length === 0) {
             winnerIds.push('None');
+          }
+
+          if (winnerIds.length > 0 && winnerIds[0] !== 'None') {
+            winnerIds.forEach((userId) => {
+              Message.create({
+                userId: userId,
+                challengeId: challengeId,
+                outcome: 'winner',
+                amount: (totalPot / winnerIds.length),
+                read: false
+              })
+              .then((msg) => {
+                console.log('Message send:' + msg);
+              });
+            });
+          }
+          if (loserIds.length > 0) {
+            loserIds.forEach((userId) => {
+              Message.create({
+                userId: userId,
+                challengeId: challengeId,
+                outcome: 'loser',
+                amount: (-1 * buyInAmount),
+                read: false
+              })
+              .then((msg) => {
+                console.log('Message send:' + msg);
+              });
+            });
           }
           
           // console.log('Winners: ');

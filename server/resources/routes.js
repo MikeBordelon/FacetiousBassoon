@@ -122,6 +122,15 @@ module.exports = (app, express) => {
       fitCoinController.updateChallenge(req, res);
     });
 
+  app.route('/messages')
+    .get((req, res) => {
+      fitCoinController.getMessage(req, res);
+    });
+  app.route('/messages/:msgId')
+    .put((req, res) => {
+      fitCoinController.updateMessage(req, res);
+    });
+
 //End of endpoint routes
   app.get('/', function (request, response) {
     response.sendFile(path.resolve(__dirname, '../../app/public', 'index.html'));

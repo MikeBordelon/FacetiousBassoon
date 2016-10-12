@@ -24,11 +24,8 @@
     "axios": "^0.14.0",
     "body-parser": "^1.15.2",
     "bootstrap": "^3.3.7",
-<<<<<<< e31b73bc01f00fe463538891144d7504d5a3695b
     "chai": "^3.5.0",
-=======
     "cloudinary": "^1.4.3",
->>>>>>> working on opencf frontend
     "connect-redis": "^3.1.0",
     "cookie-parser": "^1.4.3",
     "ethereumjs-testrpc": "^2.2.7",
@@ -60,7 +57,6 @@
     "request": "^2.75.0",
     "redux-mock-store": "^1.2.1",
     "redux-thunk": "^2.1.0",
-
     "sequelize": "^3.24.3",
     "sequelize-cli": "^2.4.0",
     "sha1": "^1.1.1",

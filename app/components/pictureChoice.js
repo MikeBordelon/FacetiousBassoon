@@ -49,8 +49,8 @@ class PictureChoice extends Component {
   		    <label style={style.label}>Select {(this.props.polarity === 'Before') ? 'a Before' : 'an After'}</label>
   		    <br/>
 
-  		      <select id={"userPictures" + this.props.polarity} className="form-control" onChange= {this.updateChoice.bind(this)}>
-  		      	<option selected disabled>Choose here</option>
+  		      <select defaultValue='ChooseHere' id={"userPictures" + this.props.polarity} className="form-control" onChange= {this.updateChoice.bind(this)}>
+  		      	<option value='ChooseHere' disabled >Choose here</option>
               {this.props.userPics.map((picture, index) => {
   		     		  return (
   		        		<option key={index} value={index}> {picture.created_at} </option>

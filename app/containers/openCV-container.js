@@ -122,7 +122,7 @@ class OpenCVContainer extends Component {
 const mapStateToProps = function(store) {
   return {
     userPics: store.userState.userPictures,
-    userId: store.userState.userId,
+    userId: store.userState.user.id,
     comparedPictures: store.userState.comparedPictures,
     comparedOutlines: store.userState.comparedOutlines
   };

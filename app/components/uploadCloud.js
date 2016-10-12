@@ -43,7 +43,7 @@ class UploadCloud extends Component {
 const mapStateToProps = function(store) {
   return {
     isLoggedIn: store.userState.isLoggedIn,
-    userId: store.userState.userId
+    userId: store.userState.user.id
   };
 };
 

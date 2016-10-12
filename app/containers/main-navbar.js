@@ -6,7 +6,7 @@ const MainNavBar = (props) => {
 
   return (
     <div>
-    <AppBar2/>
+    <AppBar2 />
         {props.children}
     </div>
   );

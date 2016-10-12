@@ -27,7 +27,7 @@ module.exports = {
       {
         test: /\.(png|jpg|svg)$/,
         include: path.join(__dirname, 'public'),
-        loader: 'url-loader?limit=30000&name=images/[name].[ext]'
+        loader: 'url-loader'
       }]
   }
 };

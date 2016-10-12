@@ -1,6 +1,9 @@
 const fitCoinController = require('../database/db-helpers.js');
 const passport = require('./passport.js');
 const path = require('path');
+var cloudinary = require('cloudinary');
+var request = require('request');
+var fs = require('fs');
 
 var isAuthMiddleware = (req, res, next) => {
   if (req.isAuthenticated()) {
@@ -131,6 +134,68 @@ module.exports = (app, express) => {
       fitCoinController.updateMessage(req, res);
     });
 
+  //OpenCV
+  cloudinary.config({ 
+    cloud_name: 'dsz0gov6k', 
+    api_key: '674192445522955', 
+    api_secret: 't6uJBD_T4bzaAYa1-YXJ2E7Oxtw' 
+  });
+
+  // app.get('/cloudSignature', function(req, res) {
+  //   var secret='t6uJBD_T4bzaAYa1-YXJ2E7Oxtw';
+  //   var str='context=true&prefix=' + req.params.userId + '&timestamp=' + Date.now() + secret;
+  //   res.json(sha1(str));
+  // });
+
+  // app.get('/cloudinaryUpdate', function(req, res) {
+  //   cloudinary.api.update("1/ub11jimadmgpopm2jsat",
+  //   function(result) { console.log(result); res.json(result);},
+  //   { context: "waist=30|weight=160"});
+  // });
+
+  app.get('/cloudinaryGet/:userId', function(req, res) {
+    console.log(req.params.userId);
+    cloudinary.api.resources(function(result){
+      res.json(result);
+    },
+    { type: 'upload', prefix: req.params.userId, context: 'true' });
+  });
+
+  app.post('/openCV', function(req, res) {
+    var result = [];
+
+    const spawn = require('child_process').spawn;
+
+    var download = function(uri, filename, callback){
+      request.head(uri, function(err, res, body){
+        request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+      });
+    };
+
+    download(req.body.url, 'temp.jpg', function(){
+      
+      var picture = '../temp.jpg';
+      var program = './imageproc2';
+      const getPics = spawn(program, [picture], {cwd: 'BodyCV'});
+
+      getPics.stdout.on('data', function(data) {
+        data.forEach(function(elem) {
+          result.push(String.fromCharCode(elem));
+        });
+
+        cloudinary.v2.uploader.upload("BodyCV/outline1.jpg", 
+          {
+            folder: 'outline/' + req.body.userId, 
+            public_id: req.body.public_id.slice(2),
+            context: "area=" + result.join('')
+          },
+          function(error, picture) {
+            res.json(picture); 
+          });
+      });  
+    });
+  });
+  
 //End of endpoint routes
   app.get('/', function (request, response) {
     response.sendFile(path.resolve(__dirname, '../../app/public', 'index.html'));

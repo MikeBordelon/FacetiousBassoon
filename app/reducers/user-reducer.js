@@ -1,4 +1,3 @@
-
 const initialState = {
   myChallenges: [],
   joinableChallenges: [],
@@ -10,7 +9,8 @@ const initialState = {
     avatar150: null
   }
   userPictures: [],
-  comparedPictures: {one: {}, two: {}},
+  comparedPictures: {Before: {}, After: {}},
+  comparedOutlines: {Before: {}, After: {}, showing: false},
   newChallenge: false,
   userId: null,
   profile: {
@@ -38,8 +38,6 @@ const userReducer = function(state = initialState, action) {
       joinableChallenges: action.joinableChallenges
     };
 
-<<<<<<< e31b73bc01f00fe463538891144d7504d5a3695b
-
   case 'AUTH_SUCCESS':
     return {
       ...state,
@@ -47,39 +45,50 @@ const userReducer = function(state = initialState, action) {
       user: action.user
     };
 
-
   case 'AUTH_FAILURE':
     return {
       ...state,
       isLoggedIn: false
     };
 
-  case 'AUTH_SUCCESS':
-  console.log('setting userId');
-    return {
-      ...state,
-      isLoggedIn: true,
-      userId: action.userId
-    };
-
-  case 'AUTH_FAILURE':
-    return {
-      ...state,
-      isLoggedIn: false
-    };
-  
   case 'GET_PICTURES':
     return {
       ...state,
       userPictures: action.pictures
     };
-    
+
   case 'CHANGE_PICTURE':
+    var temp = {};
+    temp[action.changedPol] = state.userPictures[action.pictureIdx];
+    temp[action.unchangedPol] = state.comparedPictures[action.unchangedPol];
+    
     return {
       ...state,
-      comparedPictures: [action.num: state.userPictures[action.pictureIdx], unchangedNum: state.comparedPictures.action.unchangedNum]
+      comparedPictures: temp
     };  
-  }
+
+  case 'CHANGE_OUTLINE':
+    var temp = {};
+    temp[action.changedPol] = action.picture;
+    temp[action.unchangedPol] = state.comparedOutlines[action.unchangedPol];
+
+    if (action.changedPol === 'After') {
+      temp.showing = true;
+    } else {
+      temp.showing = false;
+    }
+
+    return {
+      ...state,
+      comparedOutlines: temp
+    }; 
+
+  case 'ERASE_OUTLINES':
+  
+    return {
+      ...state,
+      comparedOutlines: {Before: {}, After: {}, showing: false}
+    };  
 
   return state;
   

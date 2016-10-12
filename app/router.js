@@ -7,7 +7,7 @@ import MainNavBar from './containers/main-navbar';
 // Pages
 import Home from './containers/home';
 import About from './components/about';
-import ChallengesContainer from './containers/challenges-container';
+import DashboardContainer from './containers/dashboard-container';
 import NewChallengeContainer from './containers/new-challenge-container';
 import BrowseContainer from './containers/user-browse-container';
 import OpenCVContainer from './containers/OpenCV-container';
@@ -22,8 +22,8 @@ export default (
       <Route path='/about' component={About}/>
       <Route path='/openCV' component={OpenCVContainer}/>
       <Route path='/browseChallenges' component={BrowseContainer}/>
-      <Route path='/allChallenges' component={ChallengesContainer}/>
-      <Route path='/openCV' component={OpenCVContainer}/>
+      <Route path='/dashboard' component={DashboardContainer}/>
+      <Route path='/pictureDifferences' component={OpenCVContainer}/>
       <Route path='/newChallenge' component={NewChallengeContainer}/>
     </Route>
   </Router>

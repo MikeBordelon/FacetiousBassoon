@@ -3,11 +3,11 @@ import store from '../store';
 import { connect } from 'react-redux';
 import axios from 'axios';
 import { getMyChallenges } from '../actions/user-actions';
-import Challenges from '../components/challenges';
+import Dashboard from '../components/dashboard';
 import Messages from '../components/messages';
 import MessagesContainer from './messages-container';
 
-class ChallengesContainer extends Component {
+class DashboardContainer extends Component {
   constructor(props) {
     super(props);
 
@@ -33,7 +33,7 @@ class ChallengesContainer extends Component {
   render () {
 
     return (
-      <Challenges myChallenges={this.props.myChallenges}
+      <Dashboard myChallenges={this.props.myChallenges}
       />
     );
   }
@@ -49,4 +49,4 @@ const mapStateToProps = function(store) {
   };
 };
 
-export default connect(mapStateToProps)(ChallengesContainer);
+export default connect(mapStateToProps)(DashboardContainer);

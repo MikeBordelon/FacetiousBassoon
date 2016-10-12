@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import UserDashboard from '../components/user-dashboard';
 import Dashboard from '../components/dashboard';
 import store from '../store';
-import { getJoinableChallenges } from '../actions/user-actions';
+import { getJoinableChallenges, hideJoinableChallenge } from '../actions/user-actions';
 import axios from 'axios';
 
 class UserDashboardContainer extends Component {
@@ -36,6 +36,8 @@ class UserDashboardContainer extends Component {
     })
     .then(function(res) {
       console.log('challenge joined', res );
+      // launch snackbar?
+      store.dispatch(hideJoinableChallenge(challengeId));
     })
     .catch(function(err) {
       console.log('challenge error', err);

@@ -10,7 +10,7 @@ import IconButton from 'material-ui/IconButton';
 import Subheader from 'material-ui/Subheader';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 
-import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
+import {grey400, deepOrange700, darkBlack, lightBlack} from 'material-ui/styles/colors';
 // import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconMenu from 'material-ui/IconMenu';
@@ -20,16 +20,22 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 
 
 
-const styles = {
+const style = {
+  h1: {
+    color: deepOrange700
+  },
+
   root: {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
   },
   gridList: {
-    width: 600,
+    width: '100%',
     height: 450,
     overflowY: 'auto',
+    marginRight: 20,
+    marginLeft: 20
   },
   button: {
     marginRight: 20
@@ -39,7 +45,10 @@ const styles = {
 var steps = ['http://cdn.grid.fotosearch.com/CSP/CSP129/k21951375.jpg', 'http://cdn2.wallpapersok.com/uploads/picture/391/4391/woman-running-sportswear.jpg?width=280&height=180', 'http://www.girlyblogger.com/wp-content/uploads/2016/07/15317-a-healthy-young-woman-running-outdoors-on-a-track-pv-270x180.jpg'];
 var floor = ['http://cdn.grid.fotosearch.com/ULY/ULY339/u23313730.jpg', 'http://cdn.grid.fotosearch.com/BLD/BLD093/bld104498.jpg', 'http://cdn.grid.fotosearch.com/IMR/IMR012/is09ar8i9.jpg'];
 
-var rand = steps[Math.floor(Math.random() * steps.length)];
+
+
+
+// var rand = steps[Math.floor(Math.random() * steps.length)];
 
 class Dashboard extends Component {
   constructor(props) {
@@ -49,36 +58,44 @@ class Dashboard extends Component {
 
   render () {
 
-    const iconButtonElement = (
-      <IconButton
-        touch={true}
-        tooltipPosition="bottom-right"
-      >
-        <MoreVertIcon color={grey400} />
-      </IconButton>
-    );
+    // const iconButtonElement = (
+    //   <IconButton
+    //     touch={true}
+    //     tooltipPosition="bottom-right"
+    //   >
+    //     <MoreVertIcon color={grey400} />
+    //   </IconButton>
+    // );
 
     return (
-      <div style={styles.root}>
+      <div style={style.root}>
+        <h1 style={style.h1}>Browse Challenges</h1>
         <TextField id='etherAddress'
           floatingLabelText="Enter Your Ethereum Address"
         />
 
         <GridList
           cellHeight={180}
-          style={styles.gridList}
+          cols={3}
+
+          style={style.gridList}
         >
 
-          <Subheader>Join A Challenge</Subheader>
+          <Subheader></Subheader>
           {this.props.joinableChallenges.map((challenge, index) => (
             <GridTile
+              // cols={1}
+
               key={index}
-              title={challenge.goalAmount + ' ' + challenge.goalType + ' ' + '$' + challenge.buyInAmount + ' fee'}
-              subtitle={<span>by <b>{moment(challenge.expirationDate).format('MMMM Do YYYY, h:mm:ss a')}</b></span>}
+              title={'Goal ' + challenge.goalAmount + ' ' + challenge.goalType + ' ' + challenge.buyInAmount + ' ether'}
+              subtitle={
+                <span><b>Starts </b>{moment(challenge.expirationDate).format('MM/DD/YY, h:mma ')}
+                <b>Ends </b>{moment(challenge.expirationDate).format('MM/DD/YY, h:mma')}</span>}
+
               actionIcon={
                 <FloatingActionButton
                 onClick={() => this.props.handleJoinChallengeRequest(challenge.id)}
-                mini={true} style={styles.button}>
+                mini={true} style={style.button}>
                      <ContentAdd />
                 </FloatingActionButton>
               }

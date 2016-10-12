@@ -89,8 +89,8 @@ const Logged = (props) => (
     anchorOrigin={{horizontal: 'right', vertical: 'top'}}
   >
 
-    <MenuItem onClick={()=> { browserHistory.push('/dashboard'); }}> Dashboard </MenuItem>
-    <MenuItem onClick={()=> { browserHistory.push('/allChallenges'); }}> All Challenges </MenuItem>
+    <MenuItem onClick={()=> { browserHistory.push('/dashboard'); }}> Browse Challenges </MenuItem>
+    <MenuItem onClick={()=> { browserHistory.push('/allChallenges'); }}> Dashboard </MenuItem>
     <MenuItem onClick={()=> { browserHistory.push('/newChallenge'); }}> Create Challenge </MenuItem>
     <MenuItem onClick={()=> { browserHistory.push('/openCV'); }}> OpenCV </MenuItem>
     <MenuItem onClick={()=> { browserHistory.push('/about'); }}> About Us </MenuItem>

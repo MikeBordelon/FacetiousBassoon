@@ -21,6 +21,12 @@ export function hideMessage(messageId) {
   };
 }
 
+export function hideJoinableChallenge(challengeId) {
+  return {
+    type: 'HIDE_JOINABLE_CHALLENGE',
+    challengeId: challengeId
+  };
+}
 
 export function getJoinableChallenges(joinableChallenges) {
   return {

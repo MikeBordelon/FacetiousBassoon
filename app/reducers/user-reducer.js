@@ -55,6 +55,12 @@ const userReducer = function(state = initialState, action) {
       joinableChallenges: action.joinableChallenges
     };
 
+    case 'HIDE_JOINABLE_CHALLENGE':
+    return {
+      ...state,
+      joinableChallenges: state.joinableChallenges.filter(challenge => challenge.id !== action.challengeId)
+    };
+
 
     case 'AUTH_FAILURE':
       return {

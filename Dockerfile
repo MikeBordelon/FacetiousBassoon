@@ -1,9 +1,9 @@
-FROM nodesource/trusty:6.2.2
+FROM davidplatt/nodeopencv
 
+ENV STARTPATH /usr/src/app
+WORKDIR $STARTPATH
 ADD package.json package.json
 RUN npm install 
-RUN npm install nodemon -g 
 ADD . .
 RUN chmod +x ./wait-for-it.sh
-
 CMD ["npm","start"]

@@ -43,6 +43,12 @@ const userReducer = function(state = initialState, action) {
       messages: action.messages
     };
 
+    case 'HIDE_MY_MESSAGE':
+    return {
+      ...state,
+      messages: state.messages.filter(message => message.id !== action.messageId)
+    };
+
   case 'GET_JOINABLE_CHALLENGES':
     return {
       ...state,

@@ -56,23 +56,6 @@ const style = {
 
 
 
-
-const messages = [
-  {
-    id: 1,
-    amount: 300
-  },
-  {
-    id: 2,
-    amount: 300
-  },
-  {
-    id: 3,
-    amount: 300
-  },
-
-];
-
 class Messages extends Component {
   constructor(props) {
     super(props);
@@ -80,7 +63,7 @@ class Messages extends Component {
 
 
   render () {
-    console.log(this.props);
+    // console.log(this.props);
 
     const iconButtonElement = (
       <IconButton
@@ -93,13 +76,14 @@ class Messages extends Component {
     );
 
     // var activemessages = this.props.joinablemessages.filter(challenge => challenge.status !== 'failed');
-
+    // if (this.props.messages > 0) {}
     return (
     <div>
 
       <Subheader>Win/Lose Notifications</Subheader>
-      {messages.map((message, index) => {
+      {this.props.messages.map((message, index) => {
         return (
+
         <div key={index}>
          <List style={style.list}>
             <ListItem
@@ -113,8 +97,9 @@ class Messages extends Component {
 
               secondaryText={
                 <p>
-                  <span style={{color: darkBlack}}>{'Other info: '}</span><br />
-                  {'More Info?: '}
+                  <span style={{color: darkBlack}}>{message.outcome === 'loser' ? message.outcome = 'Lost ' : 'Won '}</span>
+                  <span style={{color: darkBlack}}>{'Read: ' + message.read}</span><br />
+                  {'Amount: ' + '$' + message.amount}
                 </p>
               }
               secondaryTextLines={2}

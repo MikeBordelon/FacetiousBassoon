@@ -14,6 +14,13 @@ export function getMessages(messages) {
   };
 }
 
+export function hideMessage(messageId) {
+  return {
+    type: 'HIDE_MY_MESSAGE',
+    messageId: messageId
+  };
+}
+
 
 export function getJoinableChallenges(joinableChallenges) {
   return {

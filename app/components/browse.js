@@ -50,7 +50,7 @@ var floor = ['http://cdn.grid.fotosearch.com/ULY/ULY339/u23313730.jpg', 'http://
 
 // var rand = steps[Math.floor(Math.random() * steps.length)];
 
-class Dashboard extends Component {
+class Browse extends Component {
   constructor(props) {
     super(props);
   }
@@ -109,4 +109,4 @@ class Dashboard extends Component {
   }
 }
 
-export default Dashboard;
+export default Browse;

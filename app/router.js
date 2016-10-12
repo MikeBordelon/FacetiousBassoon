@@ -9,7 +9,7 @@ import Home from './containers/home';
 import About from './components/about';
 import ChallengesContainer from './containers/challenges-container';
 import NewChallengeContainer from './containers/new-challenge-container';
-import DashboardContainer from './containers/user-dashboard-container';
+import BrowseContainer from './containers/user-browse-container';
 import OpenCVContainer from './containers/OpenCV-container';
 // import WidgetListContainer from './components/containers/widget-list-container';
 // import TodoListContainer from './components/containers/todo-list-container';
@@ -21,7 +21,7 @@ export default (
       <Route path='/' component={Home}/>
       <Route path='/about' component={About}/>
       <Route path='/openCV' component={OpenCVContainer}/>
-      <Route path='/dashboard' component={DashboardContainer}/>
+      <Route path='/browseChallenges' component={BrowseContainer}/>
       <Route path='/allChallenges' component={ChallengesContainer}/>
       <Route path='/openCV' component={OpenCVContainer}/>
       <Route path='/newChallenge' component={NewChallengeContainer}/>

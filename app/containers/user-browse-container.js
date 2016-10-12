@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import UserDashboard from '../components/user-dashboard';
-import Dashboard from '../components/dashboard';
+import UserBrowse from '../components/user-browse';
+import Browse from '../components/browse';
 import store from '../store';
 import { getJoinableChallenges, hideJoinableChallenge } from '../actions/user-actions';
 import axios from 'axios';
 
-class UserDashboardContainer extends Component {
+class UserBrowseContainer extends Component {
   constructor(props) {
     super(props);
 
@@ -47,7 +47,7 @@ class UserDashboardContainer extends Component {
   render () {
     // console.log(this.props);
     return (
-      <Dashboard user={this.props.user} joinableChallenges={this.props.joinableChallenges}
+      <Browse user={this.props.user} joinableChallenges={this.props.joinableChallenges}
                    handleJoinChallengeRequest={this.handleJoinChallengeRequest}
 
       />
@@ -62,4 +62,4 @@ const mapStateToProps = function(store) {
   };
 };
 
-export default connect(mapStateToProps)(UserDashboardContainer);
+export default connect(mapStateToProps)(UserBrowseContainer);

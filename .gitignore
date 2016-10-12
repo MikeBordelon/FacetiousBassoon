@@ -1,6 +1,7 @@
 node_modules/
 bower_components/
 *.log
-
+*.jpg
+.DS_Store
 build/
 dist/

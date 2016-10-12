@@ -14,7 +14,7 @@ import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {deepOrange700, cyan500, cyan700,
-  pinkA200,
+  pink200,
   grey100, grey300, grey400, grey500,
   white, darkBlack, fullBlack} from 'material-ui/styles/colors';
 import {browserHistory} from 'react-router';
@@ -26,7 +26,7 @@ const muiTheme = getMuiTheme({
     primary1Color: cyan500,
     primary2Color: cyan700,
     primary3Color: grey400,
-    accent1Color: pinkA200,
+    accent1Color: deepOrange700,
     accent2Color: grey100,
     accent3Color: grey500,
     textColor: darkBlack,
@@ -39,35 +39,44 @@ const muiTheme = getMuiTheme({
   appBar: {
     height: 90,
     color: grey300,
-    textColor: pinkA200,
+    textColor: deepOrange700,
     // textColor: darkBlack,
-    accent1Color: pinkA200,
+    accent1Color: deepOrange700
   },
   menuItem: {
     color: grey300,
-    textColor: pinkA200,
+    textColor: deepOrange700
   },
   iconMenu: {
     color: grey300,
-    textColor: pinkA200,
+    textColor: deepOrange700
   }
 });
 
+class Login extends Component {
+  static muiName = 'FlatButton';
 
-const Login = (props) => (
-  <IconMenu
-    {...props}
-    iconButtonElement={
-      <IconButton><MoreVertIcon /></IconButton>
-    }
-    targetOrigin={{horizontal: 'right', vertical: 'top'}}
-    anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-  >
-    <MenuItem href='/auth/fitbit'> Login </MenuItem>
-    <MenuItem onClick={()=> { browserHistory.push('/about'); }}> About </MenuItem>
-    <MenuItem onClick={()=> { browserHistory.push('/'); }}> Home </MenuItem>
-  </IconMenu>
-);
+  render() {
+    return (
+      <FlatButton href='/auth/fitbit' {...this.props} label="Login" />
+    );
+  }
+}
+
+// const Login = (props) => (
+//   <IconMenu
+//     {...props}
+//     iconButtonElement={
+//       <IconButton><MoreVertIcon /></IconButton>
+//     }
+//     targetOrigin={{horizontal: 'right', vertical: 'top'}}
+//     anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+//   >
+//     <MenuItem href='/auth/fitbit'> Login </MenuItem>
+//     <MenuItem onClick={()=> { browserHistory.push('/about'); }}> About </MenuItem>
+//     <MenuItem onClick={()=> { browserHistory.push('/'); }}> Home </MenuItem>
+//   </IconMenu>
+// );
 
 const Logged = (props) => (
   <IconMenu
@@ -75,6 +84,7 @@ const Logged = (props) => (
     iconButtonElement={
       <IconButton><MoreVertIcon /></IconButton>
     }
+    iconStyle={{color: white}}
     targetOrigin={{horizontal: 'right', vertical: 'top'}}
     anchorOrigin={{horizontal: 'right', vertical: 'top'}}
   >
@@ -115,9 +125,10 @@ class AppBar2 extends Component {
       <div>
         <MuiThemeProvider muiTheme={muiTheme}>
           <AppBar
-            title="FitCoin"
-            iconElementLeft={<IconButton><Avatar src={this.props.avatar150}/></IconButton>}
-            iconElementRight={this.props.isLoggedIn ? <div style={{marginBottom: '30px'}}><Logged /></div> : <Login />}
+            style={{backgroundImage: 'url(http://completebody.com.au/images/Result-Banner.jpg)'}}
+            title={<img style={{maxHeight:'80%', width: 'auto'}} src='http://res.cloudinary.com/dijpyi6ze/image/upload/v1476300641/Logomakr_0UFVLu_nu9mmm.png' />}
+            iconElementLeft={<IconButton></IconButton>}
+            iconElementRight={this.props.isLoggedIn ? <div><Avatar style={{marginBottom: '15px'}}src={this.props.avatar150} /><Logged /></div> : <Login />}
           />
         </MuiThemeProvider>
       </div>

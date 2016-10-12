@@ -9,6 +9,7 @@ import {GridList, GridTile} from 'material-ui/GridList';
 import IconButton from 'material-ui/IconButton';
 import Subheader from 'material-ui/Subheader';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
+import SelectField from 'material-ui/SelectField';
 
 import {grey400, deepOrange700, darkBlack, lightBlack} from 'material-ui/styles/colors';
 // import IconButton from 'material-ui/IconButton';
@@ -53,6 +54,10 @@ var floor = ['http://cdn.grid.fotosearch.com/ULY/ULY339/u23313730.jpg', 'http://
 class Browse extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      eth: [],
+      ethGrab: false
+    };
   }
 
 
@@ -70,9 +75,11 @@ class Browse extends Component {
     return (
       <div style={style.root}>
         <h1 style={style.h1}>Browse Challenges</h1>
-        <TextField id='etherAddress'
+        
+
+        {this.state.ethGrab === false ? <TextField id='etherAddress'
           floatingLabelText="Enter Your Ethereum Address"
-        />
+        /> : <div /> }
 
         <GridList
           cellHeight={180}

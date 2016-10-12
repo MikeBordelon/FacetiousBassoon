@@ -13,10 +13,10 @@ class MessagesContainer extends Component {
   }
 
   componentDidMount () {
-    axios.get('/messages/')
+    axios.get('/messages')
       .then(function(messages) {
         // console.log(messages);
-        console.log('Got messages', res );
+        console.log('messages container response', messages.data );
         var messages = messages.data;
         store.dispatch(getMessages(messages));
       })
@@ -43,7 +43,7 @@ class MessagesContainer extends Component {
   }
 
   render () {
-    console.log(this.props);
+
     return (
       <Messages messages={this.props.messages}
                 hideMessage={this.hideMessage}

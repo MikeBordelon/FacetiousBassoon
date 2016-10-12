@@ -1,5 +1,6 @@
 const initialState = {
   myChallenges: [],
+  messages : [],
   joinableChallenges: [],
   isLoggedIn: false,
   user: {
@@ -36,6 +37,19 @@ const userReducer = function(state = initialState, action) {
         user: action.user
       };
 
+    case 'GET_MY_MESSAGES':
+    return {
+      ...state,
+      messages: action.messages
+    };
+
+  case 'GET_JOINABLE_CHALLENGES':
+    return {
+      ...state,
+      joinableChallenges: action.joinableChallenges
+    };
+
+
     case 'AUTH_FAILURE':
       return {
         ...state,
@@ -52,11 +66,11 @@ const userReducer = function(state = initialState, action) {
       var temp = {};
       temp[action.changedPol] = state.userPictures[action.pictureIdx];
       temp[action.unchangedPol] = state.comparedPictures[action.unchangedPol];
-      
+
       return {
         ...state,
         comparedPictures: temp
-      };  
+      };
 
     case 'CHANGE_OUTLINE':
       var temp = {};
@@ -72,14 +86,14 @@ const userReducer = function(state = initialState, action) {
       return {
         ...state,
         comparedOutlines: temp
-      }; 
+      };
 
     case 'ERASE_OUTLINES':
-    
+
       return {
         ...state,
         comparedOutlines: {Before: {}, After: {}, showing: false}
-      };  
+      };
     }
 
     return state;

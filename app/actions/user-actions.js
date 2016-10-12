@@ -7,6 +7,14 @@ export function getMyChallenges(myChallenges) {
   };
 }
 
+export function getMessages(messages) {
+  return {
+    type: 'GET_MY_MESSAGES',
+    messages: messages
+  };
+}
+
+
 export function getJoinableChallenges(joinableChallenges) {
   return {
     type: 'GET_JOINABLE_CHALLENGES',
@@ -58,7 +66,7 @@ export function generatePictureList(pics) {
 
 export function changePicture(polarity, idx) {
   var unchangedPol = '';
-  
+
   if (polarity === 'Before') {
     unchangedPol = 'After';
   } else {

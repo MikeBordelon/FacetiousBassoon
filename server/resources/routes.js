@@ -4,6 +4,7 @@ const path = require('path');
 var cloudinary = require('cloudinary');
 var request = require('request');
 var fs = require('fs');
+const axios = require('axios');
 
 var isAuthMiddleware = (req, res, next) => {
   if (req.isAuthenticated()) {
@@ -196,6 +197,18 @@ module.exports = (app, express) => {
     });
   });
   
+//ethereumaddress
+  app.get('/accounts', (req, res) => {
+    axios.get('http://ethereum:3002/api/accounts')
+    .then((results) => {
+      res.status(200).send(results.data);
+    })
+    .catch((err) => {
+      // console.log(err);
+      res.status(404).send(err);
+    });
+  });
+
 //End of endpoint routes
   app.get('/', function (request, response) {
     response.sendFile(path.resolve(__dirname, '../../app/public', 'index.html'));

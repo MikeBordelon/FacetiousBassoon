@@ -18,6 +18,7 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
+const axios = require('axios');
 
 
 
@@ -55,14 +56,34 @@ class Browse extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      value: null,
       eth: [],
       ethGrab: false
     };
   }
 
+  componentWillMount () {
+    axios.get('/accounts')
+    .then((results) => {
+      this.setState({
+        ...this.state,
+        eth: results.data,
+        ethGrab: true
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+    
+  }
+  handleChange (event, index, value) { 
+    this.setState({
+      ...this.state,
+      value
+    });
+  }
 
   render () {
-
     // const iconButtonElement = (
     //   <IconButton
     //     touch={true}
@@ -79,7 +100,20 @@ class Browse extends Component {
 
         {this.state.ethGrab === false ? <TextField id='etherAddress'
           floatingLabelText="Enter Your Ethereum Address"
-        /> : <div /> }
+        /> : <SelectField 
+        value={this.state.value}
+        onChange={this.handleChange.bind(this)} 
+        floatingLabelText={this.state.value === null ? 'No address selected' : 'Balance: ' + (this.state.value.balance/1000000000000000000) + ' ether'}
+        floatingLabelFixed={true}
+        autoWidth={false}
+        style={{width: '400px'}}
+        hintText="Select an ethereum address"
+        >{
+          this.state.eth.map((obj, index) => {
+            return (
+              <MenuItem key={index} value={obj} primaryText={obj.account} />
+            );
+          })}</SelectField>}
 
         <GridList
           cellHeight={180}

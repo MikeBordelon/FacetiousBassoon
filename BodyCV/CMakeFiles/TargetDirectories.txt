@@ -1,2 +1,0 @@
-/usr/src/app/BodyCV/CMakeFiles/helloWorld.dir
-/usr/src/app/BodyCV/CMakeFiles/imageproc2.dir

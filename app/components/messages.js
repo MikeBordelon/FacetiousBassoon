@@ -1,35 +1,20 @@
 
 import React, {Component} from 'react';
 import { Link, browserHistory} from 'react-router';
-
-import RaisedButton from 'material-ui/RaisedButton';
-import Paper from 'material-ui/Paper';
 import {connect} from 'react-redux';
-var moment = require('moment');
-var path = require ('path');
 import TextField from 'material-ui/TextField';
 import Avatar from 'material-ui/Avatar';
-
 import {List, ListItem} from 'material-ui/List';
-
 import Divider from 'material-ui/Divider';
-
 import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
+import Subheader from 'material-ui/Subheader';
 
-import GridListExampleSimple from './dashboard';
 
 const style = {
-  textField: {
-    margin: '0px 0px 0px 0px'
-  },
-
-  chip: {
-    margin: 4,
-  },
 
   wrapper: {
     display: 'flex',
@@ -60,21 +45,25 @@ const style = {
     flex: 1,
     width: '450px'
 
+  },
+
+  menuItem: {
+    width: '100px',
+    height: '50px'
   }
 
 };
 
 
 
-
-
-class Profile extends Component {
+class Messages extends Component {
   constructor(props) {
     super(props);
   }
 
 
   render () {
+    // console.log(this.props);
 
     const iconButtonElement = (
       <IconButton
@@ -86,40 +75,31 @@ class Profile extends Component {
       </IconButton>
     );
 
-    // FILTER ACTIVE CHALLENGES
-    var activeChallenges = this.props.joinableChallenges.filter(challenge => challenge.status !== 'failed');
-
+    // var activemessages = this.props.joinablemessages.filter(challenge => challenge.status !== 'failed');
+    // if (this.props.messages > 0) {}
     return (
-      <div>
-      <Paper style={style.paper} zDepth={1}>
-        <h3 style={style.h3}>Dashboard</h3>
+    <div>
 
-      </Paper>
-
-      <GridListExampleSimple />
-
-      <TextField style={style.textField} id='etherAddress'
-      floatingLabelText="Enter Your Ethereum Address"
-      />
-
-
-      {activeChallenges.map((challenge, index) => {
+      <Subheader>Win/Lose Notifications</Subheader>
+      {this.props.messages.map((message, index) => {
         return (
+
         <div key={index}>
          <List style={style.list}>
             <ListItem
-              leftAvatar={<Avatar />}
+              leftAvatar={<Avatar src={this.props.avatar}/>}
               rightIconButton={
-                <IconMenu onClick={() => this.props.handleJoinChallengeRequest(challenge.id)} iconButtonElement={iconButtonElement}>
-                  <MenuItem >Join</MenuItem>
+                <IconMenu onClick={() => this.props.hideMessage(message.id)} iconButtonElement={iconButtonElement}>
+                  <MenuItem primaryText={'Mark as Read'}/>
                 </IconMenu>
               }
 
-              primaryText={challenge.goalAmount < 0 ? 'You Won ' + challenge.goalAmount + ' Ethereum!' : 'Sorry You Didn\'t Win, Your Loss is ' + challenge.goalAmount + ' Ethereum.'}
+
               secondaryText={
                 <p>
-                  <span style={{color: darkBlack}}>{'Starts: ' + moment(challenge.creationDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</span><br />
-                  {'Ends: ' + moment(challenge.expirationDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}
+                  <span style={{color: darkBlack}}>{message.outcome === 'loser' ? message.outcome = 'Lost ' : 'Won '}</span>
+                  <span style={{color: darkBlack}}>{'Read: ' + message.read}</span><br />
+                  {'Amount: ' + '$' + message.amount}
                 </p>
               }
               secondaryTextLines={2}
@@ -128,11 +108,9 @@ class Profile extends Component {
           </List>
         </div>
       );
-      })}
-
-
-      </div>
-
+      }
+      )}
+    </div>
     );
 
   }
@@ -140,9 +118,9 @@ class Profile extends Component {
 
 const mapStateToProps = function(store) {
   return {
-
+    avatar: store.userState.user.avatar,
   };
 };
 
-export default connect(mapStateToProps)(Profile);
+export default connect(mapStateToProps)(Messages);
 

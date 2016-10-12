@@ -18,7 +18,7 @@ import {deepOrange700, cyan500, cyan700,
   grey100, grey300, grey400, grey500,
   white, darkBlack, fullBlack} from 'material-ui/styles/colors';
 import {browserHistory} from 'react-router';
-
+import Avatar from 'material-ui/Avatar';
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -37,7 +37,7 @@ const muiTheme = getMuiTheme({
     shadowColor: fullBlack
   },
   appBar: {
-    height: 125,
+    height: 90,
     color: grey300,
     textColor: pinkA200,
     // textColor: darkBlack,
@@ -84,7 +84,7 @@ const Logged = (props) => (
     <MenuItem onClick={()=> { browserHistory.push('/newChallenge'); }}> Create Challenge </MenuItem>
     <MenuItem onClick={()=> { browserHistory.push('/openCV'); }}> OpenCV </MenuItem>
     <MenuItem onClick={()=> { browserHistory.push('/about'); }}> About Us </MenuItem>
-    <MenuItem onClick={()=> { browserHistory.push('/'); }}> Home </MenuItem> 
+    <MenuItem onClick={()=> { browserHistory.push('/'); }}> Home </MenuItem>
     <MenuItem href='/auth/logout'>Logout</MenuItem>
   </IconMenu>
 );
@@ -98,7 +98,7 @@ class AppBar2 extends Component {
   componentDidMount() {
     axios.get('/auth/checkLogin')
     .then(response => {
-      console.log(response);
+      // console.log(response);
       if (response.data.logInStatus === 'authenticated') {
         store.dispatch(authSuccess(response.data.user));
       } else {
@@ -116,8 +116,8 @@ class AppBar2 extends Component {
         <MuiThemeProvider muiTheme={muiTheme}>
           <AppBar
             title="FitCoin"
-            iconElementLeft={<IconButton></IconButton>}
-            iconElementRight={this.props.isLoggedIn ? <div style={{marginBottom: '30px'}}><span>{this.props.userName}</span><img src={this.props.avatar} style={{borderRadius: '50px', border: '2px solid ' + pinkA200}} /><Logged /></div> : <Login />}
+            iconElementLeft={<IconButton><Avatar src={this.props.avatar150}/></IconButton>}
+            iconElementRight={this.props.isLoggedIn ? <div style={{marginBottom: '30px'}}><Logged /></div> : <Login />}
           />
         </MuiThemeProvider>
       </div>

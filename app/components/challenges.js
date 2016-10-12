@@ -3,12 +3,13 @@ import { Link, browserHistory} from 'react-router';
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
 var moment = require('moment');
-
+import Messages from './messages';
+import MessagesContainer from '../containers/messages-container';
 
 const style = {
   paper: {
-    height: '70px',
-    width: '500px',
+    height: '30px',
+    width: '200px',
     margin: '30px 0px 50px 400px',
 
   },
@@ -17,7 +18,7 @@ const style = {
     display: 'flex',
     // textAlign: 'center',
     // verticalAlign: 'middle',
-    margin: '0px 0px 0px 120px'
+    margin: '0px 0px 0px 10px'
 
   },
 
@@ -35,8 +36,9 @@ export default function (props) {
 
       <div>
       <Paper style={style.paper} zDepth={1}>
-        <h3 style={style.h3}>Your current challenges</h3>
+        <h3 style={style.h3}>Your Challenges</h3>
       </Paper>
+      <MessagesContainer/>
 
         <table className="table">
           <tbody>

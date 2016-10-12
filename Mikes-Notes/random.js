@@ -1,0 +1,1 @@
+Grid file size is 270 x 180

@@ -7,7 +7,6 @@ import { changeOutline } from '../actions/user-actions';
 import UploadCloud from '../components/UploadCloud';
 import CVResults from '../components/cvResults.js';
 import PictureChoice from '../components/pictureChoice';
-import Loader from '../components/loader';
 import { eraseOutlines } from '../actions/user-actions';
 import { erasePictures } from '../actions/user-actions';
 import { changeToggle } from '../actions/user-actions';

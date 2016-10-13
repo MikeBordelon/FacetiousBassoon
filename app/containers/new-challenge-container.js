@@ -20,16 +20,16 @@ class NewChallengeContainer extends Component {
 
   }
 
-  postChallenge (e) {
+  postChallenge (e, wallet) {
     var userId = this.props.user.id;
-    var userEtherWallet = $('#userEtherWallet').val();
+    var userEtherWallet = wallet;
     var goalAmount = $('#goalAmount').val();
     var buyInAmount = $('#buyInAmount').val();
     var startDate = $('#startDate').val();
     var expirationDate = $('#expirationDate').val();
     var goalType = $('#goalType').val();
 
-
+    console.log(userEtherWallet);
     axios.post('/challenges', {
       'userId': userId,
       'startDate': startDate,

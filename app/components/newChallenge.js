@@ -92,7 +92,7 @@ class NewChallenge extends Component {
           <div className="form-group">
             <label className="col-md-4 control-label" >Ethereum Address</label>
             <div className="col-md-4">
-              {this.state.ethGrab === false ? <TextField id='etherAddress' floatingLabelText="Enter Your Ethereum Address" /> : <SelectField 
+              {this.state.ethGrab === false ? <TextField id='userEtherWallet' floatingLabelText="Enter Your Ethereum Address" /> : <SelectField id='userEtherWallet'
                 value={this.state.value}
                 onChange={this.handleChange} 
                 floatingLabelText={this.state.value === null ? 'No address selected' : 'Balance: ' + (this.state.balance/1000000000000000000) + ' ether'}
@@ -153,7 +153,7 @@ class NewChallenge extends Component {
          <RaisedButton
           style={style.submit}
           onTouchTap={this.handleTouchTap}
-          onClick={this.props.postChallenge}
+          onClick={(e)=>{this.props.postChallenge(e, this.state.value)}}
           label="Add to my Challenges"
          />
          <RaisedButton

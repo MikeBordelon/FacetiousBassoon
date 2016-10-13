@@ -106,7 +106,7 @@ class Browse extends Component {
 
         {this.state.ethGrab === false ? <TextField id='etherAddress'
           floatingLabelText="Enter Your Ethereum Address"
-        /> : <SelectField 
+        /> : <SelectField id='etherAddress'
         value={this.state.value}
         onChange={this.handleChange} 
         floatingLabelText={this.state.value === null ? 'No address selected' : 'Balance: ' + (this.state.balance/1000000000000000000) + ' ether'}
@@ -141,7 +141,7 @@ class Browse extends Component {
 
               actionIcon={
                 <FloatingActionButton
-                onClick={() => this.props.handleJoinChallengeRequest(challenge.id)}
+                onClick={() => this.props.handleJoinChallengeRequest(challenge.id, this.state.value)}
                 mini={true} style={style.button}>
                      <ContentAdd />
                 </FloatingActionButton>

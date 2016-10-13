@@ -144,7 +144,7 @@ module.exports = {
       }).then((response) => {
         challenge.update(
           { numOfParticipants: challenge.numOfParticipants + 1,
-          totalPot: challenge.totalPot + challenge.buyInAmount},
+          totalPot: parseInt(challenge.totalPot) + parseInt(challenge.buyInAmount)},
           { where: { id: req.params.id } }
         )
         .then(function(result) {

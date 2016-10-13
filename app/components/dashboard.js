@@ -35,16 +35,16 @@ const style = {
     margin: '30px 0px 50px 540px',
 
   },
+  h1: {
+    color: deepOrange700,
+    textAlign: 'center',
+    margin: '0 0 30px 0'
+  },
 
   h3: {
     display: 'flex',
     margin: '0px 0px 0px 10px'
 
-  },
-
-  create: {
-    display: 'flex',
-    margin: '0px 0px 0px 160px'
   },
 
   root: {
@@ -62,7 +62,16 @@ const style = {
 
   button: {
     marginRight: 20
-  }
+  },
+
+  notifications: {
+
+  },
+
+  createChallenge: {
+    width: 120,
+    margin: '0px 0px 30px 1115px'
+  },
 };
 
 
@@ -127,18 +136,24 @@ class Dashboard extends Component {
 
 
     var unreadMessages = this.props.messages.filter(message => message.read === false);
-    var unreadMessagesButton = <FlatButton style={{bottom: 100}} onTouchTap={this.checkMail} label={'You Have ' + unreadMessages.length + ' Unread Notifications'} icon={<Message/>} primary={true} />
+    var unreadMessagesButton = <FlatButton style={style.notifications} onTouchTap={this.checkMail} label={'You Have ' + unreadMessages.length + ' Unread Notifications'} icon={<Message/>} primary={true} />
 
     // console.log('unread messages', unreadMessages);
-    if (this.props.myChallenges.length > 0) {
-      return (
+
+    return (
       <div>
 
-        <Paper style={style.paper} zDepth={1}>
-          <h3 style={style.h3}>Dashboard</h3>
-        </Paper>
+        {unreadMessages.length ? unreadMessagesButton : null}
 
-        {unreadMessagesButton}
+        <RaisedButton style={style.createChallenge}
+                      primary={true}
+                      onClick={()=> browserHistory.push('/newChallenge')}>
+                      Create Challenge
+        </RaisedButton>
+
+        <h1 style={style.h1}>Dashboard</h1>
+
+
 
         {this.state.readMail ? <MessagesContainer /> : null}
 
@@ -179,19 +194,7 @@ class Dashboard extends Component {
 
       </div>
     );
-    } else {
-      return (
-      <div>
-        <Paper style={style.paper}zDepth={1}>
-          <h3 style={style.h3}>Create a challenge!</h3>
-          <button style={style.create} className="btn btn-success" onClick={()=> browserHistory.push('/newChallenge')}>Create Challenge</button>
-        </Paper>
-      </div>
-      );
-    }
-
   }
-
 }
 
 

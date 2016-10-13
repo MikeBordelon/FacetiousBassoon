@@ -61,7 +61,7 @@ class NewChallenge extends Component {
     });
   }
 
-  handleChange (event, index, value) { 
+  handleChange (event, index, value) {
     axios.get('/balance/' + value)
     .then((results) => {
       this.setState({
@@ -122,7 +122,7 @@ class NewChallenge extends Component {
             <div className="col-md-4">
                 {this.state.ethGrab === false ? <TextField id='userEtherWallet' floatingLabelText="Enter Your Ethereum Address" /> : <SelectField id='userEtherWallet'
                   value={this.state.value}
-                  onChange={this.handleChange} 
+                  onChange={this.handleChange}
                   floatingLabelText={this.state.value === null ? 'No address selected' : 'Balance: ' + (this.state.balance/1000000000000000000) + ' ether'}
                   floatingLabelFixed={true}
                   autoWidth={false}
@@ -141,7 +141,7 @@ class NewChallenge extends Component {
                 style={style.submit}
                 onTouchTap={this.handleNotification}
                 onClick={(e)=>{this.props.postChallenge(e, this.state.value)}}
-                label="Add to my Challenges"
+                label="Add"
                />
                <RaisedButton className="col-md-2"
                 style={style.cancel}
@@ -154,7 +154,7 @@ class NewChallenge extends Component {
                 autoHideDuration={2000}
                 onRequestClose={this.handleNotification}
                />
-            
+
             </div>
           </div>
 

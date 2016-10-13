@@ -76,9 +76,9 @@ class Browse extends Component {
     .catch((err) => {
       console.log(err);
     });
-    
+
   }
-  handleChange (event, index, value) { 
+  handleChange (event, index, value) {
     axios.get('/balance/' + value)
     .then((results) => {
       this.setState({
@@ -102,13 +102,13 @@ class Browse extends Component {
     return (
       <div style={style.root}>
         <h1 style={style.h1}>Browse Challenges</h1>
-        
+
 
         {this.state.ethGrab === false ? <TextField id='etherAddress'
           floatingLabelText="Enter Your Ethereum Address"
         /> : <SelectField id='etherAddress'
         value={this.state.value}
-        onChange={this.handleChange} 
+        onChange={this.handleChange}
         floatingLabelText={this.state.value === null ? 'No address selected' : 'Balance: ' + (this.state.balance/1000000000000000000) + ' ether'}
         floatingLabelFixed={true}
         autoWidth={false}
@@ -116,6 +116,7 @@ class Browse extends Component {
         hintText="Select an ethereum address"
         >{
           this.state.eth.map((obj, index) => {
+            // console.log(obj);
             return (
               <MenuItem key={index} value={obj} primaryText={obj} />
             );

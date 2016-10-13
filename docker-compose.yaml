@@ -34,6 +34,8 @@ services:
       - "3002:3002"
     links:
       - testrpc
+    # volumes:
+    #   - ../ethereumService:/usr/src/app
   testrpc:
     image: apantelides/testrpc
     ports: 

@@ -58,6 +58,7 @@ class Browse extends Component {
     this.state = {
       value: null,
       eth: [],
+      balance: null,
       ethGrab: false
     };
   }
@@ -77,10 +78,14 @@ class Browse extends Component {
     
   }
   handleChange (event, index, value) { 
-    this.setState({
-      ...this.state,
-      value
-    });
+    axios.get('/balance/' + value)
+    .then((results) => {
+      this.setState({
+        ...this.state,
+        balance: results.data,
+        value
+      });
+    })
   }
 
   render () {
@@ -103,7 +108,7 @@ class Browse extends Component {
         /> : <SelectField 
         value={this.state.value}
         onChange={this.handleChange.bind(this)} 
-        floatingLabelText={this.state.value === null ? 'No address selected' : 'Balance: ' + (this.state.value.balance/1000000000000000000) + ' ether'}
+        floatingLabelText={this.state.value === null ? 'No address selected' : 'Balance: ' + (this.state.balance/1000000000000000000) + ' ether'}
         floatingLabelFixed={true}
         autoWidth={false}
         style={{width: '400px'}}
@@ -111,7 +116,7 @@ class Browse extends Component {
         >{
           this.state.eth.map((obj, index) => {
             return (
-              <MenuItem key={index} value={obj} primaryText={obj.account} />
+              <MenuItem key={index} value={obj} primaryText={obj} />
             );
           })}</SelectField>}
 

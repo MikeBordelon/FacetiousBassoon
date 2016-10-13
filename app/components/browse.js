@@ -132,10 +132,8 @@ class Browse extends Component {
           <Subheader></Subheader>
           {this.props.joinableChallenges.map((challenge, index) => (
             <GridTile
-              // cols={1}
-
               key={index}
-              title={'Goal ' + challenge.goalAmount + ' ' + challenge.goalType + ' ' + challenge.buyInAmount + ' ether'}
+              title={'Goal ' + challenge.goalAmount + ' ' + challenge.goalType + ' ' + challenge.buyInAmount/1000000000000000000 + ' ether'}
               subtitle={
                 <span><b>Starts </b>{moment(challenge.expirationDate).format('MM/DD/YY, h:mma ')}
                 <b>Ends </b>{moment(challenge.expirationDate).format('MM/DD/YY, h:mma')}</span>}

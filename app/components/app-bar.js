@@ -19,7 +19,7 @@ import {deepOrange700, cyan500, cyan700,
   white, darkBlack, fullBlack} from 'material-ui/styles/colors';
 import {browserHistory} from 'react-router';
 import Avatar from 'material-ui/Avatar';
-
+import PopoverMessages from './popover';
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -126,10 +126,13 @@ class AppBar2 extends Component {
       <div>
         <MuiThemeProvider muiTheme={muiTheme}>
           <AppBar
+
             style={{backgroundImage: 'url(http://completebody.com.au/images/Result-Banner.jpg)'}}
             title={<img style={{maxHeight:'80%', width: 'auto'}} src='http://res.cloudinary.com/dijpyi6ze/image/upload/v1476300641/Logomakr_0UFVLu_nu9mmm.png' />}
-            iconElementLeft={<IconButton></IconButton>}
+            iconElementLeft={<IconButton><PopoverMessages/></IconButton>}
+            iconStyleLeft={{marginRight: '40px'}}
             iconElementRight={this.props.isLoggedIn ? <div><Avatar style={{marginBottom: '15px'}}src={this.props.avatar150} /><Logged /></div> : <Login />}
+
           />
         </MuiThemeProvider>
       </div>

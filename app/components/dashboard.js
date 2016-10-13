@@ -28,19 +28,33 @@ import {deepOrange700, cyan500, cyan700,
   grey100, grey300, grey400, grey500,
   white, darkBlack, fullBlack} from 'material-ui/styles/colors';
 import PopoverMessages from './popover';
+import Popover from 'material-ui/Popover';
+import Menu from 'material-ui/Menu';
+import MenuItem from 'material-ui/MenuItem';
 
 
 const style = {
   paper: {
-    height: '27px',
-    width: '135px',
-    margin: '30px 0px 50px 540px',
+    height: '180px',
+    width: '250px',
+  },
+
+  paperTitle: {
+    // display: 'flex',
+    textAlign: 'center',
+    color: cyan500
+  },
+
+  paperText: {
+    // display: 'flex',
+    textAlign: 'center',
 
   },
+
   h1: {
     color: deepOrange700,
     textAlign: 'center',
-    margin: '0 0 30px 0'
+    margin: '20px 0 30px 0'
   },
 
   h3: {
@@ -101,16 +115,34 @@ class Dashboard extends Component {
     super(props);
 
     this.state = {
+      openPopover: false,
+      anchorEl: null,
       readMail: false,
       open: false,
       openForm: false,
-
     };
+
     this.checkMail = this.checkMail.bind(this);
     this.handleOpenDialog = this.handleOpenDialog.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.handleTouchTap = this.handleTouchTap.bind(this);
+    this.handleRequestClose = this.handleRequestClose.bind(this);
   }
 
+  handleTouchTap (event) {
+    event.preventDefault();
+
+    this.setState({
+      openPopover: true,
+      anchorEl: event.currentTarget
+    });
+  }
+
+  handleRequestClose () {
+    this.setState({
+      openPopover: false
+    });
+  }
 
   handleOpenDialog () {
     this.setState({open: true});
@@ -123,7 +155,6 @@ class Dashboard extends Component {
   checkMail () {
     this.setState({readMail: !this.state.readMail});
   }
-
 
 
   render () {
@@ -139,13 +170,14 @@ class Dashboard extends Component {
     ];
 
 
-    var unreadMessages = this.props.messages.filter(message => message.read === false);
+
 
 
     return (
       <div>
 
-        {unreadMessages.length ? <PopoverMessages /> : null}
+
+        <h1 style={style.h1}>Dashboard</h1>
 
         <RaisedButton style={style.createChallenge}
                       primary={true}
@@ -155,15 +187,13 @@ class Dashboard extends Component {
 
 
 
-        <h1 style={style.h1}>Dashboard</h1>
-
-
 
         {this.state.readMail ? <MessagesContainer /> : null}
 
         <GridList
-          cellHeight={280}
+          cellHeight={180}
           cols={3}
+          padding={10}
           style={style.gridList}
         >
         {this.props.myChallenges.map((challenge, index) => (
@@ -172,22 +202,36 @@ class Dashboard extends Component {
             title={'Goal: ' + challenge.goalAmount + ' ' + challenge.goalType + ' Buy-in:' + (challenge.buyInAmount / 1000000000000000000) + ' ether'}
             actionIcon={
 
-              <div>
+            <div>
               <FlatButton
               style={{color: cyan700}}
               label="Info"
-              onTouchTap={this.handleOpenDialog}
+              onTouchTap={this.handleTouchTap}
               />
 
-                <Dialog
-                  title="Challenge Info"
-                  actions={actions}
-                  modal={true}
-                  open={this.state.open}
-                  onTouchTap={this.handleClose}
+                <Popover
+                  open={this.state.openPopover}
+                  anchorEl={this.state.anchorEl}
+                  anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+                  targetOrigin={{horizontal: 'left', vertical: 'top'}}
+                  onRequestClose={this.handleRequestClose}
                 >
-                <b>Goal Amount:</b>{challenge.goalAmount} <b>Start Date:</b>{moment(challenge.startDate).format('MM/DD/YY')} <b>End Date:</b>{moment(challenge.expirationDate).format('MM/DD/YY')} <b>Number of Participants:</b>{challenge.numOfParticipants}
-                </Dialog>
+                <Paper style={style.paper}>
+                <h3 style={style.paperTitle}>Challenge Info</h3>
+                <span>
+                  <p style={style.paperText}>
+                    <b>Goal </b>{challenge.goalAmount} {challenge.goalType}<br/>
+                    <b>Starts </b>{moment(challenge.expirationDate).format('MM/DD/YY, h:mma ')}<br/>
+                    <b>Ends </b>{moment(challenge.expirationDate).format('MM/DD/YY, h:mma')}<br/>
+                    <b>Number of Participants </b>{challenge.numOfParticipants}<br/>
+                    <b>Buy-in Amount </b>{challenge.buyInAmount / 1000000000000000000} Ether<br/>
+                    <b>Pot Total </b>{challenge.totalPot / 1000000000000000000} Ether<br/>
+
+                  </p>
+                </span>
+                </Paper>
+
+                </Popover>
               </div>
 
             }
@@ -195,7 +239,6 @@ class Dashboard extends Component {
                 <span><b>Starts </b>{moment(challenge.expirationDate).format('MM/DD/YY, h:mma ')}
                 <b>Ends </b>{moment(challenge.expirationDate).format('MM/DD/YY, h:mma')}</span>}
             >
-
             <img src={challenge.goalType === 'steps' ? steps[Math.floor(Math.random() * steps.length)] : floor[Math.floor(Math.random() * floor.length)]}/>
           </GridTile>
         ))}
@@ -209,10 +252,11 @@ class Dashboard extends Component {
 
 const mapStateToProps = function(store) {
   return {
-    messages: store.userState.messages,
     user: store.userState.user
   };
 };
 
 export default connect(mapStateToProps)(Dashboard);
+
+
 

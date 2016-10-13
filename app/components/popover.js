@@ -42,8 +42,10 @@ class PopoverMessages extends Component {
 
     return (
       <div>
+
         <FlatButton
-          label={'You Have ' + unreadMessages.length + ' Unread Notifications'}
+
+          label={unreadMessages.length}
           onTouchTap={this.handleTouchTap}
           icon={<Message/>}
           primary={true}

@@ -6,7 +6,7 @@ import TextField from 'material-ui/TextField';
 import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
-import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
+import {white, grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
 import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconMenu from 'material-ui/IconMenu';

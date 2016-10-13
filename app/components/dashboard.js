@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {Component} from 'react';
+import { connect } from 'react-redux';
 import { Link, browserHistory} from 'react-router';
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
-var moment = require('moment');
+import moment from 'moment';
 import Messages from './messages';
 import MessagesContainer from '../containers/messages-container';
 
@@ -14,21 +15,29 @@ import Subheader from 'material-ui/Subheader';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-
-
+import DialogExampleSimple from './browseDialog';
+import MailIcon from './mail-icon';
+import Dialog from 'material-ui/Dialog';
+import axios from 'axios';
+import store from '../store';
+import {getMessages, hideMessage } from '../actions/user-actions';
+import FlatButton from 'material-ui/FlatButton';
+import Message from 'material-ui/svg-icons/communication/message';
+import {deepOrange700, cyan500, cyan700,
+  pink200,
+  grey100, grey300, grey400, grey500,
+  white, darkBlack, fullBlack} from 'material-ui/styles/colors';
 
 const style = {
   paper: {
-    height: '30px',
-    width: '200px',
-    margin: '30px 0px 50px 400px',
+    height: '27px',
+    width: '135px',
+    margin: '30px 0px 50px 540px',
 
   },
 
   h3: {
     display: 'flex',
-    // textAlign: 'center',
-    // verticalAlign: 'middle',
     margin: '0px 0px 0px 10px'
 
   },
@@ -45,7 +54,7 @@ const style = {
   },
   gridList: {
     width: '100%',
-    height: 450,
+    height: '45%',
     overflowY: 'auto',
     marginRight: 20,
     marginLeft: 20
@@ -69,48 +78,103 @@ const info = (props) => (
     targetOrigin={{horizontal: 'right', vertical: 'top'}}
     anchorOrigin={{horizontal: 'right', vertical: 'top'}}
   >
-
   </IconMenu>
 );
 
-export default function (props) {
 
-  if (props.myChallenges.length > 0) {
-    return (
+
+
+class Dashboard extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      readMail: false,
+      open: false,
+      openDialog: false
+    };
+    this.checkMail = this.checkMail.bind(this);
+    this.handleOpenDialog = this.handleOpenDialog.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+  }
+
+
+  handleOpenDialog () {
+    this.setState({open: true});
+  }
+
+  handleClose () {
+    this.setState({open: false});
+  }
+
+  checkMail () {
+    this.setState({readMail: !this.state.readMail});
+  }
+
+
+
+  render () {
+
+    const actions = [
+
+      <FlatButton
+        label="Close"
+        primary={true}
+        keyboardFocused={false}
+        onTouchTap={this.handleClose}
+      />
+    ];
+
+
+    var unreadMessages = this.props.messages.filter(message => message.read === false);
+    var unreadMessagesButton = <FlatButton style={{bottom: 100}} onTouchTap={this.checkMail} label={'You Have ' + unreadMessages.length + ' Unread Notifications'} icon={<Message/>} primary={true} />
+
+    // console.log('unread messages', unreadMessages);
+    if (this.props.myChallenges.length > 0) {
+      return (
       <div>
+
         <Paper style={style.paper} zDepth={1}>
           <h3 style={style.h3}>Dashboard</h3>
         </Paper>
 
-        <MessagesContainer/>
+        {unreadMessagesButton}
+
+
+
+        {this.state.readMail ? <MessagesContainer /> : null}
 
         <GridList
           cellHeight={280}
           cols={3}
           style={style.gridList}
         >
-        <Subheader>Your Challenges</Subheader>
-        {props.myChallenges.map((challenge, index) => (
+
+
+        {this.props.myChallenges.map((challenge, index) => (
           <GridTile
-
             key={index}
-            title={'Goal ' + challenge.goalAmount + ' ' + challenge.goalType + ' Buy-in' + challenge.buyInAmount + ' ether'}
+            title={'Goal: ' + challenge.goalAmount + ' ' + challenge.goalType + ' Buy-in:' + (challenge.buyInAmount / 1000000000000000000) + ' ether'}
             actionIcon={
-              <IconMenu
-                {...props}
-                iconButtonElement={
-                  <IconButton><MoreVertIcon /></IconButton>
-                }
-                targetOrigin={{horizontal: 'right', vertical: 'top'}}
-                anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-              >
 
-              </IconMenu>
+              <div>
+              <FlatButton style={{color: cyan700}}label="Info" onTouchTap={this.handleOpenDialog} />
+                <Dialog
+                  title="Challenge Info"
+                  actions={actions}
+                  modal={true}
+                  open={this.state.open}
+                  onTouchTap={this.handleClose}
+                >
+                <b>Goal Amount:</b>{challenge.goalAmount} <b>Start Date:</b>{moment(challenge.startDate).format('MM/DD/YY')} <b>End Date:</b>{moment(challenge.expirationDate).format('MM/DD/YY')} <b>Number of Participants:</b>{challenge.numOfParticipants}
+                </Dialog>
+              </div>
+
             }
             subtitle={
                 <span><b>Starts </b>{moment(challenge.expirationDate).format('MM/DD/YY, h:mma ')}
                 <b>Ends </b>{moment(challenge.expirationDate).format('MM/DD/YY, h:mma')}</span>}
-          >
+            >
 
             <img src={challenge.goalType === 'steps' ? steps[Math.floor(Math.random() * steps.length)] : floor[Math.floor(Math.random() * floor.length)]}/>
           </GridTile>
@@ -119,8 +183,8 @@ export default function (props) {
 
       </div>
     );
-  } else {
-    return (
+    } else {
+      return (
       <div>
         <Paper style={style.paper}zDepth={1}>
           <h3 style={style.h3}>Create a challenge!</h3>
@@ -128,34 +192,19 @@ export default function (props) {
         </Paper>
       </div>
       );
+    }
+
   }
 
 }
 
 
-// <table className="table">
-//           <tbody>
-//             <tr className="thead-inverse">
-//               <th>Challenge ID</th>
-//               <th>Challenge Goal</th>
-//               <th>Stats</th>
-//               <th>Start Date</th>
-//               <th>End Date</th>
-//               <th>Challenge Status</th>
-//               <th></th>
-//             </tr>
-//           {props.myChallenges.map((challenge, index) => {
+const mapStateToProps = function(store) {
+  return {
+    messages: store.userState.messages,
+    user: store.userState.user
+  };
+};
 
-//             return (
-//               <tr key={index}>
-//                 <td style={style.tableCNT}>{challenge.id}</td>
-//                 <td className=''>{challenge.goalAmount + ' ' + challenge.goalType}</td>
-//                 <td className=''>{'Created by UserId: ' + ' ' + challenge.creatorUserId + ' ' + 'Num of People: ' + challenge.numOfParticipants}</td>
-//                 <td className=''>{moment(challenge.creationDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</td>
-//                 <td className=''>{moment(challenge.expirationDate).format('dddd, MMMM Do YYYY, h:mm:ss a')}</td>
-//                 <td className=''>{challenge.status}</td>
-//               </tr>
-//             );
-//           })}
-//           </tbody>
-//         </table>
+export default connect(mapStateToProps)(Dashboard);
+

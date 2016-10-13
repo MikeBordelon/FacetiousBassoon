@@ -12,6 +12,7 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import Subheader from 'material-ui/Subheader';
+import moment from 'moment';
 
 
 const style = {
@@ -43,7 +44,7 @@ const style = {
 
   list: {
     flex: 1,
-    width: '450px'
+    width: '350px'
 
   },
 
@@ -63,7 +64,7 @@ class Messages extends Component {
 
 
   render () {
-    // console.log(this.props);
+    console.log('messages from MESSAGES', this.props.messages);
 
     const iconButtonElement = (
       <IconButton
@@ -75,15 +76,13 @@ class Messages extends Component {
       </IconButton>
     );
 
-    // var activemessages = this.props.joinablemessages.filter(challenge => challenge.status !== 'failed');
-    // if (this.props.messages > 0) {}
+    var unreadMessages = this.props.messages.filter(message => message.read === false);
+    console.log(unreadMessages);
     return (
     <div>
 
-      <Subheader>Win/Lose Notifications</Subheader>
-      {this.props.messages.map((message, index) => {
+      {unreadMessages.map((message, index) => {
         return (
-
         <div key={index}>
          <List style={style.list}>
             <ListItem
@@ -97,9 +96,9 @@ class Messages extends Component {
 
               secondaryText={
                 <p>
-                  <span style={{color: darkBlack}}>{message.outcome === 'loser' ? message.outcome = 'Lost ' : 'Won '}</span>
-                  <span style={{color: darkBlack}}>{'Read: ' + message.read}</span><br />
-                  {'Amount: ' + '$' + message.amount}
+                  <span style={{color: darkBlack}}>{message.outcome === 'loser' ? 'You Lost' : ' You Won!'}</span>
+                  <span style={{color: darkBlack}}></span>  Date:{moment(message.updatedAt).format('MM/DD/YY')}<br />
+                  {'Amount: ' + Math.abs(message.amount / 1000000000000000000) + ' Ether'}
                 </p>
               }
               secondaryTextLines={2}
@@ -119,6 +118,7 @@ class Messages extends Component {
 const mapStateToProps = function(store) {
   return {
     avatar: store.userState.user.avatar,
+    messages: store.userState.messages
   };
 };
 

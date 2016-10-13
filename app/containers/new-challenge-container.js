@@ -19,14 +19,11 @@ class NewChallengeContainer extends Component {
   componentDidMount () {
 
   }
-////////////////////////UNCOMMENT variables below before deployment
+////
   postChallenge (e) {
     e.preventDefault();
 
-    //      var startDate = '2017-12-12T00:12:28.000Z';
-    // var expirationDate = '2018-12-12T00:12:28.000Z';
-    // var goalAmount = '100';
-    // var buyInAmount = '100';
+
 
     var userId = this.props.user.id;
     var userEtherWallet = $('#userEtherWallet').val();
@@ -38,7 +35,7 @@ class NewChallengeContainer extends Component {
     console.log('This is the expiration date: ' + expirationDate);
     var goalType = $('#goalType').val();
 
-    // console.log(moment(startDate).format());
+
     console.log(startDate);
     console.log(expirationDate, goalType, goalAmount, buyInAmount);
 

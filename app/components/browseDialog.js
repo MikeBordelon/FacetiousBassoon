@@ -39,7 +39,7 @@ export default class DialogExampleSimple extends React.Component {
 
     return (
       <div>
-        <RaisedButton label="Dialog" onTouchTap={this.handleOpen} />
+        <RaisedButton label="Info" onTouchTap={this.handleOpen} />
         <Dialog
           title="Dialog With Actions"
           actions={actions}
@@ -47,7 +47,7 @@ export default class DialogExampleSimple extends React.Component {
           open={this.state.open}
           onRequestClose={this.handleClose}
         >
-          The actions in this window were passed in as an array of React objects.
+         Goal
         </Dialog>
       </div>
     );

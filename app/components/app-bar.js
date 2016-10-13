@@ -20,6 +20,7 @@ import {deepOrange700, cyan500, cyan700,
 import {browserHistory} from 'react-router';
 import Avatar from 'material-ui/Avatar';
 
+
 const muiTheme = getMuiTheme({
   palette: {
     textColor: grey300,

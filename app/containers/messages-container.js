@@ -12,29 +12,16 @@ class MessagesContainer extends Component {
     this.hideMessage = this.hideMessage.bind(this);
   }
 
-  componentDidMount () {
-    axios.get('/messages')
-      .then(function(messages) {
-        // console.log(messages);
-        console.log('messages container response', messages.data );
-        var messages = messages.data;
-        store.dispatch(getMessages(messages));
-      })
-      .catch(function(err) {
-        console.log('GET messages error', err);
-      });
-  }
-
 
 
   hideMessage(messageId) {
-    console.log('clicked hide a message');
+    // console.log('clicked hide a message');
 
     axios.put('/messages/' + messageId, {
       read: true
     })
     .then(function(res) {
-      console.log('hid a  message', res );
+      // console.log('hid a  message', res );
       store.dispatch(hideMessage(messageId));
     })
     .catch(function(err) {
@@ -43,10 +30,11 @@ class MessagesContainer extends Component {
   }
 
   render () {
-
+    // console.log('messages from Messages Container', this.props.messages);
     return (
-      <Messages messages={this.props.messages}
-                hideMessage={this.hideMessage}
+      <Messages
+        messages={this.props.messages}
+        hideMessage={this.hideMessage}
 
       />
     );

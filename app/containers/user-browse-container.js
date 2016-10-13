@@ -16,7 +16,7 @@ class UserBrowseContainer extends Component {
   componentDidMount () {
     axios.get('/user_joinable_challenges/')
       .then(function(challenges) {
-        console.log('Joined a challenge');
+        // console.log('Joined a challenge');
         var challenges = challenges.data;
         store.dispatch(getJoinableChallenges(challenges));
       })

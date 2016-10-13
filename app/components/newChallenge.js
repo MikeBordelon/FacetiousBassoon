@@ -81,31 +81,17 @@ class NewChallenge extends Component {
   render () {
 
     return (
-    <div style={{
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-  }}>
+    <div>
       <h1 style={style.text}>Create A Challenge!</h1>
 
       <form ref='form'className="form-horizontal">
           <div className="form-group">
-            <label className="col-md-4 control-label" >Ethereum Address</label>
+            <label className="col-md-4 control-label" >Goal Type</label>
             <div className="col-md-4">
-              {this.state.ethGrab === false ? <TextField id='userEtherWallet' floatingLabelText="Enter Your Ethereum Address" /> : <SelectField id='userEtherWallet'
-                value={this.state.value}
-                onChange={this.handleChange} 
-                floatingLabelText={this.state.value === null ? 'No address selected' : 'Balance: ' + (this.state.balance/1000000000000000000) + ' ether'}
-                floatingLabelFixed={true}
-                autoWidth={false}
-                style={{width: '400px'}}
-                hintText="Select an ethereum address">{
-                this.state.eth.map((obj, index) => {
-                  return (
-                    <MenuItem key={index} value={obj} primaryText={obj} />
-                  );
-                })}
-            </SelectField>}
+              <select ref='goalType' id="goalType" name="goalType" className="form-control">
+                <option value="steps">Steps</option>
+                <option value="floors">Floors</option>
+              </select>
             </div>
           </div>
 
@@ -116,12 +102,6 @@ class NewChallenge extends Component {
             </div>
           </div>
 
-          <div className="form-group">
-            <label className="col-md-4 control-label" >Buy In Amount</label>
-            <div className="col-md-4">
-              <input ref='buyInAmount' id="buyInAmount" name="buyInAmount" type="number" placeholder="wei's" className="form-control input-md"/>
-            </div>
-          </div>
 
           <div className="form-group">
             <label className="col-md-4 control-label" >Starting Date</label>
@@ -137,14 +117,30 @@ class NewChallenge extends Component {
             </div>
           </div>
 
+          <div className="form-group">
+            <label className="col-md-4 control-label" >Buy In Amount</label>
+            <div className="col-md-4">
+              <input ref='buyInAmount' id="buyInAmount" name="buyInAmount" type="number" placeholder="ethers" className="form-control input-md"/>
+            </div>
+          </div>
 
           <div className="form-group">
-            <label className="col-md-4 control-label" >Goal Type</label>
+            <label className="col-md-4 control-label" >Ethereum Address</label>
             <div className="col-md-4">
-              <select ref='goalType' id="goalType" name="goalType" className="form-control">
-                <option value="steps">Steps</option>
-                <option value="floors">Floors</option>
-              </select>
+                {this.state.ethGrab === false ? <TextField id='userEtherWallet' floatingLabelText="Enter Your Ethereum Address" /> : <SelectField id='userEtherWallet'
+                  value={this.state.value}
+                  onChange={this.handleChange} 
+                  floatingLabelText={this.state.value === null ? 'No address selected' : 'Balance: ' + (this.state.balance/1000000000000000000) + ' ether'}
+                  floatingLabelFixed={true}
+                  autoWidth={false}
+                  style={{width: '400px'}}
+                  hintText="Select an ethereum address">{
+                  this.state.eth.map((obj, index) => {
+                    return (
+                      <MenuItem key={index} value={obj} primaryText={obj} />
+                    );
+                  })}
+              </SelectField>}
             </div>
           </div>
 

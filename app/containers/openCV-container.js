@@ -8,7 +8,11 @@ import UploadCloud from '../components/UploadCloud';
 import CVResults from '../components/cvResults.js';
 import PictureChoice from '../components/pictureChoice';
 import { eraseOutlines } from '../actions/user-actions';
-
+import { erasePictures } from '../actions/user-actions';
+import { changeToggle } from '../actions/user-actions';
+import Toggle from 'material-ui/Toggle';
+import RaisedButton from 'material-ui/RaisedButton';
+import Snackbar from 'material-ui/Snackbar';
 
 const style = {
   h3: {
@@ -22,13 +26,21 @@ const style = {
     'textAlign': 'center',
     margin: '4% 0% 0% 0%'
   },
-  img: {
-    height: '50%',
-    width: '50%',
+  video: {
+    height: '60%',
+    width: '60%',
     display: 'block',
-    'marginTop': '40%',
+    'marginTop': '25%',
     'marginLeft': 'auto',
     'marginRight': 'auto'
+  },
+  toggle: {
+    marginTop: '10px',
+    marginLef: '10px'
+  },
+  label: {
+    marginTop: '5px',
+    marginRight: '10px'
   }
 };
 
@@ -37,14 +49,24 @@ class OpenCVContainer extends Component {
     super(props);
     this.ListInfo = this.ListInfo.bind(this);
     this.Calculate = this.Calculate.bind(this);
+    this.TogFunc = this.TogFunc.bind(this);
+    this.handleRequestClose = this.handleRequestClose.bind(this);
     this.state = {
-      loaderShow: false
+      loaderShow: false,
+      open: false
     };
   }
 
   componentDidMount() {
     var context=this;
     context.ListInfo();
+
+  }
+
+  componentWillUnmount() {  
+    store.dispatch(eraseOutlines());
+    store.dispatch(changeToggle(null));
+    store.dispatch(erasePictures());
   }
 
   ListInfo() {
@@ -59,8 +81,26 @@ class OpenCVContainer extends Component {
     });
   }
 
+  TogFunc() {
+    console.log(this.props.toggleFlag);
+    if (this.props.toggleFlag === false) {
+      store.dispatch(changeToggle(true));
+    } else {
+      store.dispatch(changeToggle(false));
+    }
+  }
+
+  handleRequestClose() {
+    this.setState({open:false});
+  }
+
   Calculate() {
     store.dispatch(eraseOutlines());
+    if (Object.keys(this.props.comparedPictures.Before).length === 0 || Object.keys(this.props.comparedPictures.After).length === 0) {
+      console.log('HERE');
+      this.setState({open:true});
+      return;
+    }
     this.setState({loaderShow: true});
 
     var before = {
@@ -81,6 +121,7 @@ class OpenCVContainer extends Component {
       .then(function(resAfter) {
         store.dispatch(changeOutline('After', resAfter.data));
         this.setState({loaderShow: false});
+        store.dispatch(changeToggle(true));
       }.bind(this))
       .catch(function(err1) {
         console.log('error calculating', err1);
@@ -105,9 +146,18 @@ class OpenCVContainer extends Component {
               <PictureChoice polarity={'Before'} /> 
             </div>
             <div id="calcChanges" className="col-md-4" style={style.calcChanges}>
-              <button onClick={this.Calculate.bind(this)} className="btn btn-primary">Calculate Change</button>
-              {this.state.loaderShow ? <img style={style.img} src='https://66.media.tumblr.com/7dd68c0249256fe7bf583542853720ca/tumblr_njueq8twt61s4fz4bo1_500.gif'/> : null}
-              {(this.props.comparedOutlines.showing && $("#userPicturesBefore").val()) ? <CVResults Before={this.props.comparedOutlines.Before.context.custom.area} After={this.props.comparedOutlines.After.context.custom.area}/> : null}
+              <Snackbar
+                open={this.state.open}
+                message="Please select two valid comparison photos"
+                autoHideDuration={4000}
+                onRequestClose={this.handleRequestClose.bind(this)}
+              />
+              <RaisedButton backgroundColor='#7986CB' labelColor='white' style={{textAlign: 'center', margin: 'auto'}} onClick={this.Calculate.bind(this)} label="Calculate Change"/>
+              {this.state.loaderShow ?  <video style={style.video} src='http://res.cloudinary.com/dsz0gov6k/video/upload/v1476296856/loader_fxru8l.mp4' autoPlay loop> </video> : null}
+              {(this.props.comparedOutlines.showing) ? <CVResults Before={this.props.comparedOutlines.Before.context.custom.area} After={this.props.comparedOutlines.After.context.custom.area}/> : null}
+              <div style={{marginTop:'20px', marginRight:'90px'}}>
+                {(this.props.comparedOutlines.showing) ? <Toggle labelStyle={{marginLeft:'70px'}}onToggle={this.TogFunc.bind(this)} labelPosition='bottom' label="Regular || Outline" defaultToggled={true} /> : null}
+              </div>
             </div>
             <div className="col-md-4">
               <PictureChoice polarity={'After'} /> 
@@ -124,7 +174,8 @@ const mapStateToProps = function(store) {
     userPics: store.userState.userPictures,
     userId: store.userState.user.id,
     comparedPictures: store.userState.comparedPictures,
-    comparedOutlines: store.userState.comparedOutlines
+    comparedOutlines: store.userState.comparedOutlines,
+    toggleFlag: store.userState.toggleFlag
   };
 };
 

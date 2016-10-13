@@ -3,6 +3,10 @@ import store from '../store';
 import { connect } from 'react-redux';
 import { changePicture } from '../actions/user-actions';
 import { eraseOutlines } from '../actions/user-actions';
+import { changeToggle } from '../actions/user-actions';
+import Toggle from 'material-ui/Toggle';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import MenuItem from 'material-ui/MenuItem';
 
 const style = {
   h3: {
@@ -23,7 +27,7 @@ const style = {
   },
   img2: {
     display: 'block',
-    'marginTop': '15%',
+    'marginTop': '10%',
     'marginLeft': 'auto',
     'marginRight': 'auto'
   }
@@ -34,12 +38,27 @@ class PictureChoice extends Component {
   constructor (props) {
     super(props);
     this.updateChoice = this.updateChoice.bind(this);
+    this.decideImage = this.decideImage.bind(this);
+    this.state = {value: undefined};
   }  
 
-  updateChoice() {
-  	var x = $("#userPictures" + this.props.polarity).val();
-  	store.dispatch(changePicture(this.props.polarity, x));
+  updateChoice(event, index, value) {
+    this.setState({value});
+    store.dispatch(changeToggle(null));
+  	store.dispatch(changePicture(this.props.polarity, value-1));
     store.dispatch(eraseOutlines());
+  }
+
+  decideImage() {
+    if (this.state.value != undefined) {
+      if (this.props.toggleFlag === null || this.props.toggleFlag === false) {
+        return <img style={style.img} src={this.props.comparedPictures[this.props.polarity].url}/>
+      } else {
+        return <img style={style.img} src={this.props.comparedOutlines[this.props.polarity].url}/>
+      }
+    } else {
+      return;
+    }
   }
 
   render() {
@@ -48,25 +67,20 @@ class PictureChoice extends Component {
   		  <div className="form-group">
   		    <label style={style.label}>Select {(this.props.polarity === 'Before') ? 'a Before' : 'an After'}</label>
   		    <br/>
-
-  		      <select defaultValue='ChooseHere' id={"userPictures" + this.props.polarity} className="form-control" onChange= {this.updateChoice.bind(this)}>
-  		      	<option value='ChooseHere' disabled >Choose here</option>
+  		       <DropDownMenu style={{width: '300px', marginLeft: '9%'}} id={"userPictures" + this.props.polarity} value={this.state.value || 'ChooseHere'} onChange= {this.updateChoice.bind(this)}>
+  		      	<MenuItem value='ChooseHere' disabled primaryText='Choose Here'/>
               {this.props.userPics.map((picture, index) => {
   		     		  return (
-  		        		<option key={index} value={index}> {picture.created_at} </option>
+  		        		<MenuItem key={index} value={index+1} primaryText={picture.created_at} />
   		          );
   	      		})}
-  		      </select>
+  		       </DropDownMenu>
   		  </div>
         <div>
-          {($("#userPictures" + this.props.polarity).val()) ? 
-          <img style={style.img} src={this.props.comparedPictures[this.props.polarity].url}/> :
-          null}
-        </div>
-         <div>
-          {(this.props.comparedOutlines.showing && $("#userPictures" + this.props.polarity).val()) ? <img style={style.img2} src={this.props.comparedOutlines[this.props.polarity].url}/> : null}
-        </div>
-      </div>  
+          {this.decideImage.call(this)}
+        </div> 
+
+      </div>
 		);
   }
 }
@@ -75,7 +89,8 @@ const mapStateToProps = function(store) {
   return {
     userPics: store.userState.userPictures,
     comparedPictures: store.userState.comparedPictures,
-    comparedOutlines: store.userState.comparedOutlines
+    comparedOutlines: store.userState.comparedOutlines,
+    toggleFlag: store.userState.toggleFlag
   };
 };
 

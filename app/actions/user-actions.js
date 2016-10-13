@@ -117,5 +117,18 @@ export function eraseOutlines() {
   };
 }
 
+export function erasePictures() {
+  return {
+    type: 'ERASE_PICTURES'
+  };
+}
+
+export function changeToggle(flag) {
+  return {
+    type: 'CHANGE_TOGGLE',
+    flag: flag
+  };
+}
+
 
 

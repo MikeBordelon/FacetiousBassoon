@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router';
 import {connect} from 'react-redux';
+import RaisedButton from 'material-ui/RaisedButton';
 
 const style = {
   h3: {
@@ -14,27 +15,30 @@ const style = {
 class UploadCloud extends Component {
   constructor (props) {
     super(props);
-    
-    // this.state = {
-    // };
+    this.OpenWidget = this.OpenWidget.bind(this);
   }
 
-  componentDidMount() {
-    var context = this;
-    $('#upload_widget_opener').cloudinary_upload_widget(
-      { cloud_name: 'dsz0gov6k', upload_preset: 'FitBit', max_image_width: 300, max_image_height: 300, thumbnails: 'false', theme: 'minimal', folder: context.props.userId.toString(), button_class: 'btn btn-primary btn-lg' },
-      function(error, result) { 
-        $('#upload_widget_opener').remove();
-        context.props.ListInfo();
-      }
-    );
+  // componentDidMount() {
+  //   var context = this;
+  //   $('#upload_widget_opener').cloudinary_upload_widget(
+  //     { cloud_name: 'dsz0gov6k', upload_preset: 'FitBit', max_image_width: 300, max_image_height: 300, thumbnails: 'false', theme: 'minimal', folder: context.props.userId.toString(), button_class: 'btn btn-primary btn-lg' },
+  //     function(error, result) { 
+  //       $('#upload_widget_opener').remove();
+  //       context.props.ListInfo();
+  //     }
+  //   );
+  // };
 
-  };
+  OpenWidget() {
+    var context = this;
+    cloudinary.openUploadWidget({ cloud_name: 'dsz0gov6k', upload_preset: 'FitBit', max_image_width: 300, max_image_height: 300, thumbnails: 'false', theme: 'minimal', folder: context.props.userId.toString()},
+      function(error, result) { context.props.ListInfo(); })
+  }
 
   render() {
     return (
       <div>   
-        <button id="upload_widget_opener" className="btn btn-primary">Upload multiple images</button>
+        <RaisedButton onClick={this.OpenWidget.bind(this)} label="Upload Pictures" primary={true}/>
       </div>
     )
   }

@@ -12,6 +12,7 @@ const initialState = {
   userPictures: [],
   comparedPictures: {Before: {}, After: {}},
   comparedOutlines: {Before: {}, After: {}, showing: false},
+  toggleFlag: null
 };
 
 const userReducer = function(state = initialState, action) {
@@ -49,7 +50,7 @@ const userReducer = function(state = initialState, action) {
       messages: state.messages.filter(message => message.id !== action.messageId)
     };
 
-  case 'GET_JOINABLE_CHALLENGES':
+    case 'GET_JOINABLE_CHALLENGES':
     return {
       ...state,
       joinableChallenges: action.joinableChallenges
@@ -60,7 +61,6 @@ const userReducer = function(state = initialState, action) {
       ...state,
       joinableChallenges: state.joinableChallenges.filter(challenge => challenge.id !== action.challengeId)
     };
-
 
     case 'AUTH_FAILURE':
       return {
@@ -101,12 +101,23 @@ const userReducer = function(state = initialState, action) {
       };
 
     case 'ERASE_OUTLINES':
-
       return {
         ...state,
         comparedOutlines: {Before: {}, After: {}, showing: false}
       };
-    }
+
+    case 'ERASE_PICTURES':
+      return {
+        ...state,
+        comparedPictures: {Before: {}, After: {}}
+      };
+
+    case 'CHANGE_TOGGLE':
+      return {
+        ...state,
+        toggleFlag: action.flag
+      };
+  }
 
     return state;
 

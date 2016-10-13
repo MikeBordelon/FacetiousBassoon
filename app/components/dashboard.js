@@ -27,6 +27,8 @@ import {deepOrange700, cyan500, cyan700,
   pink200,
   grey100, grey300, grey400, grey500,
   white, darkBlack, fullBlack} from 'material-ui/styles/colors';
+import PopoverMessages from './popover';
+
 
 const style = {
   paper: {
@@ -70,7 +72,8 @@ const style = {
 
   createChallenge: {
     width: 120,
-    margin: '0px 0px 30px 1115px'
+    margin: '0px 0px 30px 1115px',
+    color: white
   },
 };
 
@@ -100,7 +103,8 @@ class Dashboard extends Component {
     this.state = {
       readMail: false,
       open: false,
-      openForm: false
+      openForm: false,
+
     };
     this.checkMail = this.checkMail.bind(this);
     this.handleOpenDialog = this.handleOpenDialog.bind(this);
@@ -136,20 +140,20 @@ class Dashboard extends Component {
 
 
     var unreadMessages = this.props.messages.filter(message => message.read === false);
-    var unreadMessagesButton = <FlatButton style={style.notifications} onTouchTap={this.checkMail} label={'You Have ' + unreadMessages.length + ' Unread Notifications'} icon={<Message/>} primary={true} />
 
-    // console.log('unread messages', unreadMessages);
 
     return (
       <div>
 
-        {unreadMessages.length ? unreadMessagesButton : null}
+        {unreadMessages.length ? <PopoverMessages /> : null}
 
         <RaisedButton style={style.createChallenge}
                       primary={true}
                       onClick={()=> browserHistory.push('/newChallenge')}>
                       Create Challenge
         </RaisedButton>
+
+
 
         <h1 style={style.h1}>Dashboard</h1>
 
@@ -169,7 +173,12 @@ class Dashboard extends Component {
             actionIcon={
 
               <div>
-              <FlatButton style={{color: cyan700}}label="Info" onTouchTap={this.handleOpenDialog} />
+              <FlatButton
+              style={{color: cyan700}}
+              label="Info"
+              onTouchTap={this.handleOpenDialog}
+              />
+
                 <Dialog
                   title="Challenge Info"
                   actions={actions}

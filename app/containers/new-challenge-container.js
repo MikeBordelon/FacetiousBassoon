@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-
+// import $ from 'jquery';
 import { connect } from 'react-redux';
 
 import NewChallenge from '../components/newChallenge';

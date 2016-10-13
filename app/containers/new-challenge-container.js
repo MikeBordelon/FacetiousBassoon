@@ -23,8 +23,8 @@ class NewChallengeContainer extends Component {
   postChallenge (e, wallet) {
     var userId = this.props.user.id;
     var userEtherWallet = wallet;
-    var goalAmount = $('#goalAmount').val() * 1000000000000000000;
-    var buyInAmount = $('#buyInAmount').val();
+    var goalAmount = $('#goalAmount').val();
+    var buyInAmount = $('#buyInAmount').val() * 1000000000000000000;
     var startDate = $('#startDate').val();
     var expirationDate = $('#expirationDate').val();
     var goalType = $('#goalType').val();

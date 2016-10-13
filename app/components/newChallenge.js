@@ -36,8 +36,7 @@ class NewChallenge extends Component {
       ethGrab: false
     };
 
-    this.handleRequestClose = this.handleRequestClose.bind(this);
-    this.handleTouchTap = this.handleTouchTap.bind(this);
+    this.handleNotification = this.handleNotification.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -55,9 +54,10 @@ class NewChallenge extends Component {
     });
   }
 
-  handleTouchTap () {
+  handleNotification () {
     this.setState({
-      open: true,
+      ...this.state,
+      open: !this.state.open
     });
   }
 
@@ -72,14 +72,7 @@ class NewChallenge extends Component {
     })
   }
 
-  handleRequestClose () {
-    this.setState({
-      open: false,
-    });
-  }
-
   render () {
-
     return (
     <div>
       <h1 style={style.text}>Create A Challenge!</h1>
@@ -133,6 +126,7 @@ class NewChallenge extends Component {
                   floatingLabelText={this.state.value === null ? 'No address selected' : 'Balance: ' + (this.state.balance/1000000000000000000) + ' ether'}
                   floatingLabelFixed={true}
                   autoWidth={false}
+                  maxHeight='200px'
                   style={{width: '400px'}}
                   hintText="Select an ethereum address">{
                   this.state.eth.map((obj, index) => {
@@ -142,28 +136,29 @@ class NewChallenge extends Component {
                   })}
               </SelectField>}
             </div>
+            <div className="row">
+               <RaisedButton className="col-md-2"
+                style={style.submit}
+                onTouchTap={this.handleNotification}
+                onClick={(e)=>{this.props.postChallenge(e, this.state.value)}}
+                label="Add to my Challenges"
+               />
+               <RaisedButton className="col-md-2"
+                style={style.cancel}
+                onClick={this.props.cancel}
+                label="Cancel"
+               />
+               <Snackbar
+                open={this.state.open}
+                message="Event added to your challenges"
+                autoHideDuration={2000}
+                onRequestClose={this.handleNotification}
+               />
+            
+            </div>
           </div>
 
       </form>
-      <span>
-         <RaisedButton
-          style={style.submit}
-          onTouchTap={this.handleTouchTap}
-          onClick={(e)=>{this.props.postChallenge(e, this.state.value)}}
-          label="Add to my Challenges"
-         />
-         <RaisedButton
-          style={style.cancel}
-          onClick={this.props.cancel}
-          label="Cancel"
-         />
-         <Snackbar
-          open={this.state.open}
-          message="Event added to your challenges"
-          autoHideDuration={2000}
-          onRequestClose={this.handleRequestClose}
-         />
-      </span>
     </div>
   );
   }

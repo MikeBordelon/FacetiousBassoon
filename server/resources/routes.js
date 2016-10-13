@@ -208,6 +208,15 @@ module.exports = (app, express) => {
       res.status(404).send(err);
     });
   });
+  app.get('/balance/:addr', (req, res) => {
+    axios.get('http://ethereum:3002/api/balance/' + req.params.addr)
+    .then((results) => {
+      res.status(200).send(results.data);
+    })
+    .catch((err) => {
+      res.status(404).send(err);
+    });
+  });
 
 //End of endpoint routes
   app.get('/', function (request, response) {

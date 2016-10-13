@@ -1,8 +1,14 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import store from '../store.js';
+
 import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
+import MenuItem from 'material-ui/MenuItem';
+import SelectField from 'material-ui/SelectField';
+import Slider from 'material-ui/Slider';
+import TextField from 'material-ui/TextField';
+
+var axios = require('axios');
+
 
 
 let style = {
@@ -24,39 +30,61 @@ class NewChallenge extends Component {
 
     this.state = {
       open: false,
+      value: null,
+      eth: [],
+      balance: null,
+      ethGrab: false
     };
 
-    this.handleRequestClose = this.handleRequestClose.bind(this);
-    this.handleTouchTap = this.handleTouchTap.bind(this);
+    this.handleNotification = this.handleNotification.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
-
-  handleTouchTap () {
-    this.setState({
-      open: true,
+  componentWillMount () {
+    axios.get('/accounts')
+    .then((results) => {
+      this.setState({
+        ...this.state,
+        eth: results.data,
+        ethGrab: true
+      });
+    })
+    .catch((err) => {
+      console.log(err);
     });
   }
 
-
-  handleRequestClose () {
+  handleNotification () {
     this.setState({
-      open: false,
+      ...this.state,
+      open: !this.state.open
     });
   }
+
+  handleChange (event, index, value) { 
+    axios.get('/balance/' + value)
+    .then((results) => {
+      this.setState({
+        ...this.state,
+        balance: results.data,
+        value
+      });
+    })
+  }
+
   render () {
-
-    // console.log('store is: ', this.props);
     return (
     <div>
       <h1 style={style.text}>Create A Challenge!</h1>
 
-
       <form ref='form'className="form-horizontal">
-        <fieldset>
           <div className="form-group">
-            <label className="col-md-4 control-label" >Ethereum Address</label>
+            <label className="col-md-4 control-label" >Goal Type</label>
             <div className="col-md-4">
-              <input ref='userEtherWallet' id="userEtherWallet" name="userEtherWallet" type="text" placeholder="enter your ethereum address" className="form-control input-md"/>
+              <select ref='goalType' id="goalType" name="goalType" className="form-control">
+                <option value="steps">Steps</option>
+                <option value="floors">Floors</option>
+              </select>
             </div>
           </div>
 
@@ -67,12 +95,6 @@ class NewChallenge extends Component {
             </div>
           </div>
 
-          <div className="form-group">
-            <label className="col-md-4 control-label" >Buy In Amount</label>
-            <div className="col-md-4">
-              <input ref='buyInAmount' id="buyInAmount" name="buyInAmount" type="number" placeholder="wei's" className="form-control input-md"/>
-            </div>
-          </div>
 
           <div className="form-group">
             <label className="col-md-4 control-label" >Starting Date</label>
@@ -88,45 +110,60 @@ class NewChallenge extends Component {
             </div>
           </div>
 
-
           <div className="form-group">
-            <label className="col-md-4 control-label" >Goal Type</label>
+            <label className="col-md-4 control-label" >Buy In Amount</label>
             <div className="col-md-4">
-              <select ref='goalType' id="goalType" name="goalType" className="form-control">
-                <option value="steps">Steps</option>
-                <option value="floors">Floors</option>
-              </select>
+              <input ref='buyInAmount' id="buyInAmount" name="buyInAmount" type="number" placeholder="ethers" className="form-control input-md"/>
             </div>
           </div>
 
-        </fieldset>
+          <div className="form-group">
+            <label className="col-md-4 control-label" >Ethereum Address</label>
+            <div className="col-md-4">
+                {this.state.ethGrab === false ? <TextField id='userEtherWallet' floatingLabelText="Enter Your Ethereum Address" /> : <SelectField id='userEtherWallet'
+                  value={this.state.value}
+                  onChange={this.handleChange} 
+                  floatingLabelText={this.state.value === null ? 'No address selected' : 'Balance: ' + (this.state.balance/1000000000000000000) + ' ether'}
+                  floatingLabelFixed={true}
+                  autoWidth={false}
+                  maxHeight='200px'
+                  style={{width: '400px'}}
+                  hintText="Select an ethereum address">{
+                  this.state.eth.map((obj, index) => {
+                    return (
+                      <MenuItem key={index} value={obj} primaryText={obj} />
+                    );
+                  })}
+              </SelectField>}
+            </div>
+            <div className="row">
+               <RaisedButton className="col-md-2"
+                style={style.submit}
+                onTouchTap={this.handleNotification}
+                onClick={(e)=>{this.props.postChallenge(e, this.state.value)}}
+                label="Add to my Challenges"
+               />
+               <RaisedButton className="col-md-2"
+                style={style.cancel}
+                onClick={this.props.cancel}
+                label="Cancel"
+               />
+               <Snackbar
+                open={this.state.open}
+                message="Event added to your challenges"
+                autoHideDuration={2000}
+                onRequestClose={this.handleNotification}
+               />
+            
+            </div>
+          </div>
+
       </form>
-      <span>
-         <RaisedButton
-          style={style.submit}
-          onTouchTap={this.handleTouchTap}
-          onClick={this.props.postChallenge}
-          label="Add to my Challenges"
-         />
-         <RaisedButton
-          style={style.cancel}
-          onClick={this.props.cancel}
-          label="Cancel"
-         />
-         <Snackbar
-          open={this.state.open}
-          message="Event added to your challenges"
-          autoHideDuration={2000}
-          onRequestClose={this.handleRequestClose}
-         />
-      </span>
     </div>
   );
   }
 }
 
-
-// users are now props on UserListContainer
 export default NewChallenge;
 
 

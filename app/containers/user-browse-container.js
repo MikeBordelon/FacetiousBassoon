@@ -27,12 +27,12 @@ class UserBrowseContainer extends Component {
 
 
 
-  handleJoinChallengeRequest(challengeId) {
-    console.log($('#etherAddress').val());
+  handleJoinChallengeRequest(challengeId, val) {
+    console.log(val);
     console.log('clicked');
     axios.put('/challenges/ ' + challengeId, {
       'userId': this.props.user.id,
-      'userEtherWallet': $('#etherAddress').val()
+      'userEtherWallet': val === null ? $('#etherAddress').val() : val
     })
     .then(function(res) {
       console.log('challenge joined', res );

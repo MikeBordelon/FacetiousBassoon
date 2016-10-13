@@ -40,17 +40,17 @@ const muiTheme = getMuiTheme({
   appBar: {
     height: 90,
     color: grey300,
-    textColor: deepOrange700,
+    textColor: cyan700,
     // textColor: darkBlack,
-    accent1Color: deepOrange700
+    accent1Color: cyan700
   },
   menuItem: {
     color: grey300,
-    textColor: deepOrange700
+    textColor: cyan700
   },
   iconMenu: {
     color: grey300,
-    textColor: deepOrange700
+    textColor: cyan700
   }
 });
 

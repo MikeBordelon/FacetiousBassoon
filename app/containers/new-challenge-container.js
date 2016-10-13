@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import store from '../store';
+
 import { connect } from 'react-redux';
-import axios from 'axios';
+
 import NewChallenge from '../components/newChallenge';
-import ReactDOM, { findDOMNode } from 'react-dom';
+import axios from 'axios';
 import moment from 'moment';
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
@@ -19,27 +19,17 @@ class NewChallengeContainer extends Component {
   componentDidMount () {
 
   }
-////
-  postChallenge (e) {
-    e.preventDefault();
 
-
-
+  postChallenge (e, wallet) {
     var userId = this.props.user.id;
-    var userEtherWallet = $('#userEtherWallet').val();
+    var userEtherWallet = wallet;
     var goalAmount = $('#goalAmount').val();
-    var buyInAmount = $('#buyInAmount').val();
+    var buyInAmount = $('#buyInAmount').val() * 1000000000000000000;
     var startDate = $('#startDate').val();
-    console.log('This is the start date: ' + startDate);
     var expirationDate = $('#expirationDate').val();
-    console.log('This is the expiration date: ' + expirationDate);
     var goalType = $('#goalType').val();
 
-
-    console.log(startDate);
-    console.log(expirationDate, goalType, goalAmount, buyInAmount);
-
-
+    console.log(userEtherWallet);
     axios.post('/challenges', {
       'userId': userId,
       'startDate': startDate,
@@ -70,8 +60,6 @@ class NewChallengeContainer extends Component {
   }
 
   render () {
-
-    // console.log(this.props.userId);
     return (
       <NewChallenge postChallenge={this.postChallenge} cancel={this.cancel}/>
     );
@@ -84,5 +72,4 @@ const mapStateToProps = function(store) {
     user: store.userState.user
   };
 };
-// users are now props on UserListContainer
 export default connect(mapStateToProps)(NewChallengeContainer);

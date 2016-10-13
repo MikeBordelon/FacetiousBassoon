@@ -91,7 +91,7 @@ class Dashboard extends Component {
     this.state = {
       readMail: false,
       open: false,
-      openDialog: false
+      openForm: false
     };
     this.checkMail = this.checkMail.bind(this);
     this.handleOpenDialog = this.handleOpenDialog.bind(this);
@@ -140,8 +140,6 @@ class Dashboard extends Component {
 
         {unreadMessagesButton}
 
-
-
         {this.state.readMail ? <MessagesContainer /> : null}
 
         <GridList
@@ -149,8 +147,6 @@ class Dashboard extends Component {
           cols={3}
           style={style.gridList}
         >
-
-
         {this.props.myChallenges.map((challenge, index) => (
           <GridTile
             key={index}

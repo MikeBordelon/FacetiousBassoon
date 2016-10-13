@@ -1,8 +1,14 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import store from '../store.js';
+
 import RaisedButton from 'material-ui/RaisedButton';
 import Snackbar from 'material-ui/Snackbar';
+import MenuItem from 'material-ui/MenuItem';
+import SelectField from 'material-ui/SelectField';
+import Slider from 'material-ui/Slider';
+import TextField from 'material-ui/TextField';
+
+var axios = require('axios');
+
 
 
 let style = {
@@ -24,12 +30,30 @@ class NewChallenge extends Component {
 
     this.state = {
       open: false,
+      value: null,
+      eth: [],
+      balance: null,
+      ethGrab: false
     };
 
     this.handleRequestClose = this.handleRequestClose.bind(this);
     this.handleTouchTap = this.handleTouchTap.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
+  componentWillMount () {
+    axios.get('/accounts')
+    .then((results) => {
+      this.setState({
+        ...this.state,
+        eth: results.data,
+        ethGrab: true
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
 
   handleTouchTap () {
     this.setState({
@@ -37,26 +61,51 @@ class NewChallenge extends Component {
     });
   }
 
+  handleChange (event, index, value) { 
+    axios.get('/balance/' + value)
+    .then((results) => {
+      this.setState({
+        ...this.state,
+        balance: results.data,
+        value
+      });
+    })
+  }
 
   handleRequestClose () {
     this.setState({
       open: false,
     });
   }
+
   render () {
 
-    // console.log('store is: ', this.props);
     return (
-    <div>
+    <div style={{
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+  }}>
       <h1 style={style.text}>Create A Challenge!</h1>
 
-
       <form ref='form'className="form-horizontal">
-        <fieldset>
           <div className="form-group">
             <label className="col-md-4 control-label" >Ethereum Address</label>
             <div className="col-md-4">
-              <input ref='userEtherWallet' id="userEtherWallet" name="userEtherWallet" type="text" placeholder="enter your ethereum address" className="form-control input-md"/>
+              {this.state.ethGrab === false ? <TextField id='etherAddress' floatingLabelText="Enter Your Ethereum Address" /> : <SelectField 
+                value={this.state.value}
+                onChange={this.handleChange} 
+                floatingLabelText={this.state.value === null ? 'No address selected' : 'Balance: ' + (this.state.balance/1000000000000000000) + ' ether'}
+                floatingLabelFixed={true}
+                autoWidth={false}
+                style={{width: '400px'}}
+                hintText="Select an ethereum address">{
+                this.state.eth.map((obj, index) => {
+                  return (
+                    <MenuItem key={index} value={obj} primaryText={obj} />
+                  );
+                })}
+            </SelectField>}
             </div>
           </div>
 
@@ -99,7 +148,6 @@ class NewChallenge extends Component {
             </div>
           </div>
 
-        </fieldset>
       </form>
       <span>
          <RaisedButton
@@ -125,8 +173,6 @@ class NewChallenge extends Component {
   }
 }
 
-
-// users are now props on UserListContainer
 export default NewChallenge;
 
 

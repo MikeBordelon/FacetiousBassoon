@@ -61,6 +61,7 @@ class Browse extends Component {
       balance: null,
       ethGrab: false
     };
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentWillMount () {
@@ -107,7 +108,7 @@ class Browse extends Component {
           floatingLabelText="Enter Your Ethereum Address"
         /> : <SelectField 
         value={this.state.value}
-        onChange={this.handleChange.bind(this)} 
+        onChange={this.handleChange} 
         floatingLabelText={this.state.value === null ? 'No address selected' : 'Balance: ' + (this.state.balance/1000000000000000000) + ' ether'}
         floatingLabelFixed={true}
         autoWidth={false}

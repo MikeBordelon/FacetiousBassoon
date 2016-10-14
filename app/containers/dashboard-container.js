@@ -28,16 +28,16 @@ class DashboardContainer extends Component {
     });
 
 
-    axios.get('/messages')
-      .then(function(messages) {
-        // console.log('messages from DashboardContainer', messages.data);
-        // console.log('messages container response', messages.data );
-        var messages = messages.data;
-        store.dispatch(getMessages(messages));
-      })
-      .catch(function(err) {
-        console.log('GET messages error', err);
-      });
+    // axios.get('/messages')
+    //   .then(function(messages) {
+    //     // console.log('messages from DashboardContainer', messages.data);
+    //     // console.log('messages container response', messages.data );
+    //     var messages = messages.data;
+    //     store.dispatch(getMessages(messages));
+    //   })
+    //   .catch(function(err) {
+    //     console.log('GET messages error', err);
+    //   });
 
 
 

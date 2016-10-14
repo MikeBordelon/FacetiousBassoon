@@ -8,7 +8,7 @@ import FlatButton from 'material-ui/FlatButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import { Link } from 'react-router';
 import axios from 'axios';
-import {authSuccess, authFailure} from '../actions/user-actions';
+import {authSuccess, authFailure, getMessages} from '../actions/user-actions';
 import store from '../store';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -117,11 +117,22 @@ class AppBar2 extends Component {
       }
       // console.log(store.getState());
     });
+
+    axios.get('/messages')
+      .then(function(messages) {
+        // console.log('messages from DashboardContainer', messages.data);
+        // console.log('messages container response', messages.data );
+        var messages = messages.data;
+        store.dispatch(getMessages(messages));
+      })
+      .catch(function(err) {
+        console.log('GET messages error', err);
+      });
   }
 
 
   render() {
-    // console.log(this.props);
+
     return (
       <div>
         <MuiThemeProvider muiTheme={muiTheme}>
@@ -129,7 +140,7 @@ class AppBar2 extends Component {
 
             style={{backgroundImage: 'url(http://completebody.com.au/images/Result-Banner.jpg)'}}
             title={<img style={{maxHeight:'80%', width: 'auto'}} src='http://res.cloudinary.com/dijpyi6ze/image/upload/v1476300641/Logomakr_0UFVLu_nu9mmm.png' />}
-            iconElementLeft={<IconButton><PopoverMessages/></IconButton>}
+            iconElementLeft={ this.props.isLoggedIn ? <IconButton><PopoverMessages/></IconButton> : <span></span> }
             iconStyleLeft={{marginRight: '40px'}}
             iconElementRight={this.props.isLoggedIn ? <div><Avatar style={{marginBottom: '15px'}}src={this.props.avatar150} /><Logged /></div> : <Login />}
 
